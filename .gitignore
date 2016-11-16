@@ -1,0 +1,52 @@
+# System files
+# ------------
+
+Icon
+.DS_Store
+.dropbox
+.git
+
+# Temporary files
+# ---------------
+
+/thumbs/*
+!/thumbs/index.html
+
+/site/cache/*
+!/site/cache/index.html
+
+# Content
+# ---------------
+
+/content/*
+
+# Unlicensed components
+# ---------------
+
+/site/plugins/cachebuster/*
+/site/plugins/guggenheim/*
+/site/plugins/imagekit/*
+/site/plugins/phpmailer/*
+
+/assets/guggenheim/*
+/assets/js/contenttools/*
+/assets/js/photoswipe/*
+/assets/js/stickyfill/*
+
+/assets/fonts/*
+
+# -------------SECURITY-------------
+# NEVER publish these files via Git!
+# -------------SECURITY-------------
+
+# Kirby accounts
+# ---------------
+
+/site/accounts/*
+/assets/avatars/*
+
+# Config (private)
+# ---------------
+
+/site/config/private.php
+/content/site.txt

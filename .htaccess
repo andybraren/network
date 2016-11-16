@@ -1,0 +1,92 @@
+# Kirby .htaccess
+
+# Boost the memory limit to ensure image thumbnails are always generated
+php_value memory_limit 256M
+
+# rewrite rules
+<IfModule mod_rewrite.c>
+
+# enable awesome urls. i.e.:
+# http://yourdomain.com/about-us/team
+RewriteEngine on
+
+# make sure to set the RewriteBase correctly
+# if you are running the site in a subfolder.
+# Otherwise links or the entire site will break.
+#
+# If your homepage is http://yourdomain.com/mysite
+# Set the RewriteBase to:
+#
+# RewriteBase /mysite
+
+# block text files in the content folder from being accessed directly
+RewriteRule ^content/(.*)\.(txt|md|mdown)$ index.php [L]
+
+# block all files in the site folder from being accessed directly
+RewriteRule ^site/(.*) index.php [L]
+
+# block all files in the kirby folder from being accessed directly
+RewriteRule ^kirby/(.*) index.php [L]
+
+# kirby cachebuster for css and js
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.+)\.(\d+)\.(js|css)$ $1.$3 [L]
+
+# remove trailing slash
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} (.+)/$
+RewriteRule ^ %1 [R=301,L]
+
+# make site links work
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*) index.php [L]
+
+# redirect www to non-www https
+RewriteCond %{HTTPS} on
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+# force https
+RewriteCond %{HTTPS} !on
+RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+<IfModule mod_headers.c>
+  Header always set Strict-Transport-Security "max-age=3600; includeSubDomains"
+</IfModule>
+
+</IfModule>
+
+# Additional recommended values
+# Remove comments for those you want to use.
+#
+AddDefaultCharset UTF-8
+#
+# php_flag short_open_tag on
+
+
+
+
+# Caching
+<IfModule mod_headers.c>
+  <filesMatch ".(jpe?g|png|gif|ico|svg)$">
+    Header set Cache-Control "max-age=604800, public"
+  </filesMatch>
+  # One month for css and js
+  <filesMatch ".(css|js)$">
+    Header set Cache-Control "max-age=604800, public"
+  </filesMatch>
+</IfModule>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

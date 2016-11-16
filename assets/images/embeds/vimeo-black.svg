@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="85px" height="52px" viewBox="0 0 85 52" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.2 (12043) - http://www.bohemiancoding.com/sketch -->
+    <title>vimeo-black</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="vimeo-black" sketch:type="MSArtboardGroup">
+            <g sketch:type="MSLayerGroup">
+                <rect id="rectangle" fill-opacity="0.75" fill="#172322" sketch:type="MSShapeGroup" x="0" y="0" width="85" height="52.3076923" rx="5.23076923"></rect>
+                <path d="M30.0769231,39.2307692 L30.0769231,13.0769231 L54.9230769,26.1538462 L30.0769231,39.2307692 Z" id="triangle" fill="#FFFFFF" sketch:type="MSShapeGroup"></path>
+            </g>
+        </g>
+    </g>
+</svg>
