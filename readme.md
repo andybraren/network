@@ -1,20 +1,19 @@
 # Maker Network
 
-The Maker Network is a [Kirby](https://getkirby.com/)-based community website platform that currently powers <https://maker.tufts.edu>. It includes many of the features that new community makerspaces need, and integrates directly with the [RFID Network](https://github.com/JumbosMakerNetwork/RFID_Network) to make managing a makerspace easier.
+The Maker Network is a [Kirby](https://getkirby.com/)-based community website platform that currently powers <https://maker.tufts.edu>. It includes many of the features that new makerspaces need, and integrates directly with the [RFID Network](https://github.com/JumbosMakerNetwork/RFID_Network) to make managing a makerspace easier.
 
 ## Documentation
 
-For detailed documentation about how the site works, visit [this page](https://makernetwork.org/docs).
+For detailed documentation about how the site works, visit [this page](https://makernetwork.org/docs). For information on the project's history and the design work involved, [check here](https://makernetwork.org/projects/maker-network).
 
 ## Features
 
 - User profiles
-- Project pages
-- Event calendar
-- Makerspace equipment pages
-- Group newsletters
+- Frontend-editable pages (projects, spaces, equipment, etc.)
 - RFID integration
-- (and eventually more)
+- Event calendar
+- Group newsletters
+- (and eventually a lot more)
 
 ## License
 
