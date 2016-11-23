@@ -302,15 +302,14 @@ function groupColor($groupslug) {
   - cannot return the image object because an error occurs, the image is not readable yet
 */
 function downloadedImageURL($filename, $remoteURL) {
-  $imagepath = kirby()->roots()->content() . '/' . page()->diruri() . '/' . $filename . '.jpg';
   if (!page()->image($filename . '.jpg')) {
     if ($remoteURL == 'youtube') {
       $youtubeid = substr(strstr($filename, '-'), 1);
       $remoteURL = youtube_image($youtubeid);
+      $imagepath = kirby()->roots()->content() . '/' . page()->diruri() . '/' . $filename . '.jpg';
     }
     copy($remoteURL, $imagepath);
   }
-  // $image = page()->image($filename . '.jpg');
   $imageURL = page()->contentURL() . '/' . $filename . '.jpg';
   return $imageURL;
 };
