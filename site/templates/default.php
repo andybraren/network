@@ -32,7 +32,7 @@
       <?php snippet('sidebar') ?>
     <?php endif ?>
 
-    <?php if($page->parent() == 'articles' or $page->parent() == 'spaces' or $page->parent() == 'groups' or $page->uid() == 'docs' or $page->parent() == 'projects'): ?>
+    <?php if($page->parent() == 'articles' or $page->parent() == 'spaces' or $page->parent() == 'groups' or $page->parent() == 'handbooks' or $page->uid() == 'docs' or $page->parent() == 'projects'): ?>
       <div class="sidebar rightsidebar">
         <?php snippet('widget', array('type' => 'links')) ?>
         <?php snippet('widget', array('type' => 'equipment')) ?>
