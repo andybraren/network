@@ -55,8 +55,50 @@ kirbytext::$tags['video'] = array(
     
     if (page()->id() != "feed"):
       
+      // YouTube Videos
+      if (str::contains($url, 'youtu')):
+
+        if (preg_match("/^((https?:\/\/)?(w{0,3}\.)?youtu(\.be|(be|be-nocookie)\.\w{2,3}\/))((watch\?v=|v|embed)?[\/]?(?P<id>[a-zA-Z0-9-_]{11}))/si", $url, $matches)):
+          $youtubeid = $matches['id'];
+          $timestamp = "";
+          
+          // accounts for https://youtu.be/EKQSijn9FBs?t=53m35s
+          if (preg_match("/\?t=([0-9]*?m?[0-9]*?s)/", $url, $matches)):
+            preg_match("/([0-9]*)m/", $matches[0], $minutes);
+            preg_match("/([0-9]*)s/", $matches[0], $seconds);
+            //echo $minutes[1];
+            //echo $seconds[1];
+            if (isset($minutes[1])):
+              $timestamp = "&start=" . ($minutes[1] * 60 + $seconds[1]);
+            else:
+              $timestamp = "&start=" . ($seconds[1]);
+            endif;
+            //echo $timestamp;
+          endif;
+          
+          // accounts for https://www.youtube.com/watch?v=EKQSijn9FBs&feature=youtu.be&t=53m35s
+          // EVENTUALLY FIGURE OUT HOW TO COMBINE THESE
+          if (preg_match("/\&t=([0-9]*?m?[0-9]*?s)/", $url, $matches)):
+            preg_match("/([0-9]*)m/", $matches[0], $minutes);
+            preg_match("/([0-9]*)s/", $matches[0], $seconds);
+            //echo $minutes[1];
+            //echo $seconds[1];
+            if (isset($minutes[1])):
+              $timestamp = "&start=" . ($minutes[1] * 60 + $seconds[1]);
+            else:
+              $timestamp = "&start=" . ($seconds[1]);
+            endif;
+            //echo $timestamp;
+          endif;
+          
+          $imageurl = downloadedImageURL('video-' . $youtubeid, 'youtube');
+          
+          return '<figure><div class="video-container"><div class="youtube" style="background-image:url(' . $imageurl . ')"><div class="play"></div></div><iframe data-src="https://www.youtube.com/embed/' . $youtubeid . '?autoplay=1&wmode=transparent&modestbranding=1&autohide=1&showinfo=0&rel=0' . $timestamp . '" data-orig="' . $url . '" frameborder="0" allowfullscreen></iframe></div>' . $htmlcaption . '</figure>';
+          
+        endif;
+
       // Vimeo Videos
-      if (str::contains($url, "vimeo.com")):
+      elseif (str::contains($url, "vimeo.com")):
         
         $vimeoid = substr(parse_url($url, PHP_URL_PATH), 1);;
         $vimeothumburl = "https://vimeo.com/api/v2/video/" . $vimeoid . ".php";
@@ -66,44 +108,6 @@ kirbytext::$tags['video'] = array(
 
         return '<figure><div class="video-container"><div class="vimeo" ' . $htmlimage . '"><div class="play"></div></div><iframe data-src="//player.vimeo.com/video/' . $vimeoid . '?autoplay=1&amp;title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;color=808080" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>' . $htmlcaption . '</figure>';
 
-      // YouTube Videos
-      elseif (preg_match("/^((https?:\/\/)?(w{0,3}\.)?youtu(\.be|(be|be-nocookie)\.\w{2,3}\/))((watch\?v=|v|embed)?[\/]?(?P<id>[a-zA-Z0-9-_]{11}))/si", $url, $matches)):
-        $youtubeid = $matches['id'];
-        $timestamp = "";
-        
-        // accounts for https://youtu.be/EKQSijn9FBs?t=53m35s
-        if (preg_match("/\?t=([0-9]*?m?[0-9]*?s)/", $url, $matches)):
-          preg_match("/([0-9]*)m/", $matches[0], $minutes);
-          preg_match("/([0-9]*)s/", $matches[0], $seconds);
-          //echo $minutes[1];
-          //echo $seconds[1];
-          if (isset($minutes[1])):
-            $timestamp = "&start=" . ($minutes[1] * 60 + $seconds[1]);
-          else:
-            $timestamp = "&start=" . ($seconds[1]);
-          endif;
-          //echo $timestamp;
-        endif;
-        
-        // accounts for https://www.youtube.com/watch?v=EKQSijn9FBs&feature=youtu.be&t=53m35s
-        // EVENTUALLY FIGURE OUT HOW TO COMBINE THESE
-        if (preg_match("/\&t=([0-9]*?m?[0-9]*?s)/", $url, $matches)):
-          preg_match("/([0-9]*)m/", $matches[0], $minutes);
-          preg_match("/([0-9]*)s/", $matches[0], $seconds);
-          //echo $minutes[1];
-          //echo $seconds[1];
-          if (isset($minutes[1])):
-            $timestamp = "&start=" . ($minutes[1] * 60 + $seconds[1]);
-          else:
-            $timestamp = "&start=" . ($seconds[1]);
-          endif;
-          //echo $timestamp;
-        endif;
-        
-        $imageurl = downloadedImageURL('video-' . $youtubeid, 'youtube');
-        
-        return '<figure><div class="video-container"><div class="youtube" style="background-image:url(' . $imageurl . ')"><div class="play"></div></div><iframe data-src="https://www.youtube.com/embed/' . $youtubeid . '?autoplay=1&wmode=transparent&modestbranding=1&autohide=1&showinfo=0&rel=0' . $timestamp . '" data-orig="' . $url . '" frameborder="0" allowfullscreen></iframe></div>' . $htmlcaption . '</figure>';
-      
       // HTML5 "GIFs"
       elseif ($autoplay == "on"):
         return '<figure><video controls preload="metadata" autoplay loop muted playsinline class="b-lazy" ' . $posterimage . ' data-src="' . $url . '" data-file="' . $filename . '"></video>
