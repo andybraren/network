@@ -11,7 +11,7 @@
 
 
 
-
+/*
 kirbytext::$post[] = function($kirbytext, $value) {
   return preg_replace_callback('!\(toc\)!', function($match) use($value) {
     preg_match_all('!<h2>(.*)</h2>!', $value, $matches);
@@ -24,6 +24,7 @@ kirbytext::$post[] = function($kirbytext, $value) {
     return $ul;
   }, $value);
 };
+*/
 
 // These filters run after all markdown and kirbytext is processed.
 kirbytext::$post[] = function($kirbytext, $value) {
@@ -31,15 +32,13 @@ kirbytext::$post[] = function($kirbytext, $value) {
     return $value;
 };
 
-
-
-
 // Add ID attributes to all headers that are in fields processed by kirbytext.
 function retitle($match) {
     // Characters in the $delete array will be removed
     // Characters in the $hyphenate array will be changed to hyphens
     $delete = c::get('headid-delete', array(':','(',')','?','.','!','$',',','%','^','&',"'",';','"','[',']','{','}','|','`','#'));
-    $hyphenate = c::get('headid-hyphenate', array('~','@','*','+','=',' - ',' / ','/','>','<',' '));
+  //$hyphenate = c::get('headid-hyphenate', array(' ','~','@','*','+','=','/','>','<'));
+    $hyphenate = c::get('headid-hyphenate', array(' ','~','@','*','+','=','/','>','<',' ',' - ',' / '));
     list($_unused, $h2, $title) = $match;
     preg_match('/id=\"(.*)\"/',$_unused,$idmatches);
     preg_match('/name=\"(.*)\"/',$_unused,$namematches);
@@ -66,7 +65,7 @@ function retitle($match) {
 
 
 
-// Or, replace brackets in kirbytags with parenthesis
+// Replace brackets in kirbytags with parenthesis
 // https://forum.getkirby.com/t/way-to-use-parenthesis-inside-kirbytag/861/4
 /*
 kirbytext::$post[] = function($kirbytext, $value) {
