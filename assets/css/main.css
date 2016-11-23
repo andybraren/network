@@ -207,6 +207,7 @@ a[class*="file-"] {
 .file-doc { background-image: url(../../assets/images/file-doc.svg); }
 .file-ppt { background-image: url(../../assets/images/file-ppt.svg); }
 .file-xls { background-image: url(../../assets/images/file-xls.svg); }
+.file-vi { background-image: url(../../assets/images/file-vi.svg); }
 
 /* Site
 -------------------------------------------------- */
@@ -779,11 +780,9 @@ h3 {
 h4 {
   font-size: 1.1rem;
   line-height: 1.3rem;
-  font-weight: 500;
+  font-weight: 600;
   margin: 1rem 0 .5rem 0;
   clear: both;
-  color: #62A5F0;
-  color: var(--theme-main);
 }
 h1 a, h2 a, h3 a, h4 a {
   color: inherit;
