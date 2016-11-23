@@ -319,7 +319,7 @@
   <?php endif ?>
   
   <?php // RELEVANT HANDBOOKS WIDGET - displays each Handbook related to this piece of Equipment ?>
-  <?php if($page->parent() == "equipment"): ?>
+  <?php if($page->parent() == "equipment" or $page->parent() == "groups"): ?>
     <?php snippet('widget', array('type' => 'handbooks')) ?>
   <?php endif ?>
   
