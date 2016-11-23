@@ -138,7 +138,7 @@
           <?php // Pulling information from the database needed for populating the form ?>
           <?php $errbyear = ''; ?>
           <?php if($site->url() == "https://maker.tufts.edu"): ?>
-            <?php
+            <?php /*
               // This Link1 won't work until it's on the Tufts server.
               $link1 = pg_Connect("host=130.64.17.0 dbname=JMN user=jadmin password=jadmin_pw7");
               $result1 = pg_query($link1, "SELECT * FROM departments");
@@ -151,6 +151,7 @@
               $Class_YEARS = range(date("Y"),$current_class);
               $years = range($youngest, $oldest);
               pg_close($link1);
+            */
             ?>
           <?php endif ?>
           
