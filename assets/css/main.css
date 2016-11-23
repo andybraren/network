@@ -3006,7 +3006,7 @@ twitterwidget {
   position: -moz-sticky;
   position: -o-sticky;
   position: -ms-sticky;
-  top: 140px;
+  top: 60px;
 }
 .menu-secondary.sticky {
   top: 0px;
@@ -3045,15 +3045,23 @@ twitterwidget {
       -ms-user-select: none;
           user-select: none;
 }
-.toc > div > h3 {
-  /*flex-grow: 1;*/
-}
 
 .toc li {
-  font-size: .9rem;
-  line-height: 1.2rem;
+  font-size: .8rem;
+  line-height: 1rem;
   margin-bottom: .5rem;
 }
+
+.toc ul ul {
+  padding-left: 10px;
+  color: #666;
+}
+
+
+
+
+
+
 
 
 /*

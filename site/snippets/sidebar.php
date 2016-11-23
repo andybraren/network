@@ -327,37 +327,50 @@
   
   <?php // TABLE OF CONTENTS ?>
   <?php if($page->intendedTemplate() == 'handbook' or $page->intendedTemplate() == 'article' or $page->intendedTemplate() == 'project'): ?>
-    <?php if(preg_match_all('/(?<!#)#{2}([^#].*)\n/', $page->text(), $matches)): ?>
+    <?php if(preg_match_all('/(?<!#)#{2,3}([^#].*)\n/', $page->text(), $matches)): // Grabs H2's and H3's ?>
       <div class="toc sticky">
         <div>
           <h3>CONTENTS</h3>
           <a onclick="window.scrollTo(0,0);">&#8673;</span>
         </div>
-        <?php
-            /*
-            if(preg_match_all('/<h2 id="(.*?)"><a href=".*?">(.*?)<\/a><\/h2>/', $page->text()->kirbytext(), $matches)) {
-              echo "blah";
-              print_r($matches);
+        <ul>
+          <?php
+            $count = 0;
+            $sublist = 'none';
+            foreach ($matches[0] as $rawmatch) {
+              
+              $text = $matches[1][$count];
+              $lastmatch = end($matches[0]);
+              
+              if (preg_match('/(?<!#)#{2}([^#].*)\n/', $rawmatch)) { // H2
+                
+                if ($sublist == 'start') {
+                  echo '</ul>';
+                  $sublist = 'none';
+                }
+                
+                echo '<li><a href="#' . str::slug($text) . '">' . $text . '</a></li>';
+                
+              }
+              if (preg_match('/(?<!#)#{3}([^#].*)\n/', $rawmatch)) { // H3
+                
+                if ($sublist == 'none') {
+                  $sublist = 'start';
+                  echo '<ul>';
+                }
+                
+                echo '<li><a href="#' . str::slug($text) . '">' . $text . '</a></li>';
+                
+              }
+              
+              if ($rawmatch == $lastmatch) {
+                echo ($sublist == 'start') ? '</ul>' : '';
+              }
+              
+              $count++;
             }
-            */
-            /* /\n## (.*)\n/ */
-            /* Not outputting first H2 if it's the very first thing in doc */
-            
-            /* Grab all H2's and H2's only from the markdown-formatted text using regex
-              Negative lookbehind: http://stackoverflow.com/questions/9306202/regex-for-matching-something-if-it-is-not-preceded-by-something-else
-              Look for ## without another # beforehand, then match everything after until the newline
-            */
-            echo '<ul>';
-            foreach($matches[1] as $match) {
-              //echo $match;
-              echo '<li><a href="#' . str::slug($match) . '">' . $match . '</a></li>';
-            }
-            echo "</ul>";
-            
-            //print_r($matches[1]);
-          
-          //echo $page->text();
-        ?>
+          ?>
+        </ul>
       </div>
     <?php endif ?>
   <?php endif ?>
