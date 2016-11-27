@@ -167,7 +167,7 @@
     <h2><?php echo ucfirst(strval($type)) ?></h2>
   <?php endif ?>
   
-  <?php if ($site->user() or $items != ''): ?>
+  <?php if ($site->user() and $type != 'makers' or $items != '' and $type != 'makers'): ?>
   <div class="cards">
     
     <?php $newhero = new Asset('/assets/images/hero-new.png'); ?>
@@ -217,8 +217,6 @@
           </div>
         </a>
     <?php endif ?>
-    
-
     
     <?php foreach($items as $item): ?>
       <div class="card<?php echo ($item->color() != "") ? ' ' . $item->color() : ""; ?><?php echo ($page->uid() == 'books') ? ' size-sixth' : ''; ?>">
