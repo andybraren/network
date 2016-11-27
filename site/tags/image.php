@@ -224,6 +224,7 @@ kirbytext::$tags['image'] = array(
       $image  = $_link($_image($tag->attr('imgclass')) . $noscriptimage);
       $figure = new Brick('figure');
       $figure->addClass($tag->attr('class'));
+      $figure->addClass('b-lazy');
       //$paddingcalc = $file->height() / $file->width() * 100 . '%';
       
       

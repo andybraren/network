@@ -83,6 +83,18 @@ img.b-loaded {
   opacity: 1;
   transition: opacity 0.2s ease-out;
 }
+
+/* Crude way to ensure figcaptions aren't hidden by removing the calculated padding once loaded by b-lazy */
+article figure.b-lazy.b-error {
+  padding-top: 0px !important;
+}
+article figure.b-lazy.b-error img.b-lazy {
+  position: initial;
+}
+
+
+
+
 /*
 article img.b-loaded {
   height: auto;
