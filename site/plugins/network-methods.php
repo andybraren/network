@@ -144,7 +144,11 @@ page::$methods['related'] = function($page) {
   elseif ($page->content()->reldata() != '') {
     if (isset(str::split($page->content()->reldata(),'///')[0])) {
       return str::split(str::split($page->content()->reldata(),'///')[0],',');
+    } else {
+      return array();
     }
+  } else {
+    return array();
   }
 };
 
