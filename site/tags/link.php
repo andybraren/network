@@ -53,7 +53,8 @@ kirbytext::$tags['link'] = array(
       
       $image = '<div>' . $page->heroImage()->crop(150) . '</div>';
       
-      $author = a::first($page->authors());
+      $author = a::first($page->authors()); // Get the first (primary) author of a page
+      $author = str::split($author,'~')[0]; // Strip out the author's role (if needed)
       if (site()->user($author)) {
         $author = site()->user($author);
         $author = $author->firstname() . ' ' . $author->lastname();
