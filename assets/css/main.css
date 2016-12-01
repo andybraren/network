@@ -115,6 +115,34 @@ article > img {
 
 
 
+
+
+
+.error-image {
+  visibility: hidden;
+  position: relative;
+  max-height: 26px;
+}
+
+.error-image:after {
+  visibility: visible;
+  content: "\02716  The image " attr(alt) " is missing or broken";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  background-color: #ececec;
+}
+
+
+
+
+
+
+
+
+
 /* Links
 -------------------------------------------------- */
 a {
@@ -276,15 +304,24 @@ header {
   -ms-user-select: none;
   user-select: none;
   overflow-y: hidden;
-  /*-webkit-overflow-scrolling: touch;*/
   box-shadow: 0 2px 4px -1px rgba(0,0,0,0.06),0 4px 5px 0 rgba(0,0,0,0.06),0 1px 10px 0 rgba(0,0,0,0.08);
   -ms-overflow-style: -ms-autohiding-scrollbar;
+  /*
   -webkit-overflow-scrolling: touch; /* second necessary for scrollbars */
 
     background-color: rgba(98, 165, 240, 0.85);
     background-color: var(--theme-opac1);
     background-image: var(--theme-gradient);
 }
+
+nav {
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+
+
+
+
 header.headroom {
   /*transition: background-color 0.2s, color 0.2s;*/
   transition: transform 200ms linear, background-color 0.2s, color 0.2s;
@@ -498,6 +535,7 @@ body:nth-child(2) {
 */
 body {
   margin-top: 52px;
+  margin-top: 87px;
 }
 
 /* Navigation and Menus
@@ -669,13 +707,15 @@ ul.submenu {
   background-size: 18px;
   transition: width 0.6s ease-in-out, border-radius 0.6s, background 0.6s, box-shadow 0.6s;
   width: 32px !important;
-  height: 32px;
+  height: 32px !important;
   border: none;
   cursor: pointer;
   border-radius: initial;
   -webkit-margin-before: 0;
   -webkit-margin-after: 0;
   padding: 0 0 0 38px !important;
+  border-radius: initial !important;
+  margin-top: 1px;
 }
 
 .search-container a img {
@@ -1860,7 +1900,7 @@ select {
   color: #212121;
   outline: 0;
   transition: all 0.2s ease-in-out;
-  border: 1px solid #d9d9d9;
+  /*border: 1px solid #d9d9d9;*/
   border-radius: 4px;
 }
 /* need to figure this out */
