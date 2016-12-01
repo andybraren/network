@@ -68,9 +68,7 @@ kirbytext::$tags['image'] = array(
     if($text = $tag->attr('text')) $alt = $text;
 
     // try to get the title from the image object and use it as alt text
-    if($file) {
-
-      
+    if($file != null and $file->exists()) {
       
       // use thumbnails for large images - Added by Andy
       // http://getkirby.com/forum/general/20141030/thumb-images-posted-via-image
@@ -140,112 +138,115 @@ kirbytext::$tags['image'] = array(
         }
         $url = $thumb->url();
       }
-    }
-
-    if($file->extension() == "gif") {
-      $url = $file->url();
-      $thumb = $file;
-    } 
-
-    // link builder
-    $_link = function($image) use($tag, $url, $link, $file, $datasize, $type) {
       
-      // build the href for the link
-      if($link == 'self') {
-        $href = $url;
-      } else if($file and $link == $file->filename()) {
-        $href = $file->url();
-      } else if($file and empty($link)) {
-        $href = $file->url();
-        $datasize = $file->width() . "x" . $file->height();
-      } else {
-        $href = $link;
-        //$href = $file->url();
+      if($file->extension() == "gif") {
+        $url = $file->url();
+        $thumb = $file;
       }
       
-      //if(empty($link)) return $image;    // tweaked by Andy to force links
-      
-      //$datasize = $file->width() . "x" . $file->height();
-
-      if ($type == 'hero') {
-        return $image;
-      }
-      else if ($datasize != "null") {
-        return html::a(url($href), $image, array(
-          'rel'    => $tag->attr('rel'),
-          'class'  => $tag->attr('linkclass'),
-          'title'  => $tag->attr('title'),
-          'target' => $tag->target(),
-          'data-size'  => $datasize,          // added by Andy for PhotoSwipe
-        ));
-      }
-      else {
-        return html::a(url($href), $image, array(
-          'rel'    => $tag->attr('rel'),
-          'class'  => $tag->attr('linkclass'),
-          'title'  => $tag->attr('title'),
-          'target' => $tag->target()
-        ));
-      }
-
-    };
-
-    $datasrc = $url;
-
-    // image builder
-    //$_image = function($class) use($tag, $url, $alt, $title) {
-    $_image = function($class) use($tag, $datasrc, $alt, $title, $minithumb, $thumb) {
-      $url = "/maker/assets/images/blank.gif"; // Added for b-lazy
-      $url = $minithumb;
-      return html::img($url, array(
-        'width'  => $tag->attr('width'),
-        'height' => $tag->attr('height'),
-        'class'  => $class . "b-lazy",
-        'title'  => $title,
-        'alt'    => $alt,
-        'data-src' => $datasrc,  // Added by Andy for b-lazy
-        'data-size' => $thumb->width() . 'x' . $thumb->height(),
-      ));
-    };
-    
-    // noscript image build - same as above, just without the changes
-    $_noscriptimage = function($class) use($tag, $url, $alt, $title) {
-      return html::img($url, array(
-        'width'  => $tag->attr('width'),
-        'height' => $tag->attr('height'),
-        'class'  => $class . "b-lazy",
-        'title'  => $title,
-        'alt'    => $alt
-      ));
-    };
-    $noscriptimage = '<noscript>' . $_noscriptimage($tag->attr('imgclass')) . '</noscript>';
-
-    if(kirby()->option('kirbytext.image.figure') or !empty($caption)) {
-      $image  = $_link($_image($tag->attr('imgclass')) . $noscriptimage);
-      $figure = new Brick('figure');
-      $figure->addClass($tag->attr('class'));
-      $figure->addClass('b-lazy');
-      //$paddingcalc = $file->height() / $file->width() * 100 . '%';
-      
-      
-      $maxwidthcalc = $file->width() / 873 * 100 . '%';
-      //$figure->attr('style','padding-bottom:' . $paddingcalc); // Added by Andy for responsive images that don't reflow, assumes we want the image to be 100% width and small images rescaled, which isn't true
-      $figure->attr('style','max-width:' . $maxwidthcalc);
-      $figure->addClass($tag->attr('size'));                                    // Added by Andy
-      $figure->append($image);
-      if(!empty($caption)) {
-        $figure->append('<figcaption>' . html($caption) . '</figcaption>');
-        $figure->attr('style',$stylecalc);
-      }
-      if(empty($caption)) {
-        $figure->attr('style',$stylecalc);
-      }
-      return $figure;
-    } else {
-      $class = trim($tag->attr('class') . ' ' . $tag->attr('imgclass'));
-      return $_link($_image($class));
-    }
+      // link builder
+      $_link = function($image) use($tag, $url, $link, $file, $datasize, $type) {
+        
+        // build the href for the link
+        if($link == 'self') {
+          $href = $url;
+        } else if($file and $link == $file->filename()) {
+          $href = $file->url();
+        } else if($file and empty($link)) {
+          $href = $file->url();
+          $datasize = $file->width() . "x" . $file->height();
+        } else {
+          $href = $link;
+          //$href = $file->url();
+        }
+        
+        //if(empty($link)) return $image;    // tweaked by Andy to force links
+        
+        //$datasize = $file->width() . "x" . $file->height();
   
+        if ($type == 'hero') {
+          return $image;
+        }
+        else if ($datasize != "null") {
+          return html::a(url($href), $image, array(
+            'rel'    => $tag->attr('rel'),
+            'class'  => $tag->attr('linkclass'),
+            'title'  => $tag->attr('title'),
+            'target' => $tag->target(),
+            'data-size'  => $datasize,          // added by Andy for PhotoSwipe
+          ));
+        }
+        else {
+          return html::a(url($href), $image, array(
+            'rel'    => $tag->attr('rel'),
+            'class'  => $tag->attr('linkclass'),
+            'title'  => $tag->attr('title'),
+            'target' => $tag->target()
+          ));
+        }
+  
+      };
+  
+      $datasrc = $url;
+  
+      // image builder
+      //$_image = function($class) use($tag, $url, $alt, $title) {
+      $_image = function($class) use($tag, $datasrc, $alt, $title, $minithumb, $thumb) {
+        $url = "/maker/assets/images/blank.gif"; // Added for b-lazy
+        $url = $minithumb;
+        return html::img($url, array(
+          'width'  => $tag->attr('width'),
+          'height' => $tag->attr('height'),
+          'class'  => $class . "b-lazy",
+          'title'  => $title,
+          'alt'    => $alt,
+          'data-src' => $datasrc,  // Added by Andy for b-lazy
+          'data-size' => $thumb->width() . 'x' . $thumb->height(),
+        ));
+      };
+      
+      // noscript image build - same as above, just without the changes
+      $_noscriptimage = function($class) use($tag, $url, $alt, $title) {
+        return html::img($url, array(
+          'width'  => $tag->attr('width'),
+          'height' => $tag->attr('height'),
+          'class'  => $class . "b-lazy",
+          'title'  => $title,
+          'alt'    => $alt
+        ));
+      };
+      $noscriptimage = '<noscript>' . $_noscriptimage($tag->attr('imgclass')) . '</noscript>';
+  
+      if(kirby()->option('kirbytext.image.figure') or !empty($caption)) {
+        $image  = $_link($_image($tag->attr('imgclass')) . $noscriptimage);
+        $figure = new Brick('figure');
+        $figure->addClass($tag->attr('class'));
+        $figure->addClass('b-lazy');
+        //$paddingcalc = $file->height() / $file->width() * 100 . '%';
+        
+        
+        $maxwidthcalc = $file->width() / 873 * 100 . '%';
+        //$figure->attr('style','padding-bottom:' . $paddingcalc); // Added by Andy for responsive images that don't reflow, assumes we want the image to be 100% width and small images rescaled, which isn't true
+        $figure->attr('style','max-width:' . $maxwidthcalc);
+        $figure->addClass($tag->attr('size'));                                    // Added by Andy
+        $figure->append($image);
+        if(!empty($caption)) {
+          $figure->append('<figcaption>' . html($caption) . '</figcaption>');
+          $figure->attr('style',$stylecalc);
+        }
+        if(empty($caption)) {
+          $figure->attr('style',$stylecalc);
+        }
+        return $figure;
+      } else {
+        $class = trim($tag->attr('class') . ' ' . $tag->attr('imgclass'));
+        return $_link($_image($class));
+      }
+    }
+    
+    else { // If the image doesn't exist, is missing, or something else is wrong
+      return '<img class="error-image" src="' . $url . '" alt="' . $tag->attr('image') . '">';
+    }
   }
 );
 ?>
