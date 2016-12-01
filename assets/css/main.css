@@ -32,7 +32,7 @@ footer, header, hgroup, main, nav, section, summary {
 
 @font-face {
   font-family: dyslexic;
-  src: url(https://drewbaren.com/maker/assets/fonts/OpenDyslexic3-Regular.ttf);
+  src: url(https://makernetwork.org/assets/fonts/OpenDyslexic3-Regular.ttf);
 }
 
 body.dyslexic {
@@ -121,6 +121,7 @@ article > img {
 .error-image {
   visibility: hidden;
   position: relative;
+  height: 2rem;
   max-height: 26px;
 }
 
@@ -756,7 +757,9 @@ ul.submenu {
 }
 
 .fontselector {
+  /*
   display: none;
+  */
 }
 
 
