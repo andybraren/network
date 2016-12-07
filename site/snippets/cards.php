@@ -140,9 +140,11 @@
       if (isset($group)) {
         $filtered = new Pages();
         foreach ($items as $item) {
-          if ($item->groups() != null) {
-            if (in_array($group,$item->groups())) {
-              $filtered->add($item);
+          if ($item->relatedGroups() != null) {
+            foreach ($item->relatedGroups() as $blah) {
+              if ($blah->slug() == $group) {
+                $filtered->add($item);
+              }
             }
           }
         }
