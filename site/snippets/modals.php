@@ -35,9 +35,7 @@
             <input type="submit" class="button fullwidth" name="login" value="Log in">
           </div>
         </form>
-        
-        <!--<a href="<?php echo $site->page('signup')->url() ?>">Don't have an account?</a>-->
-          
+                  
       </div>
     </div>
   </div>

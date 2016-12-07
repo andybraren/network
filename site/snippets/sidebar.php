@@ -309,9 +309,11 @@
   <?php endif ?>
   
   <?php // RELEVANT EQUIPMENT WIDGET - displays each piece of Equipment related to this Handbook ?>
+  <?php /*
   <?php if($page->parent() == "handbooks"): ?>
     <?php snippet('widget', array('type' => 'equipment')) ?>
   <?php endif ?>
+  */ ?>
   
   <?php // RELEVANT SPACES WIDGET - displays each Handbook related to this piece of Equipment ?>
   <?php if($page->parent() == "equipment"): ?>
@@ -322,8 +324,6 @@
   <?php if($page->parent() == "equipment" or $page->parent() == "groups"): ?>
     <?php snippet('widget', array('type' => 'handbooks')) ?>
   <?php endif ?>
-  
-  
   
   <?php // TABLE OF CONTENTS ?>
   <?php if($page->intendedTemplate() == 'handbook' or $page->intendedTemplate() == 'article' or $page->intendedTemplate() == 'project'): ?>

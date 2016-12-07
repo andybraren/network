@@ -231,13 +231,15 @@
   
   <?php
     $plural = false;
-    $groups = $page->groups();
-    if (isset($groups[1])) { // if the array has a second element, then there are multiple groups
-      $plural = true;
+    $groups = $page->relatedGroups();
+    if ($groups != null and $groups != '') {
+      if ($groups->count() > 1) {
+        $plural = true;
+      }
     }
   ?>
   
-  <?php if ($groups != null or $page->isEditableByUser()): ?>
+  <?php if ($groups != null and $groups != '' or $page->isEditableByUser()): ?>
     <div class="widget">
       
       <?php /* Set the widget title */
@@ -249,8 +251,7 @@
       <div class="groups" id="groups">
         <?php if (isset($groups)): ?>
           <?php foreach ($groups as $group): ?>
-            <?php $grouppage = $site->page('groups/' . $group) ?>
-              <a data-username="<?php echo $grouppage->slug() ?>" href="<?php echo $grouppage->url() ?>">
+              <a data-username="<?php echo $group->slug() ?>" href="<?php echo $group->url() ?>">
                 
                 <?php if ($page->isEditableByUser()): ?>
                   <div class="author-delete"></div>
@@ -258,10 +259,10 @@
                 
                 <div class="row">
                   
-                  <img src="<?php echo groupLogo($grouppage->slug(), 40) ?>" width="40" height="40" class="<?php echo groupColor($grouppage->slug()) ?>">
+                  <img src="<?php echo groupLogo($group->slug(), 40) ?>" width="40" height="40" class="<?php echo groupColor($group->slug()) ?>">
                   
                   <div class="column">
-                    <span><?php echo $grouppage->title() ?></span>
+                    <span><?php echo $group->title() ?></span>
                     <?php // <span># members</span> ?>
                   </div>
                 </div>

@@ -15,7 +15,7 @@
       <?php if($_SERVER['SERVER_NAME'] == 'makernetwork.org'): ?>
       
         <?php if ($site->page('learn')): ?>
-          <li><a href="<?php echo $site->page('learn')->url() ?>" <?php echo (in_array($page->uid(), array('learn','handbooks')) OR $page->isChildOf('learn')) ? ' class="active"' : '' ?>>Learn</a></li>
+          <li><a href="<?php echo $site->page('learn')->url() ?>" <?php echo (in_array($page->uid(), array('learn','courses','handbooks','books')) OR $page->isChildOf('learn')) ? ' class="active"' : '' ?>>Learn</a></li>
         <?php endif ?>
         
         <?php if ($site->page('make')): ?>
@@ -65,7 +65,9 @@
       <li><a href="&#109;&#97;ilto&#58;and%79&#98;rare%&#54;&#69;&#64;g&#109;a%&#54;9l&#46;&#99;%6&#70;m">Contact</a></li>
       
       <?php if($site->user() == null): ?>
+      <!--
         <li><a id="button-signup" class="login">Sign up</a></li>
+      -->
       <?php else: ?>
         <li><a href="<?php echo $page->url() . '/logout' ?>">Logout</a></li>
       <?php endif ?>
@@ -106,10 +108,17 @@
       <ul class="menu">
         <li class="tocselector"><a><img src="<?php echo url('assets/images/menu-toc.svg') ?>"></a></li>
         
-        <?php if (in_array($page->uid(), array('learn','handbooks'))): ?>
-          <li><a>Courses</a></li>
+        <?php if (in_array($page->uid(), array('learn','courses','handbooks','books'))): ?>
+          <?php if ($site->page('courses')): ?>
+            <li><a href="<?php echo $site->page('courses')->url() ?>" <?php echo ($page->uid() == 'courses' OR $page->isChildOf('courses')) ? ' class="active"' : '' ?>>Courses</a></li>
+          <?php endif ?>
+          
           <?php if ($site->page('handbooks')): ?>
             <li><a href="<?php echo $site->page('handbooks')->url() ?>" <?php echo ($page->uid() == 'handbooks' OR $page->isChildOf('handbooks')) ? ' class="active"' : '' ?>>Handbooks</a></li>
+          <?php endif ?>
+          
+          <?php if ($site->page('books')): ?>
+            <li><a href="<?php echo $site->page('books')->url() ?>" <?php echo ($page->uid() == 'books' OR $page->isChildOf('books')) ? ' class="active"' : '' ?>>Books</a></li>
           <?php endif ?>
         <?php endif ?>
         

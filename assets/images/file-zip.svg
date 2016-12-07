@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="16px" viewBox="0 0 14 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+    <title>file-zip</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="file-zip">
+            <polygon id="folder" fill="#F6D38D" points="0 0 13 0 13 8 14 10 14 16 0 16"></polygon>
+            <path d="M9.5,5 L9.5,16" id="line" stroke="#979797" stroke-dasharray="1"></path>
+            <rect id="zipper" fill="#A1A1A1" x="8" y="0" width="3" height="4"></rect>
+        </g>
+    </g>
+</svg>

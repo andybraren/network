@@ -28,11 +28,11 @@
 <main class="main">
   <div class="container">
 
-    <?php if($page->uid() != 'groups' and $page->uid() != 'learn' and $page->uid() != 'spaces' and $page->uid() != 'projects' and $page->uid() != 'handbooks' and $page->uid() != 'articles' and $page->uid() != 'equipment' and $page->uid() != 'books'): ?>
+    <?php if($page->uid() != 'groups' and $page->uid() != 'spaces' and $page->uid() != 'projects' and $page->uid() != 'handbooks' and $page->uid() != 'articles' and $page->uid() != 'equipment' and $page->uid() != 'books' and $page->uid() != 'courses' and $page->uid() != 'learn'): ?>
       <?php snippet('sidebar') ?>
     <?php endif ?>
 
-    <?php if($page->parent() == 'articles' or $page->parent() == 'spaces' or $page->parent() == 'groups' or $page->parent() == 'handbooks' or $page->uid() == 'docs' or $page->parent() == 'projects'): ?>
+    <?php if($page->parent() == 'articles' or $page->parent() == 'spaces' or $page->parent() == 'groups' or $page->parent() == 'handbooks' or $page->uid() == 'docs' or $page->parent() == 'projects' and $page->uid() != 'courses' and $page->uid() != 'learn'): ?>
       <div class="sidebar rightsidebar">
         <?php snippet('widget', array('type' => 'links')) ?>
         <?php snippet('widget', array('type' => 'equipment')) ?>
@@ -105,6 +105,15 @@
       <?php if($page->uid() == 'articles'): ?>
         <?php snippet('cards', array('type' => 'articles')) ?>
       <?php endif ?>
+      
+      <?php if($page->uid() == 'courses'): ?>
+        <?php snippet('cards', array('type' => 'courses')) ?>
+      <?php endif ?>
+      
+      <?php if($page->uid() == 'learn'): ?>
+        <?php snippet('cards', array('type' => 'handbooks')) ?>
+        <?php snippet('cards', array('type' => 'courses')) ?>
+      <?php endif ?>
 
       <?php if($page->uid() == 'projects'): ?>
         <?php snippet('cards', array('type' => 'projects')) ?>
@@ -127,7 +136,7 @@
       <?php endif ?>
 
       <?php if($page->uid() == 'books'): ?>
-        <?php snippet('cards', array('type' => 'projects')) ?>
+        <?php snippet('cards', array('type' => 'books')) ?>
       <?php endif ?>
 
       <?php if($page->uid() == 'challenges'): ?>
