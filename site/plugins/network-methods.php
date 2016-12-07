@@ -1,21 +1,16 @@
 <?php
 
+//==================================================
+// PAGE DATA METHODS
+// https://makernetwork.org/docs#page-data
+//==================================================
 
+//--------------------------------------------------
+// DateData Methods
+//--------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-/* DateData page method extensions
-  - Allows sortBy() to work with subfields within DateData
-  - Also allows $page->dateCreated() to be echoed
-  - Handles old pages that include "created" fields, and new pages with the condensed DateData format
-*/
+// Date Created
+// returns the date a page was first created
 page::$methods['dateCreated'] = function($page) {
   if ($page->content()->created() != '') {
     return $page->content()->created();
@@ -26,6 +21,9 @@ page::$methods['dateCreated'] = function($page) {
     }
   }
 };
+
+// Date Modified
+// returns the most recent date the page was modified
 page::$methods['dateModified'] = function($page) {
   if ($page->content()->modified() != '') {
     return $page->content()->modified();
@@ -36,6 +34,19 @@ page::$methods['dateModified'] = function($page) {
     }
   }
 };
+
+// Modified By
+// returns the username who last modified the page
+page::$methods['modifiedBy'] = function($page) {
+  if ($page->content()->datedata() != '') {
+    if (isset(str::split(str::split($page->content()->datedata(),',')[1],'==')[1])) {
+      return str::split(str::split($page->content()->datedata(),',')[1],'==')[1];
+    }
+  }
+};
+
+// Date Published
+// returns the date the page was first made non-private
 page::$methods['datePublished'] = function($page) {
   if ($page->content()->datedata() == '') {
     return $page->content()->created();
@@ -48,6 +59,9 @@ page::$methods['datePublished'] = function($page) {
     }
   }
 };
+
+// Start Date
+// returns the start day and time of an event
 page::$methods['dateStart'] = function($page) {
   if ($page->content()->startdate() != '') {
     return $page->content()->startdate();
@@ -58,6 +72,9 @@ page::$methods['dateStart'] = function($page) {
     }
   }
 };
+
+// End Date
+// returns the end day and time of an event
 page::$methods['dateEnd'] = function($page) {
   if ($page->content()->enddate() != '') {
     return $page->content()->enddate();
@@ -69,81 +86,96 @@ page::$methods['dateEnd'] = function($page) {
   }
 };
 
-/* UserData page method extensions
-  - Allows sortBy() to work with subfields within UserData
-  - Also allows $page->dateCreated() to be echoed
-  - Handles old pages that include "created" fields, and new pages with the condensed DateData format
-*/
+//--------------------------------------------------
+// UserData Methods
+//--------------------------------------------------
+
+// Authors
+// returns an array of active author usernames (with roles separated by ~)
 page::$methods['authors'] = function($page) {
   if ($page->content()->makers() != '') {
     return $page->content()->makers()->split(',');
   }
   elseif ($page->content()->userdata() != '') {
-    if (isset(str::split($page->content()->userdata(),'///')[0])) {
-      return str::split(str::split($page->content()->userdata(),'///')[0],',');
+    if (isset(explode('///',$page->content()->userdata())[0])) {
+      return str::split(explode('///',$page->content()->userdata())[0],',');
     }
   }
 };
 
+// Old Authors
+// returns an array of old/retired author usernames (with roles separated by ~)
 page::$methods['oldauthors'] = function($page) {
   if ($page->content()->userdata() != '') {
-    if (isset(str::split($page->content()->userdata(),'///')[1])) {
-      return str::split(str::split($page->content()->userdata(),'///')[1],',');
+    if (isset(explode('///',$page->content()->userdata())[1])) {
+      return str::split(explode('///',$page->content()->userdata())[1],',');
     }
   }
 };
 
-page::$methods['groups'] = function($page) {
-  
-  $grouppages = array();
-  
-  if ($page->content()->makers() != '') {
-    foreach ($page->makers()->split(',') as $item) {
-      if ($grouppage = site()->page('groups/' . $item)) {
-        //$grouppages[] = $grouppage; // this makes it return a pages collection
-        $grouppages[] = $item;        // this makes it return an array of group strings
-      }
-    }
-    return $grouppages;
-  }
-  
-  elseif ($page->content()->reldata() != '') {
-    if (isset(str::split($page->content()->reldata(),'///')[0])) {
-      $related = str::split(str::split($page->content()->reldata(),'///')[0],',');
-      foreach ($related as $item) {
-        if ($grouppage = site()->page('groups/' . $item)) {
-          //$grouppages[] = $grouppage; // this makes it return a pages collection
-          $grouppages[] = $item;        // this makes it return an array of group strings
-        }
-      }
-      return $grouppages; // As page collection
-    }
-  }
-
-};
-
-
-/* RelData page method extensions
-  - related internal pages, external pages, tags, likes, and votes
-*/
-page::$methods['links'] = function($page) {
-  if ($page->content()->links() != null and $page->content()->links() != '') {
-    return $page->content()->links()->split(',');
-  }
-  elseif ($page->content()->reldata() != null and $page->content()->reldata() != '') {
-    if (isset(str::split($page->content()->reldata(),'///')[1])) {
-      return str::split(str::split($page->content()->reldata(),'///')[1],',');
+// Subscribers
+// returns an array of subscribed usernames
+page::$methods['subscribers'] = function($page) {
+  if ($page->content()->userdata() != '') {
+    if (isset(explode('///',$page->content()->userdata())[2])) {
+      return str::split(explode('///',$page->content()->userdata())[2],',');
     }
   }
 };
 
+// Subscriber Emails
+// returns an array of subscribed (non-user) email addresses
+page::$methods['subscriberEmails'] = function($page) {
+  if ($page->content()->userdata() != '') {
+    if (isset(explode('///',$page->content()->userdata())[3])) {
+      return str::split(explode('///',$page->content()->userdata())[3],',');
+    }
+  }
+};
+
+// Event Registrants
+// returns an array of event registrants
+page::$methods['registrants'] = function($page) {
+  if ($page->content()->userdata() != '') {
+    if (isset(explode('///',$page->content()->userdata())[4])) {
+      return str::split(explode('///',$page->content()->userdata())[4],',');
+    }
+  }
+};
+
+// Event Attendees
+// returns an array of event attendees
+page::$methods['attendees'] = function($page) {
+  if ($page->content()->userdata() != '') {
+    if (isset(explode('///',$page->content()->userdata())[5])) {
+      return str::split(explode('///',$page->content()->userdata())[5],',');
+    }
+  }
+};
+
+// Membership Requests
+// returns an array of usernames who've asked to join an event/group
+page::$methods['requests'] = function($page) {
+  if ($page->content()->userdata() != '') {
+    if (isset(explode('///',$page->content()->userdata())[6])) {
+      return str::split(explode('///',$page->content()->userdata())[6],',');
+    }
+  }
+};
+
+//--------------------------------------------------
+// RelData Methods
+//--------------------------------------------------
+
+// Related "internal" pages
+// returns an array of all related "internal" pages
 page::$methods['related'] = function($page) {
   if ($page->content()->makers() != '') {
     return $page->content()->makers()->split(',');
   }
   elseif ($page->content()->reldata() != '') {
-    if (isset(str::split($page->content()->reldata(),'///')[0])) {
-      return str::split(str::split($page->content()->reldata(),'///')[0],',');
+    if (isset(explode('///',$page->content()->reldata())[0])) {
+      return str::split(explode('///',$page->content()->reldata())[0],',');
     } else {
       return array();
     }
@@ -152,47 +184,208 @@ page::$methods['related'] = function($page) {
   }
 };
 
-
-page::$methods['relatedEquipmssssent'] = function($page) {
+// Related Groups
+// returns an array of related "group" pages only
+page::$methods['relatedGroups'] = function($page) {
   
-  $relatedpages = array();
-  
-
+  //$collection = array();
+  $collection = new Pages();
   
   if ($page->content()->makers() != '') {
     foreach ($page->makers()->split(',') as $item) {
-      if ($relatedpage = site()->page('equipment/' . $item)) {
-        $relatedpages[] = $relatedpage; // this makes it return a pages collection
-        //$grouppages[] = $item;        // this makes it return an array of group strings
+      if ($apage = site()->page('groups/' . $item)) {
+        //$collection[] = $apage; // this makes it return a pages collection
+        //$collection[] = $apage; // this makes it return an array of page strings
+        $collection->add($apage);
       }
     }
-    return $relatedpages;
+    return $collection;
   }
   
   elseif ($page->content()->reldata() != '') {
-    if (isset(str::split($page->content()->reldata(),'///')[0])) {
-      $related = str::split(str::split($page->content()->reldata(),'///')[0],',');
+    if (isset(explode('///',$page->content()->reldata())[0])) {
+      $related = str::split(explode('///',$page->content()->reldata())[0],',');
       foreach ($related as $item) {
-        if ($relatedpage = site()->page('equipment/' . $item)) {
-          $relatedpages[] = $relatedpage; // this makes it return a pages collection
-          //$grouppages[] = $item;        // this makes it return an array of group strings
+        if ($apage = site()->page('groups/' . $item)) {
+          //$collection[] = $apage; // this makes it return a pages collection
+          //$collection[] = $apage; // this makes it return an array of page strings
+          $collection->add($apage);
         }
       }
-      return $relatedpages; // As page collection
+      return $collection;
     }
   }
 
 };
 
+// Related Projects
+// returns an array of related "project" pages only
+page::$methods['relatedProjects'] = function($page) {
+  
+  $collection = array();
+  
+  if ($page->content()->makers() != '') {
+    foreach ($page->makers()->split(',') as $item) {
+      if ($apage = site()->page('projects/' . $item)) {
+        //$collection[] = $apage; // this makes it return a pages collection
+        $collection[] = $apage;   // this makes it return an array of page strings
+      }
+    }
+    return $collection;
+  }
+  
+  elseif ($page->content()->reldata() != '') {
+    if (isset(explode('///',$page->content()->reldata())[0])) {
+      $related = str::split(explode('///',$page->content()->reldata())[0],',');
+      foreach ($related as $item) {
+        if ($apage = site()->page('projects/' . $item)) {
+          //$collection[] = $apage; // this makes it return a pages collection
+          $collection[] = $apage;   // this makes it return an array of page strings
+        }
+      }
+      return $collection;
+    }
+  }
 
+};
 
+// "External" links
+// returns an array of titled external links
+page::$methods['links'] = function($page) {
+  if ($page->content()->links() != null and $page->content()->links() != '') {
+    return $page->content()->links()->split(',');
+  }
+  elseif ($page->content()->reldata() != null and $page->content()->reldata() != '') {
+    if (isset(explode('///',$page->content()->reldata())[1])) {
+      return str::split(explode('///',$page->content()->reldata())[1],',');
+    }
+  }
+};
 
+// Tags
+// returns an array of tags
+page::$methods['tags'] = function($page) {
+  if ($page->content()->reldata() != null and $page->content()->reldata() != '') {
+    if (isset(explode('///',$page->content()->reldata())[2])) {
+      return str::split(explode('///',$page->content()->reldata())[2],',');
+    }
+  }
+};
 
+// Likes
+// returns an array of usernames who "liked" the page
+page::$methods['likes'] = function($page) {
+  if ($page->content()->reldata() != null and $page->content()->reldata() != '') {
+    if (isset(explode('///',$page->content()->reldata())[3])) {
+      return str::split(explode('///',$page->content()->reldata())[3],',');
+    }
+  }
+};
 
+// Votes
+// returns an array of usernames who voted for the page
+page::$methods['votes'] = function($page) {
+  if ($page->content()->reldata() != null and $page->content()->reldata() != '') {
+    if (isset(explode('///',$page->content()->reldata())[4])) {
+      return str::split(explode('///',$page->content()->reldata())[4],',');
+    }
+  }
+};
 
+//--------------------------------------------------
+// Settings Methods
+//--------------------------------------------------
 
+// Color
+// returns the page's color
+page::$methods['color'] = function($page) {
+  if ($page->content()->color() != '') {
+    return $page->content()->color();
+  }
+  elseif ($page->content()->settings() != '') {
+    if (isset(explode(',',$page->content()->settings())[0])) {
+      return explode(',',$page->content()->settings())[0];
+    }
+  }
+};
 
+// Visibility
+// returns the page's visibility
+page::$methods['visibility'] = function($page) {
+  if ($page->content()->visibility() != '') {
+    return $page->content()->visibility();
+  }
+  elseif ($page->content()->settings() != '') {
+    if (isset(explode(',',$page->content()->settings())[1])) {
+      return explode(',',$page->content()->settings())[1];
+    }
+  }
+};
 
+// Comments
+// returns the page's comments
+page::$methods['comments'] = function($page) {
+  if ($page->content()->settings() != '') {
+    if (isset(str::split($page->content()->settings(),',')[2])) {                           // check if comments setting is present
+      if (isset(str::split(str::split($page->content()->settings(),',')[2],'==')[1])) {     // check if comments setting is set
+        if (str::split(str::split($page->content()->settings(),',')[2],'==')[1] != 'off') { // check if comments are not off
+          return str::split(str::split($page->content()->settings(),',')[2],'==')[1];       // return "on" or whatever it is
+          // Eventually return an array of the actual comment objects themselves
+        }
+      }
+    }
+  }
+};
+
+// Submissions
+// returns the page's submissions
+page::$methods['submissions'] = function($page) {
+  if ($page->content()->settings() != '') {
+    if (isset(str::split($page->content()->settings(),',')[3])) {                           // check if submissions setting is present
+      if (isset(str::split(str::split($page->content()->settings(),',')[3],'==')[1])) {     // check if submissions setting is set
+        if (str::split(str::split($page->content()->settings(),',')[3],'==')[1] != 'off') { // check if submissions are not off
+          return str::split(str::split($page->content()->settings(),',')[3],'==')[1];       // return "on" or whatever it is
+          // Eventually return an array of the actual submission objects themselves
+        }
+      }
+    }
+  }
+};
+
+// Price
+// returns the event/page's price
+page::$methods['price'] = function($page) {
+  if ($page->content()->settings() != '') {
+    if (isset(str::split($page->content()->settings(),',')[4])) {                           // check if price setting is present
+      if (isset(str::split(str::split($page->content()->settings(),',')[4],'==')[1])) {     // check if price setting is set
+        if (str::split(str::split($page->content()->settings(),',')[4],'==')[1] != 'off') { // check if price is not off
+          return str::split(str::split($page->content()->settings(),',')[4],'==')[1];       // return the price
+        }
+      }
+    }
+  }
+};
+
+// Equipment Status
+// returns the event/page's price
+page::$methods['price'] = function($page) {
+  if ($page->content()->settings() != '') {
+    if (isset(str::split($page->content()->settings(),',')[4])) {                           // check if price setting is present
+      if (isset(str::split(str::split($page->content()->settings(),',')[4],'==')[1])) {     // check if price setting is set
+        if (str::split(str::split($page->content()->settings(),',')[4],'==')[1] != 'off') { // check if price is not off
+          return str::split(str::split($page->content()->settings(),',')[4],'==')[1];       // return the price
+        }
+      }
+    }
+  }
+};
+
+//--------------------------------------------------
+// Hero Methods
+//--------------------------------------------------
+
+// Hero image
+// returns the hero image (or first image) of a page
 page::$methods['heroImage'] = function($page) {
 
   if ($hero = $page->images()->findBy('name', 'hero')) {
@@ -205,50 +398,49 @@ page::$methods['heroImage'] = function($page) {
   
 };
 
+//--------------------------------------------------
+// Permissions
+//--------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-page::$methods['datedatas'] = function($page, $type) {
-  
-  $type = null;
-  
-  if ($type == 'modifiedby') {
-    return str::split(str::split($page->content()->datedata(),',')[1],'==')[1];
+page::$methods['isVisibleToUser'] = function($page) {
+  //if (array_intersect(array('unlisted'),$page->visibility()->split(','))) {
+  if ($page->visibility() == 'unlisted') {
+    return true;
+  } else {
+    return isVisibleToUser($page);
   }
-  
 };
+
+page::$methods['isEditableByUser'] = function($page) {
+  if (!site()->user()) {
+    return false;
+  } else {
+    return isEditableByUser($page);
+  }
+};
+
+pages::$methods['visibleToUser'] = function($pages) {  
+  $collection = new Pages();
+  foreach($pages as $page) {
+    if (isVisibleToUser($page)) {
+      $collection->add($page);
+    }
+  }
+  return $collection;
+};
+
+//==================================================
+// USER DATA METHODS
+// https://makernetwork.org/docs#user-data
+//==================================================
+
+
+
+
+
+
+
+
 
 
 /* User Avatar image url
@@ -301,65 +493,9 @@ function groupColor($groupslug) {
 
 
 
-/* Remote Image Downloader
-  - stores a remote image locally and returns the image's URL
-  - cannot return the image object because an error occurs, the image is not readable yet
-*/
-function downloadedImageURL($filename, $remoteURL) {
-  if (!page()->image($filename . '.jpg')) {
-    if ($remoteURL == 'youtube') {
-      $youtubeid = substr(strstr($filename, '-'), 1);
-      $remoteURL = youtube_image($youtubeid);
-      $imagepath = kirby()->roots()->content() . '/' . page()->diruri() . '/' . $filename . '.jpg';
-    }
-    copy($remoteURL, $imagepath);
-  }
-  $imageURL = page()->contentURL() . '/' . $filename . '.jpg';
-  return $imageURL;
-};
 
-function youtube_image($id) {
-  $resolution = array (
-    'maxresdefault',
-    'mqdefault',
-    'sddefault',
-    'hqdefault',
-    'default'
-  );
-  for ($x = 0; $x < sizeof($resolution); $x++) {
-    $url = 'https://img.youtube.com/vi/' . $id . '/' . $resolution[$x] . '.jpg';
-    if (get_headers($url)[0] == 'HTTP/1.0 200 OK') {
-      break;
-    }
-  }
-  return $url;
-}
 
-page::$methods['isVisibleToUser'] = function($page) {
-  if (array_intersect(array('unlisted'),$page->visibility()->split(','))) {
-    return true;
-  } else {
-    return isVisibleToUser($page);
-  }
-};
 
-page::$methods['isEditableByUser'] = function($page) {
-  if (!site()->user()) {
-    return false;
-  } else {
-    return isEditableByUser($page);
-  }
-};
-
-pages::$methods['visibleToUser'] = function($pages) {  
-  $collection = new Pages();
-  foreach($pages as $page) {
-    if (isVisibleToUser($page)) {
-      $collection->add($page);
-    }
-  }
-  return $collection;
-};
 
 
 
@@ -422,7 +558,39 @@ function isEditableByUser($page) {
 
 
 
+/* Remote Image Downloader
+  - stores a remote image locally and returns the image's URL
+  - cannot return the image object because an error occurs, the image is not readable yet
+*/
+function downloadedImageURL($filename, $remoteURL) {
+  if (!page()->image($filename . '.jpg')) {
+    if ($remoteURL == 'youtube') {
+      $youtubeid = substr(strstr($filename, '-'), 1);
+      $remoteURL = youtube_image($youtubeid);
+      $imagepath = kirby()->roots()->content() . '/' . page()->diruri() . '/' . $filename . '.jpg';
+    }
+    copy($remoteURL, $imagepath);
+  }
+  $imageURL = page()->contentURL() . '/' . $filename . '.jpg';
+  return $imageURL;
+};
 
+function youtube_image($id) {
+  $resolution = array (
+    'maxresdefault',
+    'mqdefault',
+    'sddefault',
+    'hqdefault',
+    'default'
+  );
+  for ($x = 0; $x < sizeof($resolution); $x++) {
+    $url = 'https://img.youtube.com/vi/' . $id . '/' . $resolution[$x] . '.jpg';
+    if (get_headers($url)[0] == 'HTTP/1.0 200 OK') {
+      break;
+    }
+  }
+  return $url;
+}
 
 
 
