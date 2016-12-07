@@ -13,7 +13,7 @@
           <div class="text size-33 card-join highlight">
             <h2>Join the Network</h2>
             <p>Get email updates, register for events, reserve equipment, start new projects and more with one account that ties everything together.</p>
-            <a class="button fullwidth" href="<?php echo page('signup')->url() ?>">Become a Maker</a>
+            <button class="button fullwidth button-signup">Become a Maker</button>
           </div>
         </div>
       </div>
@@ -29,7 +29,7 @@
               <img style="height:100px;" src="<?php echo page('projects')->children()->filterBy('visibility','public')->sortBy('created','desc')->images()->filterBy('name', '*=', 'hero')->first()->crop(270,100)->url() ?>"></img>
               <p>Browse projects and ideas created by Tufts students, faculty, and community members.</p>
             </a>
-            <a class="button fullwidth" href="<?php echo page('projects')->url() ?>">View projects</a>
+            <button class="button fullwidth" href="<?php echo page('projects')->url() ?>">View projects</button>
           </div>
         
           <div class="size-quarter red card-join highlight">
@@ -38,7 +38,7 @@
               <img style="height:100px;" src="<?php echo page('handbooks')->children()->filterBy('visibility','public')->sortBy('created','desc')->limit(1)->images()->findBy('name','hero')->crop(270,100)->url() ?>"></img>
               <p>Learn the basics of a variety of tools and techniques.</p>
             </a>
-            <a class="button fullwidth" href="<?php echo page('handbooks')->url() ?>">View handbooks</a>
+            <button class="button fullwidth" href="<?php echo page('handbooks')->url() ?>">View handbooks</button>
           </div>
           
           <div class="size-quarter gold card-join highlight">
@@ -47,7 +47,7 @@
               <img style="height:100px;" src="<?php echo page('events')->children()->sortBy('startdate','desc')->limit(1)->images()->findBy('name','hero')->crop(270,100)->url() ?>"></img>
               <p>Join a workshop or event to learn new things with others.</p>
             </a>
-            <a class="button fullwidth" href="<?php echo page('events')->url() ?>">View events</a>
+            <button class="button fullwidth" href="<?php echo page('events')->url() ?>">View events</button>
           </div>
           
           <div class="size-quarter purple card-join highlight">
@@ -56,7 +56,7 @@
               <img style="height:100px;" src="<?php echo page('spaces')->children()->filterBy('visibility','public')->sortBy('modified','desc')->limit(1)->images()->filterBy('name', '*=', 'hero')->first()->crop(270,100)->url() ?>"></img>
               <p>Stop by one of Tufts' makerspaces to get access to tools and equipment.</p>
             </a>
-            <a class="button fullwidth" href="<?php echo page('spaces')->url() ?>">View spaces</a>
+            <button class="button fullwidth" href="<?php echo page('spaces')->url() ?>">View spaces</button>
           </div>
           
         </div>
@@ -98,7 +98,6 @@
             <p>The most important part of the Network is, of course, makers like you.</p>
             <p>The things you make, the events you plan, the clubs you join and the lessons you document are what make the Network tick. All of that activity is bundled up and presented on your Maker Profile page, which allows others to see the cool things you've done and connect with you for more making opportunities.</p>
             <p>All of that starts by joining the Network.</p>
-            <a class="button" href="<?php echo page('signup')->url() ?>">Sign up</a>
           </div>
           
           <div class="cards-makers size-half">

@@ -132,6 +132,7 @@ function modals() {
   var forgotbutton = document.getElementById('button-forgot');
   var forgotmodal = document.getElementById('modal-forgot');
   var signupbutton = document.getElementById('button-signup');
+  var signupbuttons = document.getElementsByClassName('button-signup');
   var signupmodal = document.getElementById('modal-signup');
   
   var resetmodal = document.getElementById('modal-reset');
@@ -163,11 +164,16 @@ function modals() {
     }, false);
   }
 
-  if (signupbutton != null) {
-    signupbutton.addEventListener('click', function() {
+  if (signupbuttons != null) {
+    
+    var showSignupModal = function() {
       signupmodal.classList.add('visible');
       document.body.classList.add('noscroll');
-    }, false);
+    }
+    
+    for (var i = 0; i < signupbuttons.length; i++) {
+      signupbuttons[i].addEventListener('click', showSignupModal, false);
+    }
 
     signupmodal.firstElementChild.addEventListener('click', function(event) {
       var target = getEventTarget(event);

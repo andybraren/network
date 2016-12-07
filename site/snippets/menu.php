@@ -65,9 +65,7 @@
       <li><a href="&#109;&#97;ilto&#58;and%79&#98;rare%&#54;&#69;&#64;g&#109;a%&#54;9l&#46;&#99;%6&#70;m">Contact</a></li>
       
       <?php if($site->user() == null): ?>
-      <!--
-        <li><a id="button-signup" class="login">Sign up</a></li>
-      -->
+        <li><a class="button-signup" class="login">Sign up</a></li>
       <?php else: ?>
         <li><a href="<?php echo $page->url() . '/logout' ?>">Logout</a></li>
       <?php endif ?>
