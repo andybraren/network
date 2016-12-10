@@ -25,12 +25,14 @@
 2016-09-13 - Fixed issue where external MP4 files wouldn't have a filename for the previous change, which caused an error.
 2016-09-19 - Implemented fix for missing YouTube thumbnails, without page slowdown. Thumbnails are now downloaded locally once and used thereafter.
 2016-09-26 - Moved YouTube thumbnail downloader to network-methods, replaced with more universal downloadedImageURL() function
+2016-12-09 - Added (size:) support, same as images
 */
 
 kirbytext::$tags['video'] = array(
   'attr' => array(
     'caption',
-    'autoplay'
+    'autoplay',
+    'size'
   ),
   'html' => function($tag) {
     
@@ -39,6 +41,11 @@ kirbytext::$tags['video'] = array(
     $url = $tag->attr('video');
     $autoplay = $tag->attr('autoplay');
     $file = $tag->file($url);
+    $size = $tag->attr('size');
+    
+    if ($size != null) {
+      $size = ' class="' . $size . '"';
+    }
     
     $posterimage = "";
     $filename = "";
@@ -110,7 +117,7 @@ kirbytext::$tags['video'] = array(
 
       // HTML5 "GIFs"
       elseif ($autoplay == "on"):
-        return '<figure><video controls preload="metadata" autoplay loop muted playsinline class="b-lazy" ' . $posterimage . ' data-src="' . $url . '" data-file="' . $filename . '"></video>
+        return '<figure' . $size . '><video controls preload="metadata" autoplay loop muted playsinline class="b-lazy" ' . $posterimage . ' data-src="' . $url . '" data-file="' . $filename . '"></video>
         <noscript><span style="color:#AB2A2A">It looks like you have JavaScript disabled. <a href="' . $url . '">Click here</a> to view the video above.</span></noscript>' . $htmlcaption . '</figure>';
         
         // Attempted HTML5 video with noscript fallback, but there doesn't seem to be an easy way unfortunately
@@ -118,7 +125,7 @@ kirbytext::$tags['video'] = array(
       
       // HTML5 embeds
       else:
-        return '<figure><video controls preload="metadata" class="b-lazy" ' . $posterimage . ' data-src="' . $url . '" data-file="' . $filename . '"></video>
+        return '<figure' . $size . '><video controls preload="metadata" class="b-lazy" ' . $posterimage . ' data-src="' . $url . '" data-file="' . $filename . '"></video>
         <noscript><span style="color:#AB2A2A">It looks like you have JavaScript disabled. <a href="' . $url . '">Click here</a> to view the video above.</span></noscript>' . $htmlcaption . '</figure>';
       endif;
     
