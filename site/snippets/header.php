@@ -74,7 +74,7 @@
       transition: all 0.3s ease;
     }
     
-    <?php if ($page->isHomePage() or in_array($page->uid(), array('spaces','events','search'))): ?>
+    <?php if ($page->isHomePage() or in_array($page->uid(), array('spaces','events','search','equipment'))): ?>
       body {
         margin-top: 52px !important;
       }
