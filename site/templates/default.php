@@ -1,10 +1,10 @@
 <?php // Authentication ?>
 <?php if (!$page->isVisibleToUser()): ?>
   <?php snippet('header') ?>
-  <main class="main">
+  <div class="main">
     <div class="container">
       <div class="sidebar"></div>
-      <div class="content">
+      <main class="content">
         <article>
           <h1>
             <?php echo ($site->errorPage()->title() != "") ? $site->errorPage()->title() : "" ?>
@@ -13,9 +13,9 @@
             <?php echo ($site->errorPage()->text() != "") ? $site->errorPage()->text()->kirbytext() : "" ?>
           </div>
         </article>
-      </div>
+      </main>
     </div>
-  </main>
+  </div>
   <?php snippet('footer') ?>
 <?php else: ?>
 
@@ -25,7 +25,7 @@
 
 
 
-<main class="main">
+<div class="main">
   <div class="container">
 
     <?php if($page->uid() != 'groups' and $page->uid() != 'spaces' and $page->uid() != 'projects' and $page->uid() != 'handbooks' and $page->uid() != 'articles' and $page->uid() != 'equipment' and $page->uid() != 'books' and $page->uid() != 'courses' and $page->uid() != 'learn'): ?>
@@ -55,7 +55,7 @@
       </div>
     <?php endif ?>
     
-    <div class="content">
+    <main class="content">
       <article>
   
         <div data-editable data-name="title">
@@ -140,14 +140,14 @@
       <?php endif ?>
 
       <?php if($page->uid() == 'challenges'): ?>
-        <?php snippet('cards', array('type' => 'projects')) ?>
+        <?php snippet('cards', array('type' => 'challenges')) ?>
       <?php endif ?>
 
-      <?php if($page->isDescendantOf($site->find('challenges'))): ?>
-        <?php snippet('cards', array('type' => 'projects')) ?>
+      <?php if($page->isChildOf($site->find('challenges'))): ?>
+        <?php snippet('cards') ?>
       <?php endif ?>
 
-      <?php if($page->isDescendantOf($site->find('books'))): ?>
+      <?php if($page->isChildOf($site->find('books'))): ?>
         <?php snippet('cards', array('type' => 'projects')) ?>
       <?php endif ?>
 
@@ -177,12 +177,12 @@
         <?php snippet('events') ?>
       <?php endif ?>
       
-    </div>
+    </main>
 
 
 
   </div>
-</main>
+</div>
 
 <?php snippet('footer') ?>
 
