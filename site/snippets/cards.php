@@ -1,6 +1,13 @@
 <?php // Master card snippet for makers, projects, events, tools, etc. ?>
 
 <?php // MAKER CARDS ?>
+
+<?php
+if (!isset($type)) {
+  $type = "none";
+}
+?>
+
 <?php if ($type == "makers"): ?>
   <?php if ($page->isHomePage()): ?>
 
@@ -109,8 +116,6 @@
 
 
 
-
-
 <?php // GROUP, CLUB, HANDBOOK, SPACE, PROJECT CARDS ?>
 
 
@@ -118,52 +123,57 @@
     
     $items = '';
     
-    if ($type != 'makers') {
-      if (isset($type)) { // Collect all items of the given type
-        //$items = $site->page($type)->children()->sortBy('created','desc');
-        //$items = $site->page($type)->children()->sortBy('datedata','desc');
-        //$items = $site->page($type)->children()->sortBy('dateCreated','desc');
-        //$items = $site->page($type)->children()->dateCreated();
-        $items = $site->page($type)->children()->sortBy('datePublished','desc');
-      }
-      if (isset($maker)) {
-        $filtered = new Pages();
-        foreach ($items as $item) {
-          if ($item->authors() != null) {
-            if (in_array($maker,$item->authors())) {
-              $filtered->add($item);
-            }
+    if (isset($type)) {
+      if ($type != 'makers') {
+        if (isset($type)) { // Collect all items of the given type
+          //$items = $site->page($type)->children()->sortBy('created','desc');
+          //$items = $site->page($type)->children()->sortBy('datedata','desc');
+          //$items = $site->page($type)->children()->sortBy('dateCreated','desc');
+          //$items = $site->page($type)->children()->dateCreated();
+          
+          if ($type == 'none') {
+            $items = page()->children()->sortBy('datePublished','desc')->visibleToUser();
+          } else {
+            $items = $site->page($type)->children()->sortBy('datePublished','desc');
           }
         }
-        $items = $filtered;
-      }
-      if (isset($group)) {
-        $filtered = new Pages();
-        foreach ($items as $item) {
-          if ($item->relatedGroups() != null) {
-            foreach ($item->relatedGroups() as $blah) {
-              if ($blah->slug() == $group) {
+        if (isset($maker)) {
+          $filtered = new Pages();
+          foreach ($items as $item) {
+            if ($item->authors() != null) {
+              if (in_array($maker,$item->authors())) {
                 $filtered->add($item);
               }
             }
           }
+          $items = $filtered;
         }
-        $items = $filtered;
+        if (isset($group)) {
+          $filtered = new Pages();
+          foreach ($items as $item) {
+            if ($item->relatedGroups() != null) {
+              foreach ($item->relatedGroups() as $blah) {
+                if ($blah->slug() == $group) {
+                  $filtered->add($item);
+                }
+              }
+            }
+          }
+          $items = $filtered;
+        }
+        if (isset($time)) {
+          if ($time == 'upcoming') {
+            $items = $items->filterBy('StartDate','>=',date('c'))->sortBy('StartDate','desc');
+          }
+          elseif ($time == 'past') {
+            $items = $items->filterBy('StartDate','<',date('c'))->sortBy('StartDate','desc');
+          }
+        }
+        $items = $items->visibleToUser();
       }
-      if (isset($time)) {
-        if ($time == 'upcoming') {
-          $items = $items->filterBy('StartDate','>=',date('c'))->sortBy('StartDate','desc');
-        }
-        elseif ($time == 'past') {
-          $items = $items->filterBy('StartDate','<',date('c'))->sortBy('StartDate','desc');
-        }
-      }
-      $items = $items->visibleToUser();
     }
     
   ?>
-
-
 
   <?php if ($page->uid() != $type and ($site->user() or $items != '')): ?>
     <h2><?php echo ucfirst(strval($type)) ?></h2>
