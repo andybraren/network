@@ -43,9 +43,15 @@ function retitle($match) {
     preg_match('/id=\"(.*)\"/',$_unused,$idmatches);
     preg_match('/name=\"(.*)\"/',$_unused,$namematches);
     if (empty($idmatches) && empty($namematches)) {
+        
+        /*
         $id = strip_tags($title);
         $id = strtolower(str_replace($delete,'',str_replace($hyphenate,'-',$id)));
         $id = preg_replace('/<\/?a[^>]*>/','',$id);
+        */
+        
+        $id = str::slug($title);
+        
         //return "<$h2 id='$id'><a href='#$id'>$title</a></$h2>";
         return "<$h2 id='$id'>$title</$h2>";
     } elseif (!empty($idmatches) && empty($namematches)) {
@@ -56,12 +62,6 @@ function retitle($match) {
         return "<$h2 id='$namematches[1]'>$title</$h2>";
     }
 }
-
-
-
-
-
-
 
 
 
