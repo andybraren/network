@@ -57,7 +57,7 @@ body {
   min-height: 100vh;
   
   position: relative;
-  top: 85px;
+  margin-top: 85px;
 }
 
 /* Header
@@ -477,18 +477,14 @@ blockquote {
 -------------------------------------------------- */
 .main .container {
   display: flex;
-  /*
   flex-flow: row wrap;
-  */
   /*
   width: 100%;
   flex-flow: row wrap;
   align-content: flex-start;
   */
   padding: 1rem 0;
-  /*
   justify-content: space-between;
-  */
 }
 
 
@@ -2989,13 +2985,17 @@ iframe.visible {
 }
 
 #hero.carousel {
+  /*
   height: 20vh;
+  */
+  height: 25vh;
   max-height: 30vh;
 }
 
 
 #hero figcaption {
   position: absolute;
+  width: 100%;
   top: 50%;
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
@@ -3006,13 +3006,21 @@ iframe.visible {
   -ms-user-select: none;
   user-select: none;
   margin: 0;
+  font-size: 5vh;
 }
-#hero h2, #hero h3 {
+
+/*
+#hero figure {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+*/
+
+#hero span {
   width: 100%;
   color: white;
   margin: 0;
-  font-size: 3rem;
-  line-height: 3.5rem;
   letter-spacing: 1px;
   text-shadow: 0px 0px 20px #000;
 }

@@ -36,7 +36,7 @@
         <figure>
           <img class="hero-image" src="<?php echo thumb($image, array('width' => 1200, 'height' => 300, 'crop' => true))->url() ?>">
           <?php if (!$image->caption()->empty() or !$image->title()->empty()): ?>
-            <figcaption><h2><?php echo $image->title() ?></h2><h3><?php echo $image->subtitle() ?></h3></figcaption>
+            <figcaption><span><?php echo $image->title() ?></span><br><span><?php echo $image->subtitle() ?></span></figcaption>
           <?php endif ?>
         </figure>
       <?php endforeach ?>
