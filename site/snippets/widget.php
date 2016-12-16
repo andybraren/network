@@ -17,7 +17,7 @@
               case 'handbooks': $title = 'HANDBOOKS'; break;
             }
           ?>
-          <h3><?php echo $title ?></h3>
+          <span class="heading"><?php echo $title ?></span>
           <?php $divechoed = true ?>
       <?php endif ?>
           <a href="<?php echo $relatedpage->url() ?>">
@@ -62,7 +62,7 @@
     
       <?php if (!$divechoed): ?>
         <div class="widget">
-          <h3>EQUIPMENT</h3>
+          <span class="heading">EQUIPMENT</span>
           <?php $divechoed = true ?>
       <?php endif ?>
           <a href="<?php echo $equipmentpage->url() ?>">
@@ -95,7 +95,7 @@
 <?php if ($type == 'links' and $page->links() != null): ?>
   
   <div class="widget">
-    <h3>LINKS</h3>
+    <span class="heading">LINKS</span>
     <ul>
       <?php foreach ($page->links() as $link): ?>
         <?php $part = str::split($link, '==') ?>
@@ -148,7 +148,7 @@
         }
       ?>
       
-      <h3><?php echo $title ?></h3>
+      <span class="heading"><?php echo $title ?></span>
       
       <?php if (isset($authors)): ?>
         <div class="authors" id="authors">
@@ -246,7 +246,7 @@
         $title = ($plural) ? 'GROUPS' : 'GROUP';
       ?>
       
-      <h3><?php echo $title ?></h3>
+      <span class="heading"><?php echo $title ?></span>
       
       <div class="groups" id="groups">
         <?php if (isset($groups)): ?>

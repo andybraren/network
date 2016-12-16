@@ -85,9 +85,10 @@ if (!isset($type)) {
         $filters = trim(preg_replace('/\s+/',' ',$filters));
       ?>
       
-        <a data-filters="<?php echo $filters ?>" href="<?php echo $site->url() . "/makers/" . $user ?>">
+        <a class="<?php echo userColor($user) ?>" data-filters="<?php echo $filters ?>" href="<?php echo $site->url() . "/makers/" . $user ?>">
           <img src="<?php echo userAvatar($user, 108) ?>" class="<?php echo userColor($user) ?>">
-          <div><span><?php echo $user->firstname() . ' ' . $user->lastname() ?></span></div>
+          <?php /* <div><span><?php echo $user->firstname() . ' ' . $user->lastname() ?></span></div> */ ?>
+          <span><?php echo $user->firstname() . ' ' . $user->lastname() ?></span>
         </a>
       <?php endforeach ?>
     </div>
