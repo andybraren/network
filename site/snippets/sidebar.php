@@ -33,7 +33,7 @@
     <div id="button-edit" class="button flash">Edit</div>
     
     <div id="settings" class="">
-      <h3>SETTINGS</h3>
+      <span class="heading">SETTINGS</span>
       <form method="post" action="savesettings" id="form-settings">
         
         <div class="size-full">
@@ -74,7 +74,7 @@
     
 <?php /*
     <div id="settings" class="settings column">
-      <h3>SETTINGS</h3>
+      <span class="heading">SETTINGS</span>
       <?php if ($page->parent() != 'makers'): ?>
       <div class="row"><span>Visible to:</span></div>
         <select>
@@ -104,7 +104,7 @@
 
   <?php // MAKERS ?>
   <?php if($page->uid() == 'makers'): ?>
-    <h3>FILTER BY:</h3>
+    <span class="heading">FILTER BY:</span>
     <form id="filters">
       <div>
         <select name="affiliation">
@@ -141,7 +141,7 @@
     
     <?php /*
     <div class="filter column">
-      <h3>Clubs</h3>
+      <span class="heading">Clubs</span>
       <form action="">
         <input type="checkbox" checked=""> Robotics<br>
         <input type="checkbox" checked=""> MAKE<br>
@@ -157,7 +157,7 @@
   <?php // MAKERS ?>
   <?php if($page->uid() == 'projects'): ?>
     <div class="filter">
-      <h3>Filter</h3>
+      <span class="heading">Filter</span>
       <form action="">
         <input type="checkbox" checked="">Personal<br>
         <input type="checkbox" checked="">Research<br>
@@ -187,12 +187,12 @@
     
     <!--
     <div class="info column">
-      <h3>Groups</h3>
+      <span class="heading">Groups</span>
       <span>CEEO</span>
     </div>
     
     <div class="info column">
-      <h3>Equipment</h3>
+      <span class="heading">Equipment</span>
       <span>3D Printing</span>
       <span>Soldering</span>
       <span>Laser cutting</span>
@@ -205,13 +205,13 @@
   <?php // EVENTS SORTING ?>
   <?php if($page->uid() == 'events'): ?>
     <div class="hours">
-      <h3>SUBSCRIBE</h3>
+      <span class="heading">SUBSCRIBE</span>
       <span><a href="https://www.facebook.com/events/1714521768776526/">Google Calendar</a></span>
       <span><a href="https://www.facebook.com/events/1714521768776526/">RSS</a></span>
     </div>
     
     <div class="hours">
-      <h3>Clubs:</h3>
+      <span class="heading">Clubs:</span>
       <div class="row"><span><input type="checkbox" name="vehicle" value="all" checked> All</input></span></div>
       <div class="row"><span><input type="checkbox" name="vehicle" value="all"> CSX</input></span></div>
       <div class="row"><span><input type="checkbox" name="vehicle" value="make"> MAKE</input></span></div>
@@ -220,7 +220,7 @@
     </div>
 
     <div class="hours">
-      <h3>Spaces:</h3>
+      <span class="heading">Spaces:</span>
       <div class="row"><span><input type="checkbox" name="vehicle" value="all" checked> All</input></span></div>
       <div class="row"><span><input type="checkbox" name="vehicle" value="make"> Maker Studio</input></span></div>
       <div class="row"><span><input type="checkbox" name="vehicle" value="robotics-"> Crafts Center</input></span></div>
@@ -228,7 +228,7 @@
     </div>
 
     <div class="hours">
-      <h3>Type:</h3>
+      <span class="heading">Type:</span>
       <div class="row"><span><input type="checkbox" name="vehicle" value="all" checked> All</input></span></div>
       <div class="row"><span><input type="checkbox" name="vehicle" value="make"> Training</input></span></div>
       <div class="row"><span><input type="checkbox" name="vehicle" value="robotics-"> Speaker</input></span></div>
@@ -238,8 +238,8 @@
 
   <?php // LOCATION INFORMATION ?>
   <?php if($page->location() != ""): ?>
-    <div class="location">
-      <h3>HOURS & LOCATION</h3>
+    <div class="widget location">
+      <span class="heading">LOCATION</span>
       <?php $address = $page->location() ?>
       <?php $address = ($page->location() == "Crafts Center" ? "75 Packard Ave, Medford MA 02155" : $page->location()) ?>
       <?php $address = ($page->location() == "Maker Studio" ? "574 Boston Ave, Medford MA 02155" : $page->location()) ?>
@@ -255,24 +255,24 @@
     
   <?php // TIME INFORMATION ?>
   <?php if($page->start() != ""): ?>
-    <div class="hours">
-      <h3>TIME / DATE</h3>
+    <div class="widget hours">
+      <span class="heading">TIME / DATE</span>
       <span><?php echo $page->date('l F d','Start') . '<br>' . $page->date('g:i','Start') . ' - ' . $page->date('g:i','End') ?></span>
     </div>
   <?php endif ?>
   
   <?php // TIME INFORMATION NEEDS TO BE MERGED WITH THE ABOVE?>
   <?php if($page->StartDate() != ""): ?>
-    <div class="hours">
-      <h3>EVENT DATE</h3>
+    <div class="widget hours">
+      <span class="heading">EVENT DATE</span>
       <span><?php echo $page->date('l F d','StartDate') . '<br>' . $page->date('g:i A','StartDate') . ' - ' . $page->date('g:i A','EndDate') ?></span>
     </div>
   <?php endif ?>
   
   <?php // SPACE HOURS INFORMATION ?>
   <?php if($page->hours() != ""): ?>
-    <div class="hours">
-      <h3>HOURS</h3>
+    <div class="widget hours">
+      <span class="heading">HOURS</span>
         <?php
           
           //$hours = preg_split('/(\s)/', $page->hours());
@@ -328,9 +328,9 @@
   <?php // TABLE OF CONTENTS ?>
   <?php if($page->intendedTemplate() == 'handbook' or $page->intendedTemplate() == 'article' or $page->intendedTemplate() == 'project'): ?>
     <?php if(preg_match_all('/(?<!#)#{2,3}([^#].*)\n/', $page->text(), $matches)): // Grabs H2's and H3's ?>
-      <div class="toc sticky">
+      <div class="widget toc sticky">
         <div>
-          <h3>CONTENTS</h3>
+          <span class="heading">CONTENTS</span>
           <a onclick="window.scrollTo(0,0);">&#8673;</span>
         </div>
         <ul>
