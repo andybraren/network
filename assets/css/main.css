@@ -916,6 +916,7 @@ aside figure a img {
 }
 .main p, .main > ul, .main > ol, blockquote, .gallery {
   margin: 0.5rem 0;
+  word-wrap: break-word;
 }
 article hr {
   max-width: initial !important;
@@ -3110,7 +3111,7 @@ twitterwidget {
   position: -moz-sticky;
   position: -o-sticky;
   position: -ms-sticky;
-  top: 60px;
+  top: 100px;
 }
 .menu-secondary.sticky {
   top: 0px;
@@ -3583,9 +3584,11 @@ article {
 .sidebar ~ .content {
   margin-right: auto;
 }
+/*
 .rightsidebar ~ .content {
   max-width: 700px;
 }
+*/
 /*
 article {
   max-width: 700px;
