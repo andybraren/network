@@ -296,11 +296,11 @@ page::$methods['votes'] = function($page) {
 // Settings Methods
 //--------------------------------------------------
 
-// Color
-// returns the page's color
-page::$methods['color'] = function($page) {
-  if ($page->content()->color() != '') {
-    return $page->content()->color();
+// Visibility
+// returns the page's visibility
+page::$methods['visibility'] = function($page) {
+  if ($page->content()->visibility() != '') {
+    return $page->content()->visibility();
   }
   elseif ($page->content()->settings() != '') {
     if (isset(explode(',',$page->content()->settings())[0])) {
@@ -309,11 +309,11 @@ page::$methods['color'] = function($page) {
   }
 };
 
-// Visibility
-// returns the page's visibility
-page::$methods['visibility'] = function($page) {
-  if ($page->content()->visibility() != '') {
-    return $page->content()->visibility();
+// Color
+// returns the page's color
+page::$methods['color'] = function($page) {
+  if ($page->content()->color() != '') {
+    return $page->content()->color();
   }
   elseif ($page->content()->settings() != '') {
     if (isset(explode(',',$page->content()->settings())[1])) {
