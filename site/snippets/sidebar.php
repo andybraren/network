@@ -37,7 +37,7 @@
       <form method="post" action="savesettings" id="form-settings">
         
         <div class="size-full">
-          <?php $class = ($page->visibility()->isNotEmpty()) ? "hasbeenclicked clicked" : "neverclicked"; ?>
+          <?php $class = ($page->visibility() != '') ? "hasbeenclicked clicked" : "neverclicked"; ?>
           <select name="visibility" id="visibility" class="<?php echo $class ?>">
             <?php foreach ($site->content()->visibilityoptions()->split(',') as $visibility): ?>
               <?php $selected = ($visibility == $page->visibility()) ? "selected " : ""; ?>
@@ -48,7 +48,7 @@
         </div>
         
         <div class="size-full">
-          <?php $class = ($page->color()->isNotEmpty()) ? "hasbeenclicked clicked" : "neverclicked"; ?>
+          <?php $class = ($page->color() != '') ? "hasbeenclicked clicked" : "neverclicked"; ?>
           <select name="color" id="color" class="<?php echo $class ?>">
             <?php foreach ($site->content()->coloroptions()->split(',') as $color): ?>
               <?php $selected = ($color == $page->color()) ? "selected " : ""; ?>
@@ -326,7 +326,7 @@
   <?php endif ?>
   
   <?php // TABLE OF CONTENTS ?>
-  <?php if($page->intendedTemplate() == 'handbook' or $page->intendedTemplate() == 'article' or $page->intendedTemplate() == 'project'): ?>
+  <?php if($page->intendedTemplate() == 'handbook' or $page->intendedTemplate() == 'article' or $page->intendedTemplate() == 'project' or $page->uid() == 'docs'): ?>
     <?php if(preg_match_all('/(?<!#)#{2,3}([^#].*)\n/', $page->text(), $matches)): // Grabs H2's and H3's ?>
       <div class="widget toc sticky">
         <div>
