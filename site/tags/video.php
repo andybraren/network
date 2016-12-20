@@ -26,6 +26,7 @@
 2016-09-19 - Implemented fix for missing YouTube thumbnails, without page slowdown. Thumbnails are now downloaded locally once and used thereafter.
 2016-09-26 - Moved YouTube thumbnail downloader to network-methods, replaced with more universal downloadedImageURL() function
 2016-12-09 - Added (size:) support, same as images
+2016-12-19 - Playsinline support for YouTube embeds
 */
 
 kirbytext::$tags['video'] = array(
@@ -100,7 +101,7 @@ kirbytext::$tags['video'] = array(
           
           $imageurl = downloadedImageURL('video-' . $youtubeid, 'youtube');
           
-          return '<figure><div class="video-container"><div class="youtube" style="background-image:url(' . $imageurl . ')"><div class="play"></div></div><iframe data-src="https://www.youtube.com/embed/' . $youtubeid . '?autoplay=1&wmode=transparent&modestbranding=1&autohide=1&showinfo=0&rel=0' . $timestamp . '" data-orig="' . $url . '" frameborder="0" allowfullscreen></iframe></div>' . $htmlcaption . '</figure>';
+          return '<figure><div class="video-container"><div class="youtube" style="background-image:url(' . $imageurl . ')"><div class="play"></div></div><iframe data-src="https://www.youtube.com/embed/' . $youtubeid . '?autoplay=1&playsinline=1&wmode=transparent&modestbranding=1&autohide=1&showinfo=0&rel=0' . $timestamp . '" data-orig="' . $url . '" frameborder="0" allowfullscreen></iframe></div>' . $htmlcaption . '</figure>';
           
         endif;
 
