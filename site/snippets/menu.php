@@ -19,7 +19,15 @@
         <?php endif ?>
         
         <?php if ($site->page('make')): ?>
-          <li><a href="<?php echo $site->page('make')->url() ?>" <?php echo (in_array($page->uid(), array('make','ideas','projects','challenges')) or $page->isDescendantOf('make') or $page->isDescendantOf('projects') or $page->isDescendantOf('challenges')) ? ' class="active"' : '' ?>>Make</a></li>
+          <li>
+            <a href="<?php echo $site->page('make')->url() ?>" <?php echo (in_array($page->uid(), array('make','ideas','projects','challenges')) or $page->isDescendantOf('make') or $page->isDescendantOf('projects') or $page->isDescendantOf('challenges')) ? ' class="active"' : '' ?>>Make</a>
+            <ul>
+              <li><a>Ideas</a></li>
+              <li><a href="https://makernetwork.org/projects">Projects</a></li>
+              <li><a href="https://makernetwork.org/challenges" class="active">Challenges</a></li>
+              <li><a>Materials</a></li>
+            </ul>
+          </li>
         <?php endif ?>
         
         <?php if ($site->page('connect')): ?>
@@ -106,7 +114,7 @@
   
 </nav>
 
-<?php if (!in_array($page->uid(), array('home','spaces','events','search','equipment'))): ?>
+<?php if (!in_array($page->uid(), array('home','spaces','events','search','equipment','docs'))): ?>
   <nav id="subnavigation" role="navigation">
     <div class="container">
       

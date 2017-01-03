@@ -189,7 +189,9 @@ img.b-lazy {
   */
 }
 img.b-loaded {
+  /*
   width: initial;
+  */
   opacity: 1;
   transition: opacity 0.2s ease-out;
 }
@@ -658,6 +660,64 @@ ul.submenu {
 }
 */
 
+
+/*
+
+Submenu testing with better structure, stopping this for now
+http://themedemos.dottoro.com/features/menu/horizontal-submenu/
+http://codepen.io/dmathisen/pen/lpszg
+
+body {
+  margin-top: 52px;
+}
+
+header {
+  overflow-y: initial;
+}
+
+
+.menu {
+  position: relative;
+}
+
+.menu > li {
+  position: initial;
+}
+
+.menu li ul {
+  position: absolute;
+  display: block;
+  left: 0;
+}
+
+.menu li ul li {
+  float: left;
+  width: auto;
+}
+.menu li ul li a {
+    padding: 7px 10px !important;
+    text-transform: initial;
+}
+
+nav {
+  overflow-y: initial;
+  overflow-x: initial;
+}
+
+#subnavigation {
+  margin-top: 60px;
+}
+*/
+.menu li ul {
+  display: none;
+}
+
+
+
+
+
+/* Options
+-------------------------------------------------- */
 
 #settings {
   display: none;
