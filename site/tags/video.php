@@ -101,7 +101,7 @@ kirbytext::$tags['video'] = array(
           
           $imageurl = downloadedImageURL('video-' . $youtubeid, 'youtube');
           
-          return '<figure><div class="video-container"><div class="youtube" style="background-image:url(' . $imageurl . ')"><div class="play"></div></div><iframe data-src="https://www.youtube.com/embed/' . $youtubeid . '?autoplay=1&playsinline=1&wmode=transparent&modestbranding=1&autohide=1&showinfo=0&rel=0' . $timestamp . '" data-orig="' . $url . '" frameborder="0" allowfullscreen></iframe></div>' . $htmlcaption . '</figure>';
+          return '<figure><div class="video-container"><div class="youtube"><img class="b-lazy" src="" data-src="' . $imageurl . '"><div class="play"></div></div><iframe data-src="https://www.youtube.com/embed/' . $youtubeid . '?autoplay=1&playsinline=1&wmode=transparent&modestbranding=1&autohide=1&showinfo=0&rel=0' . $timestamp . '" data-orig="' . $url . '" frameborder="0" allowfullscreen></iframe></div>' . $htmlcaption . '</figure>';
           
         endif;
 
@@ -112,7 +112,7 @@ kirbytext::$tags['video'] = array(
         $vimeothumburl = "https://vimeo.com/api/v2/video/" . $vimeoid . ".php";
         $hash = unserialize(@file_get_contents($vimeothumburl));
         $vimeothumb = $hash[0]['thumbnail_large'];
-        $htmlimage = 'style="background-image:url(' . $vimeothumb . ')"';
+        $htmlimage = '<img class="b-lazy" src="" data-src="' . $vimeothumb . '">';
 
         return '<figure><div class="video-container"><div class="vimeo" ' . $htmlimage . '"><div class="play"></div></div><iframe data-src="//player.vimeo.com/video/' . $vimeoid . '?autoplay=1&amp;title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;color=808080" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>' . $htmlcaption . '</figure>';
 
