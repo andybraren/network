@@ -14,6 +14,7 @@
 2016-06-03 - Added data-size to thumbnails for... Contenttools sizing when activated, I believe
 2016-06-30 - Added padding correction for smaller images, GIFs are no longer resized to preserve animations, and width is added to images smaller than maxImageSize to prevent reflow when lazy loading
 2016-06-30 - Added support for hero images, with padding and max-height to prevent reflow
+2017-01-03 - Removed b-lazy class from <figure>
 */
 
 // image tag
@@ -221,7 +222,7 @@ kirbytext::$tags['image'] = array(
         $image  = $_link($_image($tag->attr('imgclass')) . $noscriptimage);
         $figure = new Brick('figure');
         $figure->addClass($tag->attr('class'));
-        $figure->addClass('b-lazy');
+        //$figure->addClass('b-lazy');
         //$paddingcalc = $file->height() / $file->width() * 100 . '%';
         
         
