@@ -109,7 +109,8 @@ nav {
 
 header.headroom {
   /*transition: background-color 0.2s, color 0.2s;*/
-  transition: transform 200ms linear, background-color 0.2s, color 0.2s;
+  /*transition: transform 200ms linear, background-color 0.2s, color 0.2s;*/
+  transition: transform 200ms linear;
 }
 header .container {
   display: flex;
@@ -426,6 +427,21 @@ body.white { background-color: white; }
 .white #navigation .menu-secondary .login a { color: darkgrey; border-color: darkgrey; }
 .white .menu a:hover, .menu-modal:hover { background-color: rgba(0, 0, 0, 0.05); }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* Theme definition, with fallback blue colors for IE 8, 9, 11, and Edge */
 body, .button, .cards.makers a {
   background-color: #62A5F0;
@@ -475,6 +491,19 @@ blockquote {
   border-color: #f79d97;
   background-color: #feedec;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* Other things
@@ -550,7 +579,7 @@ nav {
   cursor: pointer;
 }
 .menu a:hover, .menu .active, .menu-modal:hover {
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(255, 255, 255, 0.10);
   transition: background-color .3s;
 }
 
@@ -810,6 +839,11 @@ nav {
 body.night {
   color: #CACACA;
   background-color: #2C2C2C;
+}
+.night header {
+  background-color: #2C2C2C;
+  background-image: none;
+  box-shadow: none;
 }
 /*
 .night img, .night .button, .night .cards, .night #navigation, .night #subnavigation, .night h2, .night h3 {
@@ -1192,8 +1226,10 @@ textarea {
   box-shadow: 0px 0px 10px #BBBBBB;
   */
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+  /*
   transition: all .1s ease-in-out;
   -webkit-transition: all .2s ease-in-out;
+  */
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -2652,7 +2688,7 @@ body.noscroll > header > .container {
 
 
 p > code {
-  background: #eee;
+  background-color: var(--theme-opac2);
   padding: 0 5px 2px;
   border-radius: 4px;
   position: relative;
@@ -3896,10 +3932,14 @@ aside figcaption {
     overflow-x: auto;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    /*
     max-height: 150px;
+    */
     width: 100% !important;
     max-width: initial !important;
+    /*
     margin-bottom: 1rem;
+    */
   }
   .sidebar .column {
     height: 100%;
