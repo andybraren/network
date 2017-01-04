@@ -86,6 +86,7 @@ window.onload = function() {
         toggleAuthors(clickcount);
         toggleGroups(clickcount);
         event.target.innerHTML = 'Edit';
+        savePage()
         editor.ignition().confirm();
         videoEmbed();
         clickcount = 0;
@@ -100,25 +101,27 @@ window.onload = function() {
           formupload.submit();
         };
       }
-  
+      
+      /* Clicking save button now required
       if (formSettings != null) {
         formSettingsVisibility.onchange = function() {
           data = new FormData(formSettings);
-          data.append('path', window.location.pathname);
+          data.append('page', window.location.pathname);
           var request = new XMLHttpRequest();
-          request.open('POST', 'savesettings', true);
+          request.open('POST', 'save', true);
           request.send(data);
         };
         formSettingsColor.onchange = function() {
           document.body.className = formSettingsColor.value + " editing";
           
           data = new FormData(formSettings);
-          data.append('path', window.location.pathname);
+          data.append('page', window.location.pathname);
           var request = new XMLHttpRequest();
-          request.open('POST', 'savesettings', true);
+          request.open('POST', 'save', true);
           request.send(data);
         };
       }
+      */
     
     }, false);
   
@@ -280,8 +283,8 @@ function toggleAuthors(clickcount) {
       var groups = Array.prototype.slice.call(document.getElementById('groups').children);
           newauthors = Array.prototype.slice.call(document.getElementById('authors').children);
       var combined = newauthors.concat(groups);
-      console.log(authors);
-      saveData(combined, 'users');
+      //console.log(authors);
+      //saveData(combined, 'users');
       for (var i = authors.length - 1; i >= 0; i--) {
         authors[i].setAttribute("href", authors[i].getAttribute("data-href"));
         authors[i].removeAttribute("data-href");
@@ -327,31 +330,96 @@ function toggleGroups(clickcount) {
   }
 }
 
-function saveData(data, type) {
+// Send the update content to the server to be saved
+function onStateChange(ev) {
+  if (ev.target.readyState == 4) {
+    if (ev.target.status == '200') {
+      try {
+          // Andy - redirect to the destination URL that the server responded with
+          // var data = JSON.parse(this.response);
+          data = JSON.parse(this.response);
+          //console.log(data.redirecturl);
+          redirecturl = data.redirecturl;
+          wait(3000);
+          window.location.href = redirecturl;
+      } catch (e) {
+        
+      }
+    }
+  }
+};
+
+function savePage() {
   
-  if (type == 'authors') {
-    var arr = [];
-    for (var i = data.length - 1; i >= 0; i--) {
-      arr.push(data[i].getAttribute('data-username'));
-    }
-    var usernames = arr.reverse().join(', ');
-  }
-  if (type == 'users') {
-    var arr = [];
-    for (var i = data.length - 1; i >= 0; i--) {
-      arr.push(data[i].getAttribute('data-username'));
-    }
-    var usernames = arr.reverse().join(', ');
-  }
-  //console.log(usernames);
   data = new FormData();
-  data.append('makers', usernames);
-  data.append('path', window.location.pathname);
+  
+  /* Authors */
+  var authors = document.getElementById('authors');
+  if (authors != null) {
+    var authors = Array.prototype.slice.call(authors.children);
+    var arr = [];
+    for (var i = authors.length - 1; i >= 0; i--) {
+      arr.push(authors[i].getAttribute('data-username'));
+    }
+    var authors = arr.reverse().join(', ');
+    data.append('authors', authors);
+  }
+  
+  /* Visibility */
+  var visibility = document.getElementById('visibility');
+  if (visibility != null) {
+    data.append('visibility', visibility.options[visibility.selectedIndex].value);
+  }
+  
+  /* Color */
+  var color = document.getElementById('color');
+  if (color != null) {
+    data.append('color', color.options[color.selectedIndex].value);
+  }
+  
+  var title = document.querySelectorAll("[data-name='title']")[0];
+  if (title != null) {
+    data.append('title', toMarkdown(String(title.innerHTML), { converters: kirbytagtweaks }));    
+  }
+  
+  var text = document.querySelectorAll("[data-name='text']")[0];
+  if (text != null) {
+    data.append('text', toMarkdown(String(text.innerHTML), { converters: kirbytagtweaks }));        
+  }
+  
+  data.append('page', window.location.pathname);
+    
   var request = new XMLHttpRequest();
-  request.open('POST', 'savesettings', true);
+  request.addEventListener('readystatechange', onStateChange);
+  request.open('POST', 'save', true);
   request.send(data);
   
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function authorDeleteButtons() {

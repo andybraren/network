@@ -523,62 +523,60 @@ c::set('routes', array(
 	),
 	
   // SAVE PAGES - NEW
-  // Only seems to work on main root pages at the moment
 	array(
 		'pattern' => array('save', '(.+save)'), // matches any url ending in save
 		'method' => 'POST',
 		'action'  => function() {
   		
-      
-      if(isset($_POST["text"])) {
-        try {
-          site()->page('/projects/testing-another')->update(array(
-            'text'  => $_POST["text"]
-          ));
-        } catch(Exception $e) {
-          echo $e->getMessage();
-          echo "nopetext";
-        }
-        echo "text updated";
-      }
-          
-		}
-	),
-
-  // SAVE SETTINGS
-	array(
-		'pattern' => array('savesettings', '(.+savesettings)'), // matches any url ending in save
-		'method' => 'POST',
-		'action'  => function() {
+  		$targetpage = site()->page($_POST['page']);
+  		$originaltitle = $targetpage->title();
+  		
+  		$title = (isset($_POST['title'])) ? $_POST['title'] : $targetpage->title();
+  		$text  = (isset($_POST['text'])) ? $_POST['text'] : $targetpage->text();
+  		
+  		/* DateData */
+  		$dateCreated = $targetpage->dateCreated();
+  		$dateModified  = date('Y-m-d H:i:s');
+  		//$modifiedBy = site()->user(get('username'));
+  		
+  		/* UserData */
+  		$authors = (isset($_POST['authors'])) ? $_POST['authors'] : $targetpage->authors();
+  		
+  		/* Settings */
+  		$visibility  = (isset($_POST['visibility'])) ? $_POST['visibility'] : $targetpage->visibility();
+  		$color  = (isset($_POST['color'])) ? $_POST['color'] : $targetpage->color();
+  		
       try {
-        
-        $path = str_replace(array('/maker/'), '', get('path'));
-        $targetpage = site()->page($path);
-        
-        if(isset($_POST['visibility'])) {
-          $targetpage->update(array(
-            'visibility' => $_POST['visibility']
-          ));
-        }
-        
-        if(isset($_POST['color'])) {
-          $targetpage->update(array(
-            'color' => strip_tags($_POST['color'])
-          ));
-        }
-        
-        if(isset($_POST['makers'])) {
-          $targetpage->update(array(
-            'makers' => strip_tags($_POST['makers'])
-          ));
+        site()->page($targetpage)->update(array(
+          'Title'  => $title,
+          'DateData' => $dateCreated . ', ' . $dateModified,
+          'UserData' => $authors,
+          'RelData' => '',
+          'Settings' => $visibility . ', ' . $color,
+          'Hero' => '',
+          'Text'  => $text,
+        ));
+        //echo var_dump($_POST);
+
+        if ($title != $originaltitle) {
+          $currentlocation = kirby()->roots()->content() . '/' . $targetpage->diruri();
+          $newlocation = kirby()->roots()->content() . '/' . $targetpage->parent()->diruri() . '/' . str::slug($title);
+          rename($currentlocation, $newlocation);
+          
+          $redirecturl = site()->url() . '/' . $targetpage->parent()->diruri() . '/' . str::slug($title);
+          
+          $response = array('redirecturl' => $redirecturl); // redirect to new url
+          echo json_encode($response);
         }
         
       } catch(Exception $e) {
         echo $e->getMessage();
       }
-      
+          
 		}
 	),
+
+
 
   // SAVE AVATAR OR ICON, or possibly ContentTools uploads and eventually videos and other files as well
 	array(
@@ -1003,6 +1001,34 @@ c::set('routes', array(
 
 
 
+  // Convert pages to new datedata
+  array(
+    'pattern' => 'stripe',
+    'method' => 'POST',
+    'action'  => function() {
+      
+      require_once('../site'); // need to find the right place
+      
+      \Stripe\Stripe::setApiKey("sk_test_RHH3uO4EmYB9qobfbPzvuYGd"); // Set secret key
+      $token = $_POST['stripeToken']; // Get the form's Stripe token
+      $email = $_POST['stripeEmail']; // Get the form's email
+      
+      try { // Charge the card
+        $charge = \Stripe\Charge::create(array(
+          "amount" => 1000, // Amount in cents
+          "currency" => "usd",
+          "source" => $token,
+          "description" => "Example charge"
+          ));
+      } catch(\Stripe\Error\Card $e) {
+        // The card has been declined
+      }
+      
+      
+      echo "hi";
+      
+    }
+  ),
 
 
 
