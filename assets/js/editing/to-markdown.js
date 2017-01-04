@@ -502,11 +502,11 @@ module.exports = [
     filter: 'li',
     replacement: function (content, node) {
       content = content.replace(/^\s+/, '').replace(/\n/gm, '\n    ');
-      var prefix = '*   ';
+      var prefix = '- ';
       var parent = node.parentNode;
       var index = Array.prototype.indexOf.call(parent.children, node) + 1;
 
-      prefix = /ol/i.test(parent.nodeName) ? index + '.  ' : '*   ';
+      prefix = /ol/i.test(parent.nodeName) ? index + '.  ' : '- ';
       return prefix + content;
     }
   },
