@@ -65,7 +65,6 @@ window.onload = function() {
       var formAvatar = document.getElementById('avatarToUpload');
       var formSettings = document.getElementById('form-settings');
       var formSettingsVisibility = document.getElementById('visibility');
-      var formSettingsColor = document.getElementById('color');
       
       if(clickcount == 0) {
         document.body.classList.toggle('editing');
@@ -101,6 +100,14 @@ window.onload = function() {
           formupload.submit();
         };
       }
+      
+      var color = document.getElementById('color');
+      if (color != null) {
+        color.onchange = function() {
+          document.body.className = color.options[color.selectedIndex].value + " editing";
+        };
+      }
+
       
       /* Clicking save button now required
       if (formSettings != null) {
