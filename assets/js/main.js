@@ -85,8 +85,8 @@ window.onload = function() {
         toggleAuthors(clickcount);
         toggleGroups(clickcount);
         event.target.innerHTML = 'Edit';
-        savePage()
         editor.ignition().confirm();
+        savePage()
         videoEmbed();
         clickcount = 0;
       }
@@ -384,14 +384,16 @@ function savePage() {
     data.append('color', color.options[color.selectedIndex].value);
   }
   
+  /* Title */
   var title = document.querySelectorAll("[data-name='title']")[0];
   if (title != null) {
-    data.append('title', toMarkdown(String(title.innerHTML), { converters: kirbytagtweaks }));    
+    data.append('title', toMarkdown(title.innerHTML, { converters: kirbytagtweaks }));    
   }
   
+  /* Text */
   var text = document.querySelectorAll("[data-name='text']")[0];
   if (text != null) {
-    data.append('text', toMarkdown(String(text.innerHTML), { converters: kirbytagtweaks }));        
+    data.append('text', toMarkdown(text.innerHTML, { converters: kirbytagtweaks }));      
   }
   
   data.append('page', window.location.pathname);
