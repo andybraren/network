@@ -57,24 +57,18 @@
   <?php endif ?>
 
 <?php // HERO SINGULAR IMAGE ?>
-<?php elseif ($image = $page->images()->filterBy('name', '==', 'hero')->first() and $page->hero()->isEmpty() or ($page->parent() == 'makers' or $page->parent() == 'handbooks' or $page->parent() == 'projects' or $page->parent() == 'groups') and $page->hero()->isEmpty()): ?>
+<?php elseif ($image = $page->images()->filterBy('name', '==', 'hero')->first() and $page->hero()->isEmpty() or $page->hero()->isEmpty()): ?>
   
-  <?php if($page->parent() == 'makers' and !$page->images()->filterBy('name', '*=', 'hero')->first()): ?>
+  <?php if(!$page->images()->filterBy('name', '*=', 'hero')->first()): ?>
     <?php $image = new Asset('/assets/images/hero-add.png'); ?>
   <?php endif ?>
 
-  <?php if($page->parent() == 'projects' and !$page->images()->filterBy('name', '*=', 'hero')->first()): ?>
-    <?php $image = new Asset('/assets/images/hero-add.png'); ?>
-  <?php endif ?>
-
-  <?php if($page->parent() == 'groups' and !$page->images()->filterBy('name', '*=', 'hero')->first()): ?>
-    <?php $image = new Asset('/assets/images/hero-add.png'); ?>
-  <?php endif ?>
-
-  <div id="hero" class="<?php echo ($image->ratio() >= 3.5) ? 'fullwidth' : '' ?><?php echo ($image->filename() == 'hero-add.png') ? ' invisible' : '' ?>">
+  <div id="hero" class="<?php echo ($image->ratio() >= 3.5) ? 'fullwidth' : '' ?><?php echo ($image->filename() == 'hero-add.png') ? '' : '' ?>">
     <div class="container">
       <?php if ($image->filename() == 'hero-add.png'): ?>
-        <?php echo kirbytag(array('image' => $image->filename(), 'type' => 'hero', 'default' => 'true')) ?>
+        <div class="hero-add">
+          <span>Add a featured image</span>
+        </div>
       <?php else: ?>
         <?php echo kirbytag(array('image' => $image->filename(), 'type' => 'hero')) ?>
       <?php endif ?>
