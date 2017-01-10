@@ -748,17 +748,53 @@ nav {
 /* Options
 -------------------------------------------------- */
 
-#settings {
+#settings, #button-delete {
   display: none;
   opacity: 0;
   transition: opacity 0.6s;
 }
 
-#settings.visible {
+
+
+
+.editing #settings {
   display: block;
   opacity: 1;
   transition: opacity 0.6s;
 }
+
+.editing #button-delete {
+  display: block;
+  opacity: 1;
+  transition: opacity 0.6s;
+}
+
+
+
+.hero-add {
+  display: none;
+  height: 10vh;
+  background-color: #ececec;
+}
+
+#hero span {
+  cursor: default;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.editing .hero-add {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+
+
 
 
 .search {
@@ -2201,6 +2237,7 @@ form div[role='group'] h3 {
 }
 
 
+/*
 .button-save-container, .button-edit {
   width: 90%;
 }
@@ -2208,6 +2245,7 @@ form div[role='group'] h3 {
   height: 2.5rem;
   margin-bottom: 0rem;
 }
+*/
 
 .button-solution {
   height: 50px;
@@ -2223,6 +2261,10 @@ form div[role='group'] h3 {
 .editing #hero img:hover {
   opacity: 0.6;
 }
+
+
+
+
 /*
 .editing #icon img {
   opacity: 0;
@@ -3141,7 +3183,7 @@ iframe.visible {
 }
 */
 
-#hero span {
+#hero figure span {
   width: 100%;
   color: white;
   margin: 0;
@@ -3372,7 +3414,9 @@ p {
   margin-bottom: 1rem;
   /*display: block;*/
   flex-shrink: 0;
+  /*
   min-width: 100px;
+  */
 }
 
 .sidebar ul {
@@ -3506,7 +3550,7 @@ p {
 
 
 
-#hero:not(.invisible) ~ main .sidebar #icon {
+#hero:not(.invisible) ~ .main .sidebar #icon {
   margin-top: -100px;
   border-radius: 5px;
   /*background-color: var(--theme-main);*/

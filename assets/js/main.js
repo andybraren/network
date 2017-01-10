@@ -76,11 +76,9 @@ window.onload = function() {
         authorDeleteButtons();
         Blazy();
         event.target.innerHTML = 'Save';
-        document.getElementById('settings').classList.add('visible');
         clickcount = 1;
       } else {
         document.body.classList.toggle('editing');
-        document.getElementById('settings').classList.remove('visible');
         toggleHero(clickcount, formupload);
         toggleAuthors(clickcount);
         toggleGroups(clickcount);
@@ -132,7 +130,16 @@ window.onload = function() {
     
     }, false);
   
-  }  
+  }
+  
+  /* Delete button behavior */
+  var deletebutton = document.getElementById('button-delete');
+  if (deletebutton != null) {
+    deletebutton.addEventListener('click', function() {
+      deletePage();
+    }, false);
+  }
+  
 }
 
 function modals() {
@@ -405,7 +412,15 @@ function savePage() {
   
 }
 
-
+function deletePage() {
+  data = new FormData();
+  data.append('page', window.location.pathname);
+  var request = new XMLHttpRequest();
+  request.addEventListener('readystatechange', onStateChange);
+  request.open('POST', 'delete', true);
+  request.send(data);
+  console.log('Page deleted');
+}
 
 
 
