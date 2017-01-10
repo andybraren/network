@@ -26,7 +26,7 @@
     <?php echo js('assets/js/editing/to-markdown.js') ?>
     <?php echo css('assets/js/contenttools/content-tools.min.css') ?>
     <?php echo js('assets/js/contenttools/content-tools.js') ?>
-    <?php echo js('assets/js/contenttools/editor.js') ?>
+    <?php echo js('assets/js/editing/editor.js') ?>
   <?php endif ?>
 
   </footer>
@@ -41,11 +41,12 @@ window.onscroll = function() {
   document.getElementById('whatever').style.top = document.body.scrollTop;
 }
 */
-
+/*
 document.getElementsByTagName("BODY")[0].onresize = function() {myFunction()};
 function myFunction() {
   document.getElementById('whatever').style.top = document.body.scrollTop;
 }
+*/
 
 </script>
 
