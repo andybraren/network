@@ -559,6 +559,9 @@ if (authorfield != null) {
   
   function selectResult() {
     clearSearch(authorresults);
+    authorfield.value = '';
+    authorfield.classList.remove('clicked');
+    
     if (this.getAttribute('data-major') != 'undefined') {
       var major = '<span>' + this.getAttribute('data-major') + '</span>';
     } else {
@@ -639,6 +642,10 @@ if (groupfield != null) {
   
   function selectResult() {
     clearSearch(groupresults);
+    
+    groupfield.value = '';
+    groupfield.classList.remove('clicked');
+    
     var resultHTML = '<a data-href="' + this.getAttribute('data-groupURL') + '" data-username="' + this.getAttribute('data-groupslug') + '"><div class="author-delete"></div><div class="row"><img src="' + this.getAttribute('data-logo') + '" class="' + this.getAttribute('data-color') + '" width="40" height="40"><div class="column"><span>' + this.getAttribute('data-title') + '</span></div></div></a>';
     groupwidget.insertAdjacentHTML('beforeend', resultHTML);
     authorDeleteButtons();
