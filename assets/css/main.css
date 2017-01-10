@@ -3497,6 +3497,22 @@ p {
   transition: color 0.3s;
 }
 
+.widget.hidden {
+  display: none;
+}
+
+.editing .widget.hidden {
+  display: initial;
+}
+
+.widget form {
+  display: none;
+}
+
+.editing .widget form {
+  display: initial;
+}
+
 /*
 #form-author-add > div > div {
     margin: 0;

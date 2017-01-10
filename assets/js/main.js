@@ -78,6 +78,7 @@ window.onload = function() {
         event.target.innerHTML = 'Save';
         clickcount = 1;
       } else {
+        checkEmptyWidgets()
         document.body.classList.toggle('editing');
         toggleHero(clickcount, formupload);
         toggleAuthors(clickcount);
@@ -258,7 +259,28 @@ function toggleHero(clickcount, formupload) {
   }
 }
 
-
+/* Trigger when Save button is clicked */
+/* If empty, then the hidden class is confirmed or added */
+/* If not empty, then the hidden class is removed */
+function checkEmptyWidgets() {
+  var widgets = document.getElementsByClassName('widget');
+  
+  for (var i = widgets.length - 1; i >= 0; i--) {
+    var items = widgets[i].getElementsByTagName('div')[0];
+    
+    if (typeof items != 'undefined') {
+            
+      if (items.children.length > 0) { // If it has results, then remove the "hidden" class, otherwise make sure it's added
+        widgets[i].classList.remove('hidden');
+      } else {
+        widgets[i].classList.add('hidden');
+      }
+      
+    }
+    
+  }
+    
+}
 
 
 
@@ -279,7 +301,7 @@ function toggleAuthors(clickcount) {
         authors[i].setAttribute("data-href", authors[i].href);
         authors[i].removeAttribute("href");
       }
-      authorsForm.classList.remove('invisible');
+      //authorsForm.classList.remove('invisible');
       dragula([authorsDiv], {
         removeOnSpill: true,
       });
@@ -296,7 +318,7 @@ function toggleAuthors(clickcount) {
         authors[i].setAttribute("href", authors[i].getAttribute("data-href"));
         authors[i].removeAttribute("data-href");
       }
-      authorsForm.classList.add('invisible');
+      //authorsForm.classList.add('invisible');
       /*
       dragula([authorsDiv], {
         moves: false,
@@ -316,7 +338,7 @@ function toggleGroups(clickcount) {
         groups[i].setAttribute("data-href", groups[i].href);
         groups[i].removeAttribute("href");
       }
-      groupsForm.classList.remove('invisible');
+      //groupsForm.classList.remove('invisible');
       dragula([groupsDiv], {
         removeOnSpill: true,
       });
@@ -327,7 +349,7 @@ function toggleGroups(clickcount) {
         groups[i].setAttribute("href", groups[i].getAttribute("data-href"));
         groups[i].removeAttribute("data-href");
       }
-      groupsForm.classList.add('invisible');
+      //groupsForm.classList.add('invisible');
       /*
       dragula([groupsDiv], {
         moves: false,
@@ -370,6 +392,18 @@ function savePage() {
     }
     var authors = arr.reverse().join(', ');
     data.append('authors', authors);
+  }
+  
+  /* Groups */
+  var groups = document.getElementById('groups');
+  if (groups != null) {
+    var groups = Array.prototype.slice.call(groups.children);
+    var arr = [];
+    for (var i = groups.length - 1; i >= 0; i--) {
+      arr.push(groups[i].getAttribute('data-username'));
+    }
+    var groups = arr.reverse().join(', ');
+    data.append('groups', groups);
   }
   
   /* Visibility */
