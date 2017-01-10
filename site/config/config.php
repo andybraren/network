@@ -483,6 +483,9 @@ c::set('routes', array(
   		/* Settings */
   		$visibility  = (isset($_POST['visibility'])) ? $_POST['visibility'] : $targetpage->visibility();
   		$color  = (isset($_POST['color'])) ? $_POST['color'] : $targetpage->color();
+  		$comments = 'off';
+  		$submissions = 'off';
+  		$price = 'off';
   		
       try {
         site()->page($targetpage)->update(array(
@@ -490,7 +493,7 @@ c::set('routes', array(
           'DateData' => $dateCreated . ', ' . $dateModified,
           'UserData' => $authors,
           'RelData' => $relatedGroups,
-          'Settings' => $visibility . ', ' . $color,
+          'Settings' => $visibility . ', ' . $color . ', comments == ' . $comments . ', submissions == ' . $submissions . ', price == ' . $price,
           'Hero' => '',
           'Text'  => $text,
         ));
