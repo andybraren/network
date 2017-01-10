@@ -246,20 +246,13 @@ function toggleHero(clickcount, formupload) {
         formHero.click();
       });
       formHero.onchange = function() {
+        savePage();
         editor.ignition().confirm();
         formupload.submit();
       };
-      if (heroDiv.classList.contains('invisible')) {
-        heroDiv.classList.remove('invisible');
-        heroDiv.classList.add('wasinvisible');
-      }
     }
     else {
       heroDiv.removeEventListener('click', formclick);
-      if (heroDiv.classList.contains('wasinvisible')) {
-        heroDiv.classList.remove('wasinvisible');
-        heroDiv.classList.add('invisible');
-      }
     }
 
   }
