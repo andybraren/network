@@ -89,6 +89,8 @@
 
 
 
+
+
 <?php // LINKS ?>
 <?php if ($type == 'links' and $page->links() != null): ?>
   
@@ -203,7 +205,7 @@
       
       <?php if ($page->isEditableByUser()): ?>
         <?php $image = new Asset('/assets/images/hero-add.png'); ?>
-        <form id="form-author-add" class="invisible">
+        <form id="form-author-add">
           <div>
             <input type="text" id="author-add" autocomplete="off">
             <label>Add a maker</label>
@@ -238,13 +240,9 @@
   ?>
   
   <?php if ($groups != null and $groups != '' or $page->isEditableByUser()): ?>
-    <div class="widget">
+    <div class="widget<?php echo ($groups == '' and $page->isEditableByUser()) ? ' hidden' : '' ?>">
       
-      <?php /* Set the widget title */
-        $title = ($plural) ? 'GROUPS' : 'GROUP';
-      ?>
-      
-      <span class="heading"><?php echo $title ?></span>
+      <span class="heading"><?php echo ($plural) ? 'GROUPS' : 'GROUP' ?></span>
       
       <div class="groups" id="groups">
         <?php if (isset($groups)): ?>
@@ -270,7 +268,7 @@
       </div>
       
       <?php if ($page->isEditableByUser()): ?>
-        <form id="form-group-add" class="invisible">
+        <form id="form-group-add">
           <div>
             <input type="text" id="group-add" autocomplete="off">
             <label>Add a group</label>

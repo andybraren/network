@@ -477,6 +477,9 @@ c::set('routes', array(
   		/* UserData */
   		$authors = (isset($_POST['authors'])) ? $_POST['authors'] : $targetpage->authors();
   		
+  		/* RelData */
+  		$relatedGroups = (isset($_POST['groups'])) ? $_POST['groups'] : $targetpage->groups();
+  		
   		/* Settings */
   		$visibility  = (isset($_POST['visibility'])) ? $_POST['visibility'] : $targetpage->visibility();
   		$color  = (isset($_POST['color'])) ? $_POST['color'] : $targetpage->color();
@@ -486,7 +489,7 @@ c::set('routes', array(
           'Title'  => $title,
           'DateData' => $dateCreated . ', ' . $dateModified,
           'UserData' => $authors,
-          'RelData' => '',
+          'RelData' => $relatedGroups,
           'Settings' => $visibility . ', ' . $color,
           'Hero' => '',
           'Text'  => $text,
