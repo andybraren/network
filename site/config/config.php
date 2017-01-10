@@ -37,8 +37,11 @@ of the system, please check out http://getkirby.com/docs/advanced/options
 /* Increase memory limit */
 ini_set('memory_limit', '512M');
 
-/* Increase max file upload size */
+/* Increase max file size that a user can upload */
 ini_set('upload_max_filesize', '100M');
+
+/* Increase max amount of data that can be sent via a POST in a form */
+ini_set('post_max_size', '100M');
 
 /* Increase maximum processing time */
 ini_set('max_execution_time', 60); // 60 seconds = 1 minute
@@ -454,7 +457,7 @@ c::set('routes', array(
     }
   ),
 	
-  // SAVE PAGES - NEW
+  // SAVE PAGES
 	array(
 		'pattern' => array('save', '(.+save)'), // matches any url ending in save
 		'method' => 'POST',
@@ -507,6 +510,30 @@ c::set('routes', array(
           
 		}
 	),
+	
+  // DELETE PAGES
+	array(
+		'pattern' => array('delete', '(.+delete)'), // matches any url ending in save
+		'method' => 'POST',
+		'action'  => function() {
+  		
+  		$targetpage = site()->page($_POST['page']);
+  		$redirecturl = site()->url() . '/' . $targetpage->parent()->diruri();
+  		
+      try {
+        
+        $targetpage->delete();
+        
+        $response = array('redirecturl' => $redirecturl);
+        echo json_encode($response);
+        
+      } catch(Exception $e) {
+        echo $e->getMessage();
+      }
+          
+		}
+	),
+	
 
 
 
@@ -575,6 +602,7 @@ c::set('routes', array(
           //$target_dir = kirby()->roots()->content() . $targeturi . '/';
           $target_dir = kirby()->roots()->content() . '/' . $targeturi . '/';
           $target_filename = 'hero';
+          site()->page($targeturi)->touch();
           $reload = 1;
         }
         //if (!empty($_POST['avatar'])) {
