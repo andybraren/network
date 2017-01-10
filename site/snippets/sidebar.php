@@ -29,8 +29,9 @@
     
   <?php // FRONTEND EDITING CONTROLS ?>
   <?php // Need to figure out how to enable admins still, multiple operators, maybe a case statement ?>
-  <?php if($user = $site->user() and str::contains($page->makers(), $user) or $user = $site->user() and str::contains($page->slug(), $user) or $user = $site->user() and $user->usertype() == 'admin'): ?>
+  <?php if ($page->isEditableByUser()): ?>
     <div id="button-edit" class="button flash">Edit</div>
+    <div id="button-delete" class="button red">Delete page</div>
     
     <div id="settings" class="">
       <span class="heading">SETTINGS</span>
@@ -296,6 +297,11 @@
         ?>
       
     </div>
+  <?php endif ?>
+  
+  <?php // PURCHASE WIDGET ?>
+  <?php if($page->parent() != 'makers'): ?>
+    <?php snippet('widget', array('type' => 'purchase')) ?>
   <?php endif ?>
 
   <?php // AUTHORS WIDGET ?>

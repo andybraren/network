@@ -1938,12 +1938,12 @@ select {
   background-size: auto, 40px 100%;
     background-size: 10px;
 }
-
+/*
 select.clicked {
   background: url("../../assets/images/form-arrow.svg") no-repeat top 5px right 5px;
   background-size: 10px;
 }
-
+*/
 input[type=number]::-webkit-inner-spin-button, 
 input[type=number]::-webkit-outer-spin-button { 
   -webkit-appearance: none; 

@@ -89,8 +89,6 @@
 
 
 
-
-
 <?php // LINKS ?>
 <?php if ($type == 'links' and $page->links() != null): ?>
   
@@ -150,8 +148,8 @@
       
       <span class="heading"><?php echo $title ?></span>
       
-      <?php if (isset($authors)): ?>
-        <div class="authors" id="authors">
+      <div class="authors" id="authors">
+        <?php if (isset($authors)): ?>
           <?php foreach(str::split($authors) as $author): ?>
   
             <?php
@@ -200,8 +198,8 @@
             <?php endif ?>
             
           <?php endforeach ?>
-        </div>
-      <?php endif ?>
+        <?php endif ?>
+      </div>
       
       <?php if ($page->isEditableByUser()): ?>
         <?php $image = new Asset('/assets/images/hero-add.png'); ?>

@@ -101,6 +101,9 @@ page::$methods['authors'] = function($page) {
       return str::split(explode('///',$page->content()->userdata())[0],',');
     }
   }
+  else {
+    return array();
+  }
 };
 
 // Old Authors
@@ -215,6 +218,10 @@ page::$methods['relatedGroups'] = function($page) {
       return $collection;
     }
   }
+  
+  else {
+    return $collection;
+  }
 
 };
 
@@ -304,7 +311,7 @@ page::$methods['visibility'] = function($page) {
   }
   elseif ($page->content()->settings() != '') {
     if (isset(explode(',',$page->content()->settings())[0])) {
-      return explode(',',$page->content()->settings())[0];
+      return trim(explode(',',$page->content()->settings())[0]);
     }
   }
 };
@@ -317,7 +324,7 @@ page::$methods['color'] = function($page) {
   }
   elseif ($page->content()->settings() != '') {
     if (isset(explode(',',$page->content()->settings())[1])) {
-      return explode(',',$page->content()->settings())[1];
+      return trim(explode(',',$page->content()->settings())[1]);
     }
   }
 };
@@ -357,9 +364,23 @@ page::$methods['submissions'] = function($page) {
 page::$methods['price'] = function($page) {
   if ($page->content()->settings() != '') {
     if (isset(str::split($page->content()->settings(),',')[4])) {                           // check if price setting is present
-      if (isset(str::split(str::split($page->content()->settings(),',')[4],'==')[1])) {     // check if price setting is set
-        if (str::split(str::split($page->content()->settings(),',')[4],'==')[1] != 'off') { // check if price is not off
-          return str::split(str::split($page->content()->settings(),',')[4],'==')[1];       // return the price
+      if (isset(str::split(str::split($page->content()->settings(),',')[4],'=')[1])) {      // check if price setting is set
+        if (str::split(str::split($page->content()->settings(),',')[4],'=')[1] != 'off') {  // check if price is not off
+          return str::split(str::split($page->content()->settings(),',')[4],'=')[1];        // return the price
+        }
+      }
+    }
+  }
+};
+
+// Price Description
+// returns the event/page's price for item description
+page::$methods['priceDescription'] = function($page) {
+  if ($page->content()->settings() != '') {
+    if (isset(str::split($page->content()->settings(),',')[4])) {                           // check if price setting is present
+      if (isset(str::split(str::split($page->content()->settings(),',')[4],'=')[2])) {      // check if price setting is set
+        if (str::split(str::split($page->content()->settings(),',')[4],'=')[2] != null) {   // check if price is not off
+          return str::split(str::split($page->content()->settings(),',')[4],'=')[2];        // return the price
         }
       }
     }
@@ -398,50 +419,10 @@ page::$methods['heroImage'] = function($page) {
   
 };
 
-//--------------------------------------------------
-// Permissions
-//--------------------------------------------------
-
-page::$methods['isVisibleToUser'] = function($page) {
-  //if (array_intersect(array('unlisted'),$page->visibility()->split(','))) {
-  if ($page->visibility() == 'unlisted') {
-    return true;
-  } else {
-    return isVisibleToUser($page);
-  }
-};
-
-page::$methods['isEditableByUser'] = function($page) {
-  if (!site()->user()) {
-    return false;
-  } else {
-    return isEditableByUser($page);
-  }
-};
-
-pages::$methods['visibleToUser'] = function($pages) {  
-  $collection = new Pages();
-  foreach($pages as $page) {
-    if (isVisibleToUser($page)) {
-      $collection->add($page);
-    }
-  }
-  return $collection;
-};
-
 //==================================================
 // USER DATA METHODS
 // https://makernetwork.org/docs#user-data
 //==================================================
-
-
-
-
-
-
-
-
-
 
 /* User Avatar image url
   - returns an avatar for the provided username
@@ -491,36 +472,68 @@ function groupColor($groupslug) {
   }
 }
 
+//--------------------------------------------------
+// Permissions
+//--------------------------------------------------
+
+page::$methods['isVisibleToUser'] = function($page) {
+  //if (array_intersect(array('unlisted'),$page->visibility()->split(','))) {
+  if ($page->visibility() == 'unlisted') {
+    return true;
+  } else {
+    return isVisibleToUser($page);
+  }
+};
+
+page::$methods['isEditableByUser'] = function($page) {
+  if (!site()->user()) {
+    return false;
+  } else {
+    return isEditableByUser($page);
+  }
+};
+
+pages::$methods['visibleToUser'] = function($pages) {  
+  $collection = new Pages();
+  foreach($pages as $page) {
+    if (isVisibleToUser($page)) {
+      $collection->add($page);
+    }
+  }
+  return $collection;
+};
 
 
-
-
-
-
-
+page::$methods['groups'] = function($user) {
+  if ($user->content()->groupsd() != '') {
+    return array('hello');
+  } else {
+    return array();
+  }
+};
 
 function isVisibleToUser($page) {
   $isvisible = true;
-  if (!site()->user() and $page->content()->visibility()->isNotEmpty()) { // if not logged in and has visibility setting
-    if (!array_intersect(array('public'),$page->visibility()->split(','))) {
+  if ($page->visibility() != null) { // the page has a visibility setting
+    
+    if (!site()->user() and in_array($page->visibility(), array('unlisted','groups','private'))) { // hide pages with these settings from the public
       $isvisible = false;
     }
-  }
-  if (site()->user() and $page->content()->visibility()->isNotEmpty()) { // if logged in and has visibility setting
-    if (array_intersect(array('public'),$page->visibility()->split(','))) {
+    
+    if (site()->user()) { // hide these pages from logged-in users who don't have the right permissions
+      if (in_array($page->visibility(), array('public'))) {
+        $isvisible = true;
+      }
+      elseif (!in_array(site()->user(), $page->authors())) {
+        if (!array_intersect(str::split(site()->user()->groups()), $page->relatedGroups()->toArray())) {
+          $isvisible = false;
+        }
+      }
+    }
+    
+    if (site()->user() and site()->user()->usertype() and site()->user()->usertype() == 'admin') { // show every page to admins
       $isvisible = true;
     }
-    elseif (in_array(site()->user(), str::split($page->makers() . ',' . $page->visibility(),','))) {
-      $isvisible = true;
-    }
-    elseif (array_intersect(str::split(site()->user()->groups(),','), str::split($page->makers() . ',' . $page->visibility(),','))) {
-      $isvisible = true;
-    } else {
-      $isvisible = false;
-    }
-  }
-  if (site()->user() and site()->user()->usertype() and site()->user()->usertype() == 'admin') { // if user is an admin
-    $isvisible = true;
   }
   return $isvisible;
 }
@@ -531,14 +544,9 @@ function isEditableByUser($page) {
     $isEditable = false;
   }
   if (site()->user()) { // if logged in
-    if (in_array(site()->user(), str::split($page->makers(),','))) {
-      $isEditable = true;
-    } else {
+    if (!in_array(site()->user(), $page->authors())) {
       $isEditable = false;
     }
-  }
-  if (site()->user() and $page->slug() == 'projects') {
-    $isEditable = true;
   }
   if (site()->user() and site()->user()->usertype() and site()->user()->usertype() == 'admin') { // if user is an admin
     $isEditable = true;

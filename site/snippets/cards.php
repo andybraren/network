@@ -23,51 +23,6 @@ if (!isset($type)) {
     
   <?php else: ?>
   
-  <?php /*
-  <div class="cards makers">
-    <?php foreach($site->users()->sortBy('registrationdate', 'desc') as $user): ?>
-      <a href="<?php echo $site->url() . "/makers/" . $user ?>" class="card <?php echo ($user->color() != "") ? $user->color() : $site->defaultcolor(); ?>">
-  
-        <?php // Gravatar ?>
-        <?php if($user->usegravataravatar() == "true"): ?>
-          <div class="listbox listmaker">
-            <img src="<?php echo $user->gravatar($size=108) ?>" alt="">
-
-        <?php // Avatar ?>
-        <?php elseif($avatar = $user->avatar()): ?>
-          <div class="listbox listmaker" style="background-image: url(<?php echo $avatar->crop(108)->url() ?>)">
-  
-        <?php // Default ?>
-        <?php else: ?>
-          <?php
-          if (strlen($user->firstname()) <= 3) { $number = 1; }
-          elseif (strlen($user->firstname()) <= 4) { $number = 2; }
-          elseif (strlen($user->firstname()) <= 6) { $number = 3; }
-          elseif (strlen($user->firstname()) >= 7) { $number = 4; }
-          ?>
-            
-          <?php $defaultavatar = new Asset('/assets/images/avatar-' . $number . '.svg'); ?>
-          <div class="listbox listmaker" style="background-image: url(<?php echo $defaultavatar->url() ?>);">
-
-        <?php endif ?>
-            <div class="box">
-              <span><?php echo $user->firstname() . ' ' . $user->lastname() ?></span>
-            </div>
-          </div>
-  
-      </a>
-    <?php endforeach ?>
-      <a style="visibility:hidden;" class="card"></a>
-      <a style="visibility:hidden;" class="card"></a>
-      <a style="visibility:hidden;" class="card"></a>
-      <a style="visibility:hidden;" class="card"></a>
-      <a style="visibility:hidden;" class="card"></a>
-      <a style="visibility:hidden;" class="card"></a>
-      <a style="visibility:hidden;" class="card"></a>
-  </div>
-  
-  */ ?>
-  
   <?php if ($page->uid() == 'makers'): ?>
     <div class="cards-makers">
       
@@ -133,7 +88,7 @@ if (!isset($type)) {
           //$items = $site->page($type)->children()->dateCreated();
           
           if ($type == 'none') {
-            $items = page()->children()->sortBy('datePublished','desc')->visibleToUser();
+            $items = page()->children()->sortBy('datePublished','desc');
           } else {
             $items = $site->page($type)->children()->sortBy('datePublished','desc');
           }
@@ -244,7 +199,6 @@ if (!isset($type)) {
               <?php $hero = $item->images()->sortBy('sort', 'asc')->first() ?>
               <img src="<?php echo $hero->crop(300, 120)->url() ?>" height="120px"></img>
             <?php else: ?>
-              <img src="<?php echo $defaulthero->crop(300, 120)->url() ?>" height="120px"></img>
             <?php endif ?>
   
             <?php if ($icon = $item->images()->findBy('name', 'logo')): ?>
