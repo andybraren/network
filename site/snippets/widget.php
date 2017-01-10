@@ -88,7 +88,60 @@
 <?php endif ?>
 
 
+<?php // PURCHASE ?>
+<?php if ($type == 'purchase' and $page->price() != ''): ?>
 
+  <div class="widget">
+    <span class="heading">PURCHASE</span>
+    <?php echo $page->price(); ?>
+  </div>
+  
+  <?php
+  
+    // Set the correct public key, based on whether test_mode is enabled
+    $pkey = (c::get('stripe_test_mode')) ? c::get('stripe_test_publishable_key') : c::get('stripe_live_publishable_key');
+    
+    // Set some variables
+    $currency = c::get('stripe_currency');
+    $displayAmount = $page->price();
+  
+    if ($page->price() == null) {
+      $amount = c::get('stripe_default_amount');
+    } else {
+      $amount = str_replace('.', '', $page->price());
+      $amount = str_replace(',', '', $amount);
+    }
+    $checkoutName = $site->title();
+    $checkoutDescription = ($page->priceDescription()) ? $page->priceDescription() : c::get('stripe_default_description');
+  
+    // Check if an icon has been set. 
+    $logo = (c::get('stripe_icon')) ? c::get('stripe_icon_location') : null;
+  
+    // Check if "Remember Me" has been enabled
+    $rememberMe = (c::get('stripe_remember_me')) ? 'data-allow-remember-me="false"' : null;
+  
+    // Process the charge
+    if (isset($_POST['stripeToken'])) {
+      stripeCheckout();
+      return;
+    }
+  
+  ?>
+  
+  <form action="/stripe" method="POST">
+    <script
+      src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+      data-key="<?php echo $pkey ?>"
+      data-amount="<?php echo $amount ?>"
+      data-name="<?php echo $checkoutName ?>"
+      data-description="<?php echo $checkoutDescription ?>"
+      data-image="<?php echo $logo ?>"
+      data-locale="auto"
+      data-zip-code="true">
+    </script>
+  </form>
+    
+<?php endif ?>
 
 
 <?php // LINKS ?>
@@ -208,7 +261,7 @@
         <form id="form-author-add">
           <div>
             <input type="text" id="author-add" autocomplete="off">
-            <label>Add a maker</label>
+            <label>Add an author</label>
             <ul id="author-results"></ul>
           </div>
   
