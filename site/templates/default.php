@@ -32,26 +32,11 @@
       <?php snippet('sidebar') ?>
     <?php endif ?>
 
-    <?php if($page->parent() == 'articles' or $page->parent() == 'spaces' or $page->parent() == 'groups' or $page->parent() == 'handbooks' or $page->uid() == 'docs' or $page->parent() == 'projects' and $page->uid() != 'courses' and $page->uid() != 'learn'): ?>
+    <?php if ($page->links() != '' or $page->equipment() != '' or $page->handbooks() != ''): ?>
       <div class="sidebar rightsidebar">
         <?php snippet('widget', array('type' => 'links')) ?>
         <?php snippet('widget', array('type' => 'equipment')) ?>
-        <?php /*
-        <h3>LINKS</h3>
-          <li><a href="https://google.com">Google</a></li>
-          <li><a href="https://google.com">Stack Overflow</a></li>
-        <h3>FILES</h3>
-        <ul id="blah">
-          <li>Test file 1</li>
-          <li>Test file 2</li>
-          <li>Test file 3</li>
-        </ul>
-        */ ?>
-        <?php /*
-        <div id=disquswidget class=widget>
-          <script src="//tinkertry.disqus.com/combination_widget.js?num_items=10&hide_mods=1&color=grey&default_tab=recent&excerpt_length=200"></script><style media=screen>#dsq-combo-widget a,#dsq-combo-widget cite,#dsq-combo-widget div,#dsq-combo-widget img,#dsq-combo-widget li,#dsq-combo-widget ol,#dsq-combo-widget p,#dsq-combo-widget ul{font-size:.85rem;line-height:1.2rem;border:0;padding:0;margin:0;float:none;text-indent:0;background:0 0}#dsq-combo-widget li,#dsq-combo-widget ol,#dsq-combo-widget ul{list-style-type:none;list-style-image:none;background:0 0;display:block}#dsq-combo-widget #dsq-combo-content a,#dsq-combo-widget #dsq-combo-content cite,#dsq-combo-widget #dsq-combo-content div,#dsq-combo-widget #dsq-combo-content img,#dsq-combo-widget #dsq-combo-content li,#dsq-combo-widget #dsq-combo-content ol,#dsq-combo-widget #dsq-combo-content p,#dsq-combo-widget #dsq-combo-content ul{border:0;padding:0;margin:0;float:none;text-indent:0;background:0 0}#dsq-combo-widget #dsq-combo-content li,#dsq-combo-widget #dsq-combo-content ol,#dsq-combo-widget #dsq-combo-content ul{list-style-type:none;list-style-image:none;background:0 0;display:block}.dsq-clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}#dsq-combo-widget{text-align:left}#dsq-combo-widget #dsq-combo-tabs{float:left}#dsq-combo-widget #dsq-combo-content{position:static}#dsq-combo-widget #dsq-combo-content h3{float:none;text-indent:0;background:0 0;padding:0;border:0;margin:0 0 10px 0;font-size:16px}#dsq-combo-widget #dsq-combo-tabs li{display:inline;float:left;margin-right:2px;padding:0 5px;text-transform:uppercase}#dsq-combo-widget #dsq-combo-tabs li a{text-decoration:none;font-weight:700;font-size:10px}#dsq-combo-widget #dsq-combo-content .dsq-combo-box{margin:0 0 20px;padding:12px;clear:both}#dsq-combo-widget #dsq-combo-content .dsq-combo-box li{padding-bottom:10px;margin-bottom:10px;overflow:hidden;word-wrap:break-word}#dsq-combo-widget #dsq-combo-content .dsq-combo-avatar{float:left;height:48px;width:48px;margin-right:15px}#dsq-combo-widget #dsq-combo-content .dsq-combo-box cite{font-weight:700;font-size:14px}span.dsq-widget-clout{background-color:#FF7300;color:#FFF;padding:0 2px}#dsq-combo-logo{text-align:right}#dsq-combo-widget.blue #dsq-combo-tabs li.dsq-active{background:#E1F3FC}#dsq-combo-widget.blue #dsq-combo-content .dsq-combo-box{background:#E1F3FC}#dsq-combo-widget.blue #dsq-combo-tabs li{background:#B5E2FD}#dsq-combo-widget.blue #dsq-combo-content .dsq-combo-box li{border-bottom:1px dotted #B5E2FD}#dsq-combo-widget.grey #dsq-combo-tabs li.dsq-active{background:#f0f0f0}#dsq-combo-widget.grey #dsq-combo-content .dsq-combo-box{background:#f0f0f0}#dsq-combo-widget.grey #dsq-combo-tabs li{background:#ccc}#dsq-combo-widget.grey #dsq-combo-content .dsq-combo-box li{border-bottom:1px dotted #ccc}#dsq-combo-widget.green #dsq-combo-tabs li.dsq-active{background:#f4ffea}#dsq-combo-widget.green #dsq-combo-content .dsq-combo-box{background:#f4ffea}#dsq-combo-widget.green #dsq-combo-tabs li{background:#d7edce}#dsq-combo-widget.green #dsq-combo-content .dsq-combo-box li{border-bottom:1px dotted #d7edce}#dsq-combo-widget.red #dsq-combo-tabs li.dsq-active{background:#fad8d8}#dsq-combo-widget.red #dsq-combo-content .dsq-combo-box{background:#fad8d8}#dsq-combo-widget.red #dsq-combo-tabs li{background:#fdb5b5}#dsq-combo-widget.red #dsq-combo-content .dsq-combo-box li{border-bottom:1px dotted #fdb5b5}#dsq-combo-widget.orange #dsq-combo-tabs li.dsq-active{background:#fae6d8}#dsq-combo-widget.orange #dsq-combo-content .dsq-combo-box{background:#fae6d8}#dsq-combo-widget.orange #dsq-combo-tabs li{background:#fddfb5}#dsq-combo-widget.orange #dsq-combo-content .dsq-combo-box li{border-bottom:1px dotted #fddfb5}div#dsq-combo-logo{display: none;}</style>
-        </div>
-        */ ?>
+        <?php snippet('widget', array('type' => 'handbooks')) ?>
       </div>
     <?php endif ?>
     
