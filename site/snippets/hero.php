@@ -57,47 +57,45 @@
   <?php endif ?>
 
 <?php // HERO SINGULAR IMAGE ?>
-<?php elseif ($image = $page->images()->filterBy('name', '==', 'hero')->first() and $page->hero()->isEmpty() or $page->hero()->isEmpty()): ?>
-  
-  <?php if(!$page->images()->filterBy('name', '*=', 'hero')->first()): ?>
-    <?php $image = new Asset('/assets/images/hero-add.png'); ?>
-  <?php endif ?>
+<?php elseif ($image = $page->images()->filterBy('name', '==', 'hero')->first() and $page->hero()->isEmpty()): ?>
 
-  <div id="hero" class="<?php echo ($image->ratio() >= 3.5) ? 'fullwidth' : '' ?><?php echo ($image->filename() == 'hero-add.png') ? '' : '' ?>">
+  <div id="hero" class="<?php echo ($image->ratio() >= 3.5) ? 'fullwidth' : '' ?>">
     <div class="container">
-      <?php if ($image->filename() == 'hero-add.png'): ?>
-        <div class="hero-add">
-          <span>Add a featured image</span>
-        </div>
-      <?php else: ?>
-        <?php echo kirbytag(array('image' => $image->filename(), 'type' => 'hero')) ?>
-      <?php endif ?>
+      <?php echo kirbytag(array('image' => $image->filename(), 'type' => 'hero')) ?>
+    </div>
+  </div>
+  
+<?php // NO HERO ?>
+<?php else: ?>
+
+  <div class="fullwidth">
+    <div class="container">
+      <div id="hero-add"><span>Add a featured image</span></div>
     </div>
   </div>
 
-  <?php // Maker Images in Project Pages ?>
-  <?php
-  /*
-  <div class="section-makers">
-    <?php foreach($page->makers()->split() as $maker): ?>
-      <?php if($blah = $site->user($maker)): ?>
-        <a class="maker" href="<?php echo $site->url() . "/makers/" . $maker ?>">
-          <?php if($avatar = $site->user($maker)->avatar()): ?>
-            <img src="<?php echo $site->user($maker)->avatar()->crop(60, 60)->url() ?>" alt="">
-          <?php else: ?>
-            <?php $actualpath = kirby()->roots()->index() . "/assets/images/profile-default.png" ?>
-            <?php $regularpath = $site->url() . "/assets/images/profile-default.png" ?>
-            <?php $defaultimage = new Media($actualpath,$regularpath) ?>
-            <img src="<?php echo thumb($defaultimage, array('width' => 60, 'height' => 60, 'crop' => true))->url() ?>">
-          <?php endif ?>
-        </a>
-      <?php endif ?>
-    <?php endforeach ?>
-  </div>
-  */
-  ?>
-
 <?php endif ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
