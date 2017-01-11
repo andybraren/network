@@ -203,7 +203,7 @@
       
       <span class="heading"><?php echo $title ?></span>
       
-      <div class="authors" id="authors">
+      <div class="items" id="authors">
         <?php if (isset($authors)): ?>
           <?php foreach(str::split($authors) as $author): ?>
   
@@ -214,10 +214,10 @@
             ?>
   
             <?php if($site->user($username)): ?>
-              <a href="<?php echo $site->url() . "/makers/" . $username ?>" data-username="<?php echo $site->user($username)->username() ?>">
+              <a class="item" href="<?php echo $site->url() . "/makers/" . $username ?>" data-username="<?php echo $site->user($username)->username() ?>">
                 
                 <?php if ($page->isEditableByUser()): ?>
-                  <div class="author-delete"></div>
+                  <div class="item-delete"></div>
                 <?php endif ?>
                 
                 <div class="row">
@@ -255,6 +255,34 @@
           <?php endforeach ?>
         <?php endif ?>
       </div>
+      
+      <?php if ($page->isEditableByUser()): ?>
+        <div class="items" id="requests">
+          <?php foreach (str::split($page->requests()) as $username): ?>
+            <a class="item" href="<?php echo $site->url() . "/makers/" . $username ?>" data-username="<?php echo $site->user($username)->username() ?>">
+              
+              <div class="item-delete"></div>
+              <div class="item-confirm"></div>
+              <div class="row">
+                <img src="<?php echo userAvatar($username, 40) ?>" width="40" height="40" class="<?php echo userColor($username) ?>">
+                <div class="column">
+                  <span><?php echo $site->user($username)->firstname() . ' ' . $site->user($username)->lastname() ?></span>
+                  <?php if($role): ?>
+                    <span><?php echo $role ?></span>
+                  <?php /*
+                  <?php elseif(preg_match("/" . $page->slug() . " == (.*?) ~~/", $site->user($username)->roles(), $matches)): ?>
+                    <span><?php echo $matches[1]; ?></span>
+                  */ ?>
+                  <?php elseif($site->user($username)->major() != null): ?>
+                    <span><?php echo $site->user($username)->major() ?></span>
+                  <?php endif ?>
+                </div>
+              </div>
+              
+            </a>
+          <?php endforeach ?>
+        </div>
+      <?php endif ?>
       
       <?php if ($page->isEditableByUser()): ?>
         <?php $image = new Asset('/assets/images/hero-add.png'); ?>

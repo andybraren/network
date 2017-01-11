@@ -186,6 +186,7 @@ c::set('routes', array(
         //cookie::set('kirby_session_auth', '', $lifetime = 55, $path = '/', $domain = null);
         //cookie::set('kirby_session_auth', $value, $lifetime = 42000, $path = '/', $domain = null, $secure = true, $httpOnly = true);
         //c::set('panel.session.timeout', 2160); // 36 hours
+        //cookie::set('username', site()->user()->username(), $expires = 42000, $path = '/', $domain = null, $secure = true);
         return go($currentpath);
       } elseif ($user = site()->users()->findBy('email', get('username')) and $user->login(get('password'))){
         return go($currentpath);
@@ -475,7 +476,16 @@ c::set('routes', array(
   		//$modifiedBy = site()->user(get('username'));
   		
   		/* UserData */
-  		$authors = (isset($_POST['authors'])) ? $_POST['authors'] : $targetpage->authors();
+  		$authors = (isset($_POST['authors'])) ? $_POST['authors'] : implode(', ', $targetpage->authors());
+  		$oldauthors = '';
+  		$subscribers = '';
+  		$subscriberEmails = '';
+  		$registrants = '';
+  		$attendees = '';
+  		
+  		// Existing requests
+  		$requests = (isset($_POST['requests'])) ? $_POST['requests'] : implode(', ', $targetpage->requests());
+  		  $requests = (isset($_POST['join'])) ? implode(', ', array_merge($targetpage->requests(), array($_POST['join']))) : $requests;
   		
   		/* RelData */
   		$relatedGroups = (isset($_POST['groups'])) ? $_POST['groups'] : $targetpage->groups();
@@ -491,7 +501,7 @@ c::set('routes', array(
         site()->page($targetpage)->update(array(
           'Title'  => $title,
           'DateData' => $dateCreated . ', ' . $dateModified,
-          'UserData' => $authors,
+          'UserData' => $authors . ' /// ' . $oldauthors . ' /// ' . $subscribers . ' /// ' . $subscriberEmails . ' /// ' . $registrants . ' /// ' . $attendees . ' /// ' . $requests,
           'RelData' => $relatedGroups,
           'Settings' => $visibility . ', ' . $color . ', comments == ' . $comments . ', submissions == ' . $submissions . ', price == ' . $price,
           'Hero' => '',

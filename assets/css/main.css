@@ -771,10 +771,11 @@ nav {
 
 
 
-.hero-add {
+#hero-add {
   display: none;
   height: 10vh;
   background-color: #ececec;
+  cursor: pointer;
 }
 
 #hero span {
@@ -785,7 +786,7 @@ nav {
   user-select: none;
 }
 
-.editing .hero-add {
+.editing #hero-add {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -2271,12 +2272,7 @@ form div[role='group'] h3 {
 }
 */
 
-#icon-img {
-  filter: drop-shadow(5px 0px 0px white) drop-shadow(-5px 0px 0px white) drop-shadow(0px 5px 0px white) drop-shadow(0px -5px 0px white);
-}
-#icon-img[src*="avatar"] {
-  background-color: var(--theme-main);
-}
+
 
 #icon-add {
   font-size: .8rem;
@@ -2302,6 +2298,19 @@ form div[role='group'] h3 {
   /*border: 1px solid #d2d2d2;*/
 }
 
+#icon img[src*="avatar"] {
+  background-color: var(--theme-main);
+}
+
+#hero ~ .main .sidebar #icon {
+  margin-top: -100px;
+  border-radius: 5px;
+  /*background-color: var(--theme-main);*/
+  filter: drop-shadow(5px 0px 0px white) drop-shadow(-5px 0px 0px white) drop-shadow(0px 5px 0px white) drop-shadow(0px -5px 0px white);
+}
+
+
+
 
 
 
@@ -2324,18 +2333,6 @@ form div[role='group'] h3 {
   animation-duration: 1.2s;
   animation-timing-function: ease-in-out;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -3458,19 +3455,16 @@ p {
 }
 */
 
-.authors img[src*="avatar"], .groups img[src*="avatar"] {
+.items img[src*="avatar"] {
   background-color: var(--theme-main);
 }
 
-
-
-.author-delete {
+.item-delete, .item-confirm {
   position: absolute;
   right: 0px;
   top: 0px;
   z-index: 200000000;
   height: 20px;
-  height: 40px;
   width: 15px;
   cursor: pointer;
   display: flex;
@@ -3479,23 +3473,44 @@ p {
   justify-content: center;
   display: none;
 }
-.author-delete:before {
+.item-confirm {
+  top: 20px;
+}
+.item-delete:before {
   content: "\2718";
   color: #ff5858;
 }
-.author-delete:hover ~ .row {
+.item-confirm:before {
+  content: "\2714";
+  color: green;
+}
+.item-delete:hover ~ .row {
   color: red;
   transition: color 0.3s;
 }
-
-.editing .author-delete {
+.item-confirm:hover ~ .row {
+  color: green;
+  transition: color 0.3s;
+}
+.editing .item-delete, .editing .item-confirm {
   display: block;
 }
 
-.editing #authors .row, .editing #groups .row {
+.editing .item .row {
   cursor: move;
   transition: color 0.3s;
 }
+#requests .item .row {
+  opacity: 0.5;
+}
+
+.item {
+  position: relative;
+}
+
+
+
+
 
 .widget.hidden {
   display: none;
@@ -3513,28 +3528,7 @@ p {
   display: initial;
 }
 
-/*
-#form-author-add > div > div {
-    margin: 0;
-}
-#form-author-add > div > div input {
-  height: 40px;
-}
-#form-author-add > div > div label {
-      top: 10px;
-}
-*/
 
-/*
-.author-move:before {
-  content: "\2630";
-  position: absolute;
-  right: 0px;
-  top: 20px;
-  color: #ABABAB;
-  transform: scale(.5,1);
-}
-*/
 
 
 .sidebar h1 {
@@ -3564,13 +3558,6 @@ p {
   letter-spacing: 1px;
 }
 
-
-
-#hero:not(.invisible) ~ .main .sidebar #icon {
-  margin-top: -100px;
-  border-radius: 5px;
-  /*background-color: var(--theme-main);*/
-}
 
 
 .sidebar h4 {

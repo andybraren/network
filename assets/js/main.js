@@ -71,9 +71,11 @@ window.onload = function() {
         replaceFigures(); // from editor.js, need to finish before ignition.edit
         editor.ignition().edit();
         toggleHero(clickcount, formupload);
-        toggleAuthors(clickcount);
-        toggleGroups(clickcount);
-        authorDeleteButtons();
+        //toggleAuthors(clickcount);
+        //toggleGroups(clickcount);
+        toggleItems(clickcount);
+        itemDeleteButtons();
+        itemConfirmButtons();
         Blazy();
         event.target.innerHTML = 'Save';
         clickcount = 1;
@@ -81,8 +83,9 @@ window.onload = function() {
         checkEmptyWidgets()
         document.body.classList.toggle('editing');
         toggleHero(clickcount, formupload);
-        toggleAuthors(clickcount);
-        toggleGroups(clickcount);
+        //toggleAuthors(clickcount);
+        //toggleGroups(clickcount);
+        toggleItems(clickcount);
         event.target.innerHTML = 'Edit';
         editor.ignition().confirm();
         savePage()
@@ -106,28 +109,6 @@ window.onload = function() {
           document.body.className = color.options[color.selectedIndex].value + " editing";
         };
       }
-
-      
-      /* Clicking save button now required
-      if (formSettings != null) {
-        formSettingsVisibility.onchange = function() {
-          data = new FormData(formSettings);
-          data.append('page', window.location.pathname);
-          var request = new XMLHttpRequest();
-          request.open('POST', 'save', true);
-          request.send(data);
-        };
-        formSettingsColor.onchange = function() {
-          document.body.className = formSettingsColor.value + " editing";
-          
-          data = new FormData(formSettings);
-          data.append('page', window.location.pathname);
-          var request = new XMLHttpRequest();
-          request.open('POST', 'save', true);
-          request.send(data);
-        };
-      }
-      */
     
     }, false);
   
@@ -238,10 +219,10 @@ if (modals != null) {
 
 function toggleHero(clickcount, formupload) {
   var heroDiv = document.getElementById('hero');
+  var heroAdd = document.getElementById('hero-add');
   var formHero = document.getElementById('heroToUpload');
   
   if (heroDiv != null) {
-    
     if (clickcount == '0') {
       heroDiv.addEventListener('click', formclick = function() {
         formHero.click();
@@ -255,7 +236,22 @@ function toggleHero(clickcount, formupload) {
     else {
       heroDiv.removeEventListener('click', formclick);
     }
-
+  }
+  
+  if (heroAdd != null) {
+    if (clickcount == '0') {
+      heroAdd.addEventListener('click', formclick = function() {
+        formHero.click();
+      });
+      formHero.onchange = function() {
+        savePage();
+        editor.ignition().confirm();
+        formupload.submit();
+      };
+    }
+    else {
+      heroAdd.removeEventListener('click', formclick);
+    }
   }
 }
 
@@ -282,82 +278,62 @@ function checkEmptyWidgets() {
     
 }
 
-
-
-
-
-
-
-
-
-function toggleAuthors(clickcount) {
-  var authorsDiv = document.getElementById('authors');
-  var authorsForm = document.getElementById('form-author-add')
+function toggleItems() { // Enable dragula and toggle each item's href to data-href
   
-  if (authorsDiv != null) {
-    var authors = authorsDiv.children;
-    if (clickcount == '0') {
-      for (var i = authors.length - 1; i >= 0; i--) {
-        authors[i].setAttribute("data-href", authors[i].href);
-        authors[i].removeAttribute("href");
+  dragula([document.getElementById('authors')]);
+  dragula([document.getElementById('groups')]);
+  
+  var widgets = document.getElementsByClassName('widget');
+  for (var i = 0; i < widgets.length; i++) {
+    var items = widgets[i].getElementsByClassName('item');
+    console.log(widgets.length);
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].hasAttribute('data-href')) {
+        items[i].setAttribute('href', items[i].getAttribute('data-href'));
+        items[i].removeAttribute('data-href');
+      } else {
+        items[i].setAttribute('data-href', items[i].href);
+        items[i].removeAttribute('href');
       }
-      //authorsForm.classList.remove('invisible');
-      dragula([authorsDiv], {
-        removeOnSpill: true,
-      });
-    }
-    else {
-      //saveData(authors, 'authors');
-      /* Need to combine all of this junk */
-      var groups = Array.prototype.slice.call(document.getElementById('groups').children);
-          newauthors = Array.prototype.slice.call(document.getElementById('authors').children);
-      var combined = newauthors.concat(groups);
-      //console.log(authors);
-      //saveData(combined, 'users');
-      for (var i = authors.length - 1; i >= 0; i--) {
-        authors[i].setAttribute("href", authors[i].getAttribute("data-href"));
-        authors[i].removeAttribute("data-href");
-      }
-      //authorsForm.classList.add('invisible');
-      /*
-      dragula([authorsDiv], {
-        moves: false,
-      });
-      */
     }
   }
 }
-function toggleGroups(clickcount) {
-  var groupsDiv = document.getElementById('groups');
-  var groupsForm = document.getElementById('form-group-add')
-  
-  if (groupsDiv != null || groupsForm != null) {
-    var groups = groupsDiv.children;
-    if (clickcount == '0') {
-      for (var i = groups.length - 1; i >= 0; i--) {
-        groups[i].setAttribute("data-href", groups[i].href);
-        groups[i].removeAttribute("href");
-      }
-      //groupsForm.classList.remove('invisible');
-      dragula([groupsDiv], {
-        removeOnSpill: true,
-      });
-    }
-    else {
-      //saveData(groups, 'groups');
-      for (var i = groups.length - 1; i >= 0; i--) {
-        groups[i].setAttribute("href", groups[i].getAttribute("data-href"));
-        groups[i].removeAttribute("data-href");
-      }
-      //groupsForm.classList.add('invisible');
-      /*
-      dragula([groupsDiv], {
-        moves: false,
-      });
-      */
-    }
+
+function itemDeleteButtons() {
+  var deleteButtons = document.getElementsByClassName('item-delete');
+  for (var i = 0; i < deleteButtons.length; i++) {
+    
+    function deleteItem(event) {
+      var target = getEventTarget(event);
+      target.parentNode.parentNode.removeChild(target.parentNode);
+    };
+    
+    deleteButtons[i].addEventListener('click', deleteItem, false);
+    
   }
 }
+
+
+function itemConfirmButtons() {
+  var confirmButtons = document.getElementsByClassName('item-confirm');
+  for (var i = 0; i < confirmButtons.length; i++) {
+    
+    function confirmItem(event) {
+      var target = getEventTarget(event);
+      
+      target.parentNode.parentNode.previousElementSibling.appendChild(target.parentNode);
+      target.parentNode.removeChild(target);
+    };
+    
+    confirmButtons[i].addEventListener('click', confirmItem, false);
+    
+  }
+}
+
+
+
+
+
 
 // Send the update content to the server to be saved
 function onStateChange(ev) {
@@ -378,6 +354,31 @@ function onStateChange(ev) {
   }
 };
 
+/* Request to join a page/group */
+var buttonjoin = document.getElementById('button-join');
+if (buttonjoin != null) {
+  buttonjoin.addEventListener('click', function() {
+    
+    data = new FormData();
+    data.append('page', window.location.pathname);
+    data.append('join', document.getElementById('datausername').getAttribute('data-username'));
+    
+    var request = new XMLHttpRequest();
+    request.open('POST', 'save', true);
+    request.onload = function() {
+      if (request.status >= 200 && request.status < 400) { // Success!
+        buttonjoin.innerHTML = 'Request sent';
+        buttonjoin.id = 'blah';
+      } else {
+        console.log("The server was reached, but returned an error");
+      }
+    };
+    
+    request.send(data);
+    
+  });
+}
+
 function savePage() {
   
   data = new FormData();
@@ -392,6 +393,18 @@ function savePage() {
     }
     var authors = arr.reverse().join(', ');
     data.append('authors', authors);
+  }
+  
+  /* Requests */
+  var requests = document.getElementById('requests');
+  if (requests != null) {
+    var requests = Array.prototype.slice.call(requests.children);
+    var arr = [];
+    for (var i = requests.length - 1; i >= 0; i--) {
+      arr.push(requests[i].getAttribute('data-username'));
+    }
+    var requests = arr.reverse().join(', ');
+    data.append('requests', requests);
   }
   
   /* Groups */
@@ -462,30 +475,6 @@ function deletePage() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-function authorDeleteButtons() {
-  var deleteButtons = document.getElementsByClassName('author-delete');
-  for (var i = 0; i < deleteButtons.length; i++) {
-    
-    function deleteItem(event) {
-      var target = getEventTarget(event);
-      target.parentNode.parentNode.removeChild(target.parentNode);
-    };
-    
-    deleteButtons[i].addEventListener('click', deleteItem, false);
-    
-  }
-}
 
 /* Add author widget
 */
@@ -569,7 +558,7 @@ if (authorfield != null) {
     }
     var resultHTML = '<a data-username="' + this.getAttribute('data-username') + '" data-href="' + this.getAttribute('data-profileURL') + '" ><div class="author-delete"></div><div class="row"><img src="' + this.getAttribute('data-avatar') + '" class="' + this.getAttribute('data-color') + '" width="40" height="40"><div class="column"><span>' + this.getAttribute('data-name') + '</span>' + major + '</div></div></a>';
     authorwidget.insertAdjacentHTML('beforeend', resultHTML);
-    authorDeleteButtons();
+    itemDeleteButtons();
   }
   
 }
@@ -648,7 +637,7 @@ if (groupfield != null) {
     
     var resultHTML = '<a data-href="' + this.getAttribute('data-groupURL') + '" data-username="' + this.getAttribute('data-groupslug') + '"><div class="author-delete"></div><div class="row"><img src="' + this.getAttribute('data-logo') + '" class="' + this.getAttribute('data-color') + '" width="40" height="40"><div class="column"><span>' + this.getAttribute('data-title') + '</span></div></div></a>';
     groupwidget.insertAdjacentHTML('beforeend', resultHTML);
-    authorDeleteButtons();
+    itemDeleteButtons();
   }
   
 }

@@ -96,7 +96,7 @@
           <?php endif ?>
         </figure>
         -->
-        <a href="<?php echo $site->url() . "/makers/" . $user->username() ?>">
+        <a id="datausername" href="<?php echo $site->url() . "/makers/" . $user->username() ?>" data-username="<?php echo $user->username() ?>">
           <?php echo esc($user->firstName()) ?>
         </a>
         <ul class="submenu">

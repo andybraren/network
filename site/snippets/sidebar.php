@@ -26,6 +26,15 @@
       </div>
     <?php endif ?>
   <?php endif ?>
+  
+  <?php // Join group/class button ?>
+  <?php if (site()->user() and site()->user()->usertype() != 'admin'): ?>
+    <?php if (!$page->isEditableByUser() and !in_array(site()->user()->username(), array_merge($page->requests(),$page->authors()))): ?>
+      <div id="button-join" class="button">Join group</div>
+    <?php elseif (in_array(site()->user()->username(), $page->requests())): ?>
+      <div id="button" class="button">Request sent</div>
+    <?php endif ?>
+  <?php endif ?>
     
   <?php // FRONTEND EDITING CONTROLS ?>
   <?php // Need to figure out how to enable admins still, multiple operators, maybe a case statement ?>
