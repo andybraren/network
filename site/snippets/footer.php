@@ -22,7 +22,7 @@
   -->
 
   <?php // Load all of the editing-related resources if they're a logged-in maker with the right permissions ?>
-  <?php if($user = $site->user() and str::contains($page->makers(), $user) or $user = $site->user() and str::contains($page->slug(), $user) or $user = $site->user() and $user->usertype() == 'admin'): ?>
+  <?php if($page->isEditableByUser()): ?>
     <?php echo js('assets/js/editing/to-markdown.js') ?>
     <?php echo css('assets/js/contenttools/content-tools.min.css') ?>
     <?php echo js('assets/js/contenttools/content-tools.js') ?>
