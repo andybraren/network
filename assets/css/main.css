@@ -350,6 +350,7 @@ a[class*="file-"] {
 .file-doc { background-image: url(../../assets/images/file-doc.svg); }
 .file-ppt { background-image: url(../../assets/images/file-ppt.svg); }
 .file-xls { background-image: url(../../assets/images/file-xls.svg); }
+.file-csv { background-image: url(../../assets/images/file-xls.svg); }
 .file-zip { background-image: url(../../assets/images/file-zip.svg); }
 .file-vi { background-image: url(../../assets/images/file-vi.svg); }
 
