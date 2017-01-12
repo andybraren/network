@@ -56,7 +56,7 @@ window.onload = function() {
   if (editbutton != null) {
     
     var clickcount = 0;
-    editbutton.addEventListener('click', function() {
+    editbutton.addEventListener('click', function(event) {
       
       /* Hero and icon image editing */
       var formupload = document.getElementById('upload-form');
@@ -365,6 +365,7 @@ function toggleItems() { // Enable dragula and toggle each item's href to data-h
   dragula([document.getElementById('authors')]);
   dragula([document.getElementById('groups')]);
   
+  /*
   var widgets = document.getElementsByClassName('widget');
   for (var i = 0; i < widgets.length; i++) {
     var items = widgets[i].getElementsByClassName('item');
@@ -378,6 +379,18 @@ function toggleItems() { // Enable dragula and toggle each item's href to data-h
       }
     }
   }
+  */
+  var items = document.getElementsByClassName('item');
+  for (var i = 0; i < items.length; i++) {
+    if (items[i].hasAttribute('data-href')) {
+      items[i].setAttribute('href', items[i].getAttribute('data-href'));
+      items[i].removeAttribute('data-href');
+    } else {
+      items[i].setAttribute('data-href', items[i].href);
+      items[i].removeAttribute('href');
+    }
+  }
+  
 }
 
 function itemDeleteButtons() {
