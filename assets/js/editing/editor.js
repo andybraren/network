@@ -217,6 +217,23 @@ var kirbytagtweaks = [
   },
   */
   
+  { // Files
+    filter: function (node) {
+      return node.nodeName === 'A' && node.classList.toString().includes('file-');
+    },
+    replacement: function(content, node) {      
+      var filename = node.href.split('/').pop();
+      var text = node.innerHTML;
+      
+      if (filename != text) {
+        return '(file: ' + filename + ' text: ' + text + ')';
+      } else {
+        return '(file: ' + filename + ')';
+      }
+      
+    }
+  },
+  
   {
     // <iframe frameborder="0" height="300" src="https://www.youtube.com/embed/-xzzQVk5IfE" width="400"></iframe>
     // (video: https://www.youtube.com/embed/-xzzQVk5IfE)
@@ -601,7 +618,7 @@ ContentEdit.Video.fromDOMElement = function (domElement) {
 
 // Revise the layout of tools
 // https://github.com/GetmeUK/ContentTools/issues/173
-editor.toolbox().tools([['bold', 'italic', 'link', 'heading2', 'heading3', 'paragraph', 'unordered-list', 'ordered-list', 'table'], ['image', 'video', 'preformatted'], ['undo', 'redo', 'remove']]);
+editor.toolbox().tools([['bold', 'italic', 'link', 'heading2', 'heading3', 'paragraph', 'unordered-list', 'ordered-list', 'table'], ['image', 'video'], ['undo', 'redo', 'remove']]);
 
 
 
@@ -611,8 +628,8 @@ editor.toolbox().tools([['bold', 'italic', 'link', 'heading2', 'heading3', 'para
 ContentTools.IMAGE_UPLOADER = imageUploader;
 
 function imageUploader(dialog) {
-     var image, xhr, xhrComplete, xhrProgress;
-
+    var image, xhr, xhrComplete, xhrProgress;
+    
     dialog.addEventListener('imageuploader.cancelupload', function () {
         // Cancel the current upload
 
@@ -626,13 +643,13 @@ function imageUploader(dialog) {
         // Set the dialog to empty
         dialog.state('empty');
     });
-
+    
     dialog.addEventListener('imageuploader.clear', function () {
         // Clear the current image
         dialog.clear();
         image = null;
     });
-
+    
     dialog.addEventListener('imageuploader.fileready', function (ev) {
 
         // Upload a file to the server

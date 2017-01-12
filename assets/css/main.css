@@ -2367,6 +2367,27 @@ form div[role='group'] h3 {
 
 */
 
+.tool-file:before {
+    color: #464646;
+    cursor: pointer;
+    float: left;
+    height: 32px;
+    width: 32px;
+    content: "";
+    background: url(https://makernetwork.org/assets/images/tool-file.svg) no-repeat;
+    background-position: center;
+    background-size: 14px;
+}
+
+
+
+
+
+
+
+
+
+
 .ct-widget input {
   display: initial;
 }

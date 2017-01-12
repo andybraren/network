@@ -70,6 +70,7 @@ window.onload = function() {
         document.body.classList.toggle('editing');
         replaceFigures(); // from editor.js, need to finish before ignition.edit
         editor.ignition().edit();
+        addFileTool();
         toggleHero(clickcount, formupload);
         //toggleAuthors(clickcount);
         //toggleGroups(clickcount);
@@ -217,6 +218,87 @@ if (modals != null) {
 
 
 
+
+function addFileTool() {
+  
+  // Forcefully insert the new tool
+  var prev = document.getElementsByClassName('ct-tool--video')[0];
+  html = '<div class="ct-tool ct-tool--file ct-tool--disabled tool-file" data-ct-tooltip="File"></div>';
+  prev.insertAdjacentHTML('afterend', html);
+  
+  var tool = document.getElementsByClassName('tool-file')[0];
+  var focus = document.getElementsByClassName('ce-element--focused')[0];
+  tool.addEventListener('click', function(event) {
+    
+    // Show file dialog and upload the file to the server
+    var input = document.getElementById('fileToUpload')
+    input.click();
+    input.onchange = function() {
+      var data = new FormData();
+
+      var files = input.files;
+      for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        data.append('files', file, file.name);
+      }
+      data.append('page', window.location.pathname);
+      
+      var request = new XMLHttpRequest();
+      request.open('POST', 'uploadnew', true);
+      request.onload = function () {
+        if (request.status === 200) { // File uploaded
+          response = JSON.parse(this.response);
+          insertFile(response.filename, response.fileurl, response.extension);
+        } else {
+          //alert('An error occurred! Contact Andy Braren for help.');
+        }
+      };
+      request.send(data);
+      
+    };
+    
+    function insertFile(filename, fileurl, extension) {
+      html = '<p class="ce-element ce-element--type-text"><a href="' + fileurl + '" class="file-' + extension + '">' + filename + '</a></p>';
+      
+      // For whenever ContentTools is replaced
+      // focus.insertAdjacentHTML('afterend', html);
+      // var newelement = focus.nextSibling;
+      // focus.parentNode.removeChild(focus);
+      
+      // ContentTools implementation
+      // This is necessary to make the file's block editable after insertion
+      // https://github.com/GetmeUK/ContentTools/issues/201
+      selectedElm = ContentEdit.Root.get().focused();
+      p = new ContentEdit.Text('p', {}, html)
+      selectedElm.parent().attach(p, selectedElm.parent().children.indexOf(selectedElm) + 1)
+      p.focus()
+      
+      // New paragraph below the newly-added file
+      selectedElm = ContentEdit.Root.get().focused();
+      n = new ContentEdit.Text('p', {}, '')
+      selectedElm.parent().attach(n, selectedElm.parent().children.indexOf(selectedElm) + 1)
+      n.focus()
+    }
+    
+  }, false);
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function toggleHero(clickcount, formupload) {
   var heroDiv = document.getElementById('hero');
   var heroAdd = document.getElementById('hero-add');
@@ -286,7 +368,6 @@ function toggleItems() { // Enable dragula and toggle each item's href to data-h
   var widgets = document.getElementsByClassName('widget');
   for (var i = 0; i < widgets.length; i++) {
     var items = widgets[i].getElementsByClassName('item');
-    console.log(widgets.length);
     for (var i = 0; i < items.length; i++) {
       if (items[i].hasAttribute('data-href')) {
         items[i].setAttribute('href', items[i].getAttribute('data-href'));
@@ -482,8 +563,6 @@ var authorwidget = document.getElementById('authors');
 var authorfield = document.getElementById('author-add');
 var authorresults = document.getElementById('author-results');
 if (authorfield != null) {
-    
-  authorfield.addEventListener('input', lengthCheck, false);
   
   function lengthCheck() {
     if (this.value.length >= 2) {
@@ -492,6 +571,8 @@ if (authorfield != null) {
       clearSearch(authorresults);
     }
   }
+  
+  authorfield.addEventListener('input', lengthCheck, false);
   
   function authorSearch() {
     var request = new XMLHttpRequest();
@@ -893,38 +974,36 @@ if (usernamefield != null) {
   usernamefield.addEventListener('focusout', queryUsername, false);
   usernamefield.addEventListener('blur', queryUsername, false); // For Firefox
   
-  function queryUsername() {
-    
-    var request = new XMLHttpRequest();
-    request.open('GET', 'api?users=' + usernamefield.value, true);
-    request.onload = function() {
-      if (request.status >= 200 && request.status < 400) { // Success!
-        var data = JSON.parse(request.responseText);
-        if (data.status == 'success') { // A user was found, which means the username is occupied
-          console.log('Username is not available');
-          document.getElementById('usernameurl').style.color = 'crimson';
-          document.getElementById('usernamelabel').style.color = 'crimson';
-          document.getElementById('usernamemessage').innerText = ' (taken)';
-        } else if (data.status == 'error') { // A user was not found, meaning it's available
-          console.log('Username is available');
-          document.getElementById('usernameurl').style.color = 'green';
-          document.getElementById('usernamelabel').style.color = '';
-        }
-      } else {
-        console.log("The server was reached, but returned an error");
-      }
-    };
-    
-    request.onerror = function() {
-      console.log("Connection error");
-    };
-    
-    request.send();
-  }
-  
 }
 
-
+function queryUsername() {
+  
+  var request = new XMLHttpRequest();
+  request.open('GET', 'api?users=' + usernamefield.value, true);
+  request.onload = function() {
+    if (request.status >= 200 && request.status < 400) { // Success!
+      var data = JSON.parse(request.responseText);
+      if (data.status == 'success') { // A user was found, which means the username is occupied
+        console.log('Username is not available');
+        document.getElementById('usernameurl').style.color = 'crimson';
+        document.getElementById('usernamelabel').style.color = 'crimson';
+        document.getElementById('usernamemessage').innerText = ' (taken)';
+      } else if (data.status == 'error') { // A user was not found, meaning it's available
+        console.log('Username is available');
+        document.getElementById('usernameurl').style.color = 'green';
+        document.getElementById('usernamelabel').style.color = '';
+      }
+    } else {
+      console.log("The server was reached, but returned an error");
+    }
+  };
+  
+  request.onerror = function() {
+    console.log("Connection error");
+  };
+  
+  request.send();
+}
 
 /* Solution toggle */
 /*

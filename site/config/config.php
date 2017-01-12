@@ -550,6 +550,48 @@ c::set('routes', array(
 		}
 	),
 	
+	
+  // UPLOAD
+	array(
+		'pattern' => array('uploadnew', '(.+uploadnew)'),
+		'method' => 'POST',
+		'action'  => function() {
+  		
+  		$targetpage = site()->page($_POST['page']);
+  		$files = (isset($_FILES['file']['name'])) ? $_FILES['file']['name'] : '';
+  		
+      $target_dir = kirby()->roots()->content() . '/' . $targetpage->uri() . '/';
+      $filename = pathinfo($_FILES['files']['name'],PATHINFO_FILENAME);
+      
+      $extension = strtolower(pathinfo($_FILES['files']['name'], PATHINFO_EXTENSION));
+      
+      $fileurl = $targetpage->url() . '/' . $filename . '.' . $extension;
+      $fileurl = site()->contentURL() . '/' . $targetpage->uri() . '/' . $filename . '.' . $extension;
+      
+      $target_file = $target_dir . $filename . '.' . $extension;
+
+      // Check for any old files with the same name, of any extension, and delete them
+    	//$oldfiles = glob($target_dir . $filename . '.' . $extension);
+    	$oldfile = $target_dir . $filename . '.' . $extension;
+    	if (file_exists($oldfile)) {
+      	unlink($oldfile);
+    	}
+    	
+      // Save the file in the right place
+      try {
+        
+        move_uploaded_file($_FILES['files']['tmp_name'], $target_file);
+        
+        $response = array('filename' => $filename . '.' . $extension, 'fileurl' => $fileurl, 'extension' => $extension);
+        echo json_encode($response, JSON_UNESCAPED_SLASHES);
+        
+      } catch(Exception $e) {
+        echo $e->getMessage();
+      }
+          
+		}
+	),
+	
 
 
 

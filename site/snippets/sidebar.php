@@ -76,10 +76,11 @@
     </div>
     
     <?php // Used for adding new hero images and icons ?>
-    <form method="post" action="upload" id="upload-form" enctype="multipart/form-data" style="display:none" >
+    <form method="post" action="uploadnew" id="upload-form" enctype="multipart/form-data" style="display:none" >
       <input type="file" accept="image/*" name="avatar" id="avatarToUpload">
       <input type="file" accept="image/*" name="hero" id="heroToUpload">
       <input type="file" accept="image/*" name="image" id="imageToUpload">
+      <input type="file" accept="" name="file" id="fileToUpload">
     </form>
     
 <?php /*
