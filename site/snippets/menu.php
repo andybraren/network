@@ -4,13 +4,16 @@
   
     <ul class="menu">
       
-      <div class="logo">
-        <a href="<?php echo url() ?>">
-          <?php $logo = new Asset('/assets/images/logo-white-2.svg'); ?>
-          <img id="logo-1" src="<?php echo url('assets/images/logo-white-2.svg') ?>" width="152px" alt="<?php echo $site->title()->html() ?>" />
-          <img id="logo-2" src="<?php echo url('assets/images/logo-white.svg') ?>" alt="<?php echo $site->title()->html() ?>" />
-        </a>
-      </div>
+      <a class="logo" href="<?php echo url() ?>">
+        <div id="logo-1">
+          <?php $logo = new Asset('/assets/images/logo.svg'); ?>
+          <?php echo $logo->content() ?>
+        </div>
+        <div id="logo-2">
+          <?php $logo = new Asset('/assets/images/logo-icon.svg'); ?>
+          <?php echo $logo->content() ?>
+        </div>
+      </a>
         
       <?php if($_SERVER['SERVER_NAME'] == 'makernetwork.org'): ?>
       

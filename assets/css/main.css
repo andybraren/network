@@ -104,9 +104,6 @@ nav {
   overflow-x: auto;
 }
 
-
-
-
 header.headroom {
   /*transition: background-color 0.2s, color 0.2s;*/
   /*transition: transform 200ms linear, background-color 0.2s, color 0.2s;*/
@@ -347,10 +344,9 @@ a[class*="file-"] {
 }
 
 .file-pdf { background-image: url(../../assets/images/file-pdf.svg); }
-.file-doc { background-image: url(../../assets/images/file-doc.svg); }
+.file-doc, .file-docx { background-image: url(../../assets/images/file-doc.svg); }
 .file-ppt { background-image: url(../../assets/images/file-ppt.svg); }
-.file-xls { background-image: url(../../assets/images/file-xls.svg); }
-.file-csv { background-image: url(../../assets/images/file-xls.svg); }
+.file-xls, .file-csv { background-image: url(../../assets/images/file-xls.svg); }
 .file-zip { background-image: url(../../assets/images/file-zip.svg); }
 .file-vi { background-image: url(../../assets/images/file-vi.svg); }
 
@@ -522,35 +518,53 @@ blockquote {
 }
 
 
-/* navbar color cycle animation */
-/*
-@keyframes cyclecolors {
-	0%  {background:#62A5F0;}
-	16% {background:#CE62F0;}
-	32% {background:#50B5CE;}
-	48% {background:#1D71F5;}
-	64% {background:#a759a8;}
-	96% {background:#32afe2;}
-}
-*/
+
+
 
 .logo {
-  /*flex: 1;*/
-  /*max-width: 20%;*/
-  flex-shrink: 0;
-}
-.logo a {
-  padding: 10px;
   padding: 8px;
 }
-.logo img {
-  height: 2.5rem;
-  height: 2.2rem;
+
+.logo svg {
+  display: block;
+  height: 35px;
+  width: inherit;
+}
+
+.logo svg path {
+  fill: white;
 }
 
 #logo-2 {
   display: none;
 }
+
+@media (max-width: 800px) {
+  #logo-1 { display: none; }
+  #logo-2 { display: block; }
+}
+
+/*
+.logo svg g {
+    -webkit-animation: cyclecolors linear infinite;
+    -webkit-animation-duration: 60s;
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation-iteration-count: infinite;
+    -o-animation-iteration-count: infinite;
+}
+*/
+
+@keyframes cyclecolors {
+	0%  {fill:#62A5F0;}
+	16% {fill:#5D9A6D;}
+	32% {fill:#AF5555;}
+	48% {fill:#D08536;}
+	64% {fill:#9854CA;}
+	96% {fill:#CC9933;}
+}
+
+
+
 
 
 /* Navigation and Menus
@@ -1295,6 +1309,7 @@ textarea {
   width: 15%;
   min-width: 15%;
   flex-basis: 15%;
+  max-width: 15%;
 }
 
 @media (max-width: 800px) { /* Temp fix for https://github.com/philipwalton/flexbugs#11-min-and-max-size-declarations-are-ignored-when-wrapping-flex-items */
@@ -2748,7 +2763,7 @@ body.noscroll > header > .container {
 }
 
 
-p > code {
+code {
   background-color: var(--theme-opac2);
   padding: 0 5px 2px;
   border-radius: 4px;
@@ -3806,6 +3821,17 @@ p:empty:before {
   color: #ABABAB;
 }
 
+.p {
+  text-align: center;
+  font-size: 13px;
+  padding-top: 130px;
+}
+
+
+
+
+
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -3813,8 +3839,14 @@ table {
   margin-bottom: 1rem;
 }
 
+.table {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 th {
   background: #EDF5FF;
+  background-color: var(--theme-opac2);
   text-align: left;
 }
 
@@ -3838,11 +3870,9 @@ tr:nth-of-type(odd) td {
   background: #F7F7F7;
 }
 
-.p {
-  text-align: center;
-  font-size: 13px;
-  padding-top: 130px;
-}
+
+
+
 
 /* Flexbox Grid
 -------------------------------------------------- */
@@ -3861,8 +3891,8 @@ tr:nth-of-type(odd) td {
   max-width: 720px;
 }
 
-article .text {
-  max-width: 700px;  
+article .text, article .title {
+  max-width: 700px;
   line-height: 1.625rem;
 }
 .sidebar ~ article {
@@ -3974,8 +4004,6 @@ aside figcaption {
     -webkit-overflow-scrolling: touch;
   }
   
-  #logo-1 { display: none; }
-  #logo-2 { display: block; }
   .tocselector { display: block; }
   
   .main .container {
