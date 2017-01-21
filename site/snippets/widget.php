@@ -183,8 +183,8 @@
       $plural = true;
     }
   ?>
-  
-  <?php if(isset($authors) or $page->isEditableByUser()): ?>
+
+  <?php if(!empty($authors) or $page->isEditableByUser()): ?>
     <div class="widget">
 
       <?php /* Set the widget title */
@@ -196,6 +196,8 @@
           case 'handbooks':
           case 'articles':
             $title = ($plural) ? 'AUTHORS' : 'AUTHOR'; break;
+          case 'courses':
+            $title = ($plural) ? 'INSTRUCTORS' : 'INSTRUCTOR'; break;
           default:
             $title = ($plural) ? 'MAKERS' : 'MAKER'; break;
         }
@@ -320,18 +322,18 @@
     }
   ?>
   
-  <?php if ($groups != null and $groups != '' or $page->isEditableByUser()): ?>
+  <?php if (!empty($groups) or $page->isEditableByUser()): ?>
     <div class="widget<?php echo ($groups == '' and $page->isEditableByUser()) ? ' hidden' : '' ?>">
       
       <span class="heading"><?php echo ($plural) ? 'GROUPS' : 'GROUP' ?></span>
       
-      <div class="groups" id="groups">
+      <div class="items" id="groups">
         <?php if (isset($groups)): ?>
           <?php foreach ($groups as $group): ?>
-              <a data-username="<?php echo $group->slug() ?>" href="<?php echo $group->url() ?>">
+              <a class="item" href="<?php echo $group->url() ?>" data-username="<?php echo $group->slug() ?>">
                 
                 <?php if ($page->isEditableByUser()): ?>
-                  <div class="author-delete"></div>
+                  <div class="item-delete"></div>
                 <?php endif ?>
                 
                 <div class="row">

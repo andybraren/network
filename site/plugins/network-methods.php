@@ -209,18 +209,25 @@ page::$methods['relatedGroups'] = function($page) {
     if (isset(explode('///',$page->content()->reldata())[0])) {
       $related = str::split(explode('///',$page->content()->reldata())[0],',');
       foreach ($related as $item) {
-        if ($apage = site()->page('groups/' . $item)) {
+        if ($apage = site()->page('courses/' . $item)) {
           //$collection[] = $apage; // this makes it return a pages collection
           //$collection[] = $apage; // this makes it return an array of page strings
           $collection->add($apage);
         }
+        if ($apage = site()->page('courses/' . $item)) {
+          $collection->add($apage);
+        }
       }
-      return $collection;
+      if (!is_null($collection)) {
+        return null;
+      } else {
+        return $collection;;
+      }
     }
   }
   
   else {
-    return $collection;
+    return null;
   }
 
 };
