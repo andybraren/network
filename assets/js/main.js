@@ -7,10 +7,12 @@ if (window.location.href.indexOf('login:failed') != -1) {
 */
 
 window.onload = function() {
+  checkTheme();
+  checkFontSize();
+  checkFontFamily();
+  
   videoEmbed();
   heroImages();
-  nightMode();
-  fontFamily();
   modals();
   
   /* Activate okayNav */
@@ -28,6 +30,8 @@ window.onload = function() {
       Stickyfill.add(stickyElements[i]);
   }
   
+  progressNav();
+  
   /* Activate object-fit polyfill for IE/Edge */
   objectFitImages();
   
@@ -40,7 +44,13 @@ window.onload = function() {
   var myTooltip = Frtooltip();
   myTooltip.init();
 
-
+  
+  var topbutton = document.getElementById('toc-top');
+  if (topbutton != null) {
+    topbutton.addEventListener('click', function(event) {
+      window.scrollTo(0,0);
+    });
+  }
   
   // Update signup modal color on color change
   var colorfield = document.getElementById('signup-color');
@@ -124,6 +134,139 @@ window.onload = function() {
   }
   
 }
+
+/*--------------------------------------------------
+  Theme Setting
+  - Adds a "night" class to the body and stores the night setting within localstorage
+--------------------------------------------------*/
+
+var nightMode = document.getElementsByClassName('theme-night');
+if (nightMode != null) {
+  for (var i=0; i<nightMode.length; i++) {
+    nightMode[i].addEventListener('click', function(event) {
+      if (localStorage.getItem('theme') == null) {
+        localStorage.setItem('theme', 'night');
+        document.body.classList.add('night');
+      } else {
+        localStorage.removeItem('theme');
+        document.body.classList.remove('night');
+      }
+    });
+  }
+}
+
+function checkTheme() {
+  if (localStorage.getItem('theme')) {
+    document.body.classList.add(localStorage.getItem('theme'));
+  }
+}
+
+/*--------------------------------------------------
+  Font Size Setting
+  - Adjusts the top-level font size and stores the setting within localstorage
+--------------------------------------------------*/
+
+/* Set click listeners for each of the font-related buttons, wherever they may be */
+var fontIncrease = document.getElementsByClassName('font-increase');
+if (fontIncrease != null) {
+  for (var i=0; i<fontIncrease.length; i++) {
+    fontIncrease[i].addEventListener('click', function(event) {
+      setFontSize(+1);
+    });
+  }
+}
+var fontDecrease = document.getElementsByClassName('font-decrease');
+if (fontDecrease != null) {
+  for (var i=0; i<fontDecrease.length; i++) {
+    fontDecrease[i].addEventListener('click', function(event) {
+      setFontSize(-1);
+    });
+  }
+}
+var fontReset = document.getElementsByClassName('font-reset');
+if (fontReset != null) {
+  for (var i=0; i<fontReset.length; i++) {
+    fontReset[i].addEventListener('click', function(event) {
+      setFontSize(null);
+    });
+  }
+}
+
+function setFontSize(increment) {
+  var currentSize = Number(window.getComputedStyle(document.documentElement).getPropertyValue('font-size').replace('px',''));
+  var newSize = currentSize + increment;
+  if (increment != null && newSize != initialSize) {
+    document.documentElement.style.fontSize = newSize + 'px';
+    localStorage.setItem('fontSize', newSize);
+  } else {
+    document.documentElement.style.fontSize = null;
+    localStorage.removeItem('fontSize');
+  }
+}
+
+function checkFontSize() {
+  initialSize = Number(window.getComputedStyle(document.documentElement).getPropertyValue('font-size').replace('px',''));
+  if (localStorage.getItem('fontSize')) {
+    document.documentElement.style.fontSize = localStorage.getItem('fontSize') + 'px';
+  }
+}
+
+/*--------------------------------------------------
+  Font Family Setting
+  - Adjusts the font family used throughout the interface
+--------------------------------------------------*/
+
+var fontFamily = document.getElementsByClassName('font-family');
+if (fontFamily != null) {
+  for (var i=0; i<fontFamily.length; i++) {
+    fontFamily[i].addEventListener('click', function(event) {
+      if (localStorage.getItem('fontFamily') == null) {
+        setFontFamily('dyslexic');
+      } else {
+        setFontFamily(null);
+      }
+    });
+  }
+}
+
+function setFontFamily(name) {
+  if (name != null) {
+    var currentFontFamily = window.getComputedStyle(document.body).getPropertyValue('font-family');
+    document.body.style.fontFamily = name;
+    localStorage.setItem('fontFamily', name);
+  } else {
+    document.body.style.fontFamily = null;
+    localStorage.removeItem('fontFamily');
+  }
+
+}
+
+function checkFontFamily() {
+  if (localStorage.getItem('fontFamily')) {
+    document.body.style.fontFamily = localStorage.getItem('fontFamily');
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function modals() {
   
@@ -216,9 +359,6 @@ if (modals != null) {
 }
 */
 
-
-
-
 function addFileTool() {
   
   // Forcefully insert the new tool
@@ -258,8 +398,8 @@ function addFileTool() {
     };
     
     function insertFile(filename, fileurl, extension) {
-      html = '<p class="ce-element ce-element--type-text"><a href="' + fileurl + '" class="file-' + extension + '">' + filename + '</a></p>';
-      
+      html = '<p class="ce-element ce-element--type-text"><a href="' + fileurl + '" class="file-' + extension + '" data-filename="' + filename + '">' + filename + '</a></p>';
+        
       // For whenever ContentTools is replaced
       // focus.insertAdjacentHTML('afterend', html);
       // var newelement = focus.nextSibling;
@@ -269,22 +409,128 @@ function addFileTool() {
       // This is necessary to make the file's block editable after insertion
       // https://github.com/GetmeUK/ContentTools/issues/201
       selectedElm = ContentEdit.Root.get().focused();
-      p = new ContentEdit.Text('p', {}, html)
-      selectedElm.parent().attach(p, selectedElm.parent().children.indexOf(selectedElm) + 1)
-      p.focus()
+      p = new ContentEdit.Text('p', {}, html);
+      selectedElm.parent().attach(p, selectedElm.parent().children.indexOf(selectedElm) + 1);
+      p.focus();
       
       // New paragraph below the newly-added file
       selectedElm = ContentEdit.Root.get().focused();
-      n = new ContentEdit.Text('p', {}, '')
-      selectedElm.parent().attach(n, selectedElm.parent().children.indexOf(selectedElm) + 1)
-      n.focus()
+      n = new ContentEdit.Text('p', {}, '');
+      selectedElm.parent().attach(n, selectedElm.parent().children.indexOf(selectedElm) + 1);
+      n.focus();
     }
-    
+  
   }, false);
   
 }
 
 
+/*
+var response = '';
+
+function uploadHandler(type) {
+  
+  if (type == 'file') { var input = document.getElementById('fileToUpload') };
+  if (type == 'hero') { var input = document.getElementById('heroToUpload') };
+  
+  input.click();
+  
+  
+    return new Promise (function (resolve, reject) {
+      input.onchange = function(event) {
+        var data = new FormData();
+        var files = input.files;
+        for (var i = 0; i < files.length; i++) {
+          var file = files[i];
+          data.append('files', file, file.name);
+        }
+        data.append('page', window.location.pathname);
+        data.append('type', type);
+        
+        var request = new XMLHttpRequest();
+        request.open('POST', 'uploadnew', true);
+        request.onload = function () {
+          if (request.status === 200) { // File uploaded
+            response = JSON.parse(this.response);
+            console.log('blablah' + response);
+            return response;
+          } else {
+            //alert('An error occurred! Contact Andy Braren for help.');
+          }
+        };
+        request.send(data);
+      }
+    });
+  
+}
+
+
+function addFileTool() {
+  
+  // Forcefully insert the new tool
+  var prev = document.getElementsByClassName('ct-tool--video')[0];
+  html = '<div class="ct-tool ct-tool--file ct-tool--disabled tool-file" data-ct-tooltip="File"></div>';
+  prev.insertAdjacentHTML('afterend', html);
+  
+  var tool = document.getElementsByClassName('tool-file')[0];
+  var focus = document.getElementsByClassName('ce-element--focused')[0];
+  
+  response = uploadHandler('file')
+              .then(function (e) {
+                console.log("succes");
+                insertFile(response.filename, response.fileurl, response.extension);
+              }, function (e) {
+                console.log("errorrrrr");
+              });
+  
+  
+  tool.addEventListener('click', function(event) {
+    var promise = new Promise(function(resolve, reject) {
+      response = uploadHandler('file');
+      if (response !== undefined) {
+        resolve(response);
+      } else {
+        reject(Error("Broked"));
+      }
+    });
+    
+    promise.then(function(result) {
+      console.log(result);
+    }, function(err) {
+      console.log(err);
+    });
+  });
+  
+  console.log("hello" + response);
+  
+  if (response != undefined) {
+    insertFile(response.filename, response.fileurl, response.extension);
+  }
+    
+  function insertFile(filename, fileurl, extension) {
+    html = '<p class="ce-element ce-element--type-text"><a href="' + fileurl + '" class="file-' + extension + '" data-filename="' + filename + '">' + filename + '</a></p>';
+    
+    // For whenever ContentTools is replaced
+    // focus.insertAdjacentHTML('afterend', html);
+    // var newelement = focus.nextSibling;
+    // focus.parentNode.removeChild(focus);
+    
+    // ContentTools implementation
+    // This is necessary to make the file's block editable after insertion
+    // https://github.com/GetmeUK/ContentTools/issues/201
+    selectedElm = ContentEdit.Root.get().focused();
+    p = new ContentEdit.Text('p', {}, html)
+    selectedElm.parent().attach(p, selectedElm.parent().children.indexOf(selectedElm) + 1)
+    p.focus()
+    
+    // New paragraph below the newly-added file
+    selectedElm = ContentEdit.Root.get().focused();
+    n = new ContentEdit.Text('p', {}, '')
+    selectedElm.parent().attach(n, selectedElm.parent().children.indexOf(selectedElm) + 1)
+    n.focus()
+  }
+}
+*/
 
 
 
@@ -294,11 +540,140 @@ function addFileTool() {
 
 
 
+function addHeroTool() {
+  
+  var heroDiv = document.getElementById('hero');
+  var heroAdd = document.getElementById('hero-add');
+  var formHero = document.getElementById('heroToUpload');
+  
+  tool.addEventListener('click', function(event) {
+    
+    // Show file dialog and upload the file to the server
+    var input = document.getElementById('fileToUpload')
+    input.click();
+    input.onchange = function() {
+      var data = new FormData();
+
+      var files = input.files;
+      for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        data.append('files', file, file.name);
+      }
+      data.append('page', window.location.pathname);
+      
+      var request = new XMLHttpRequest();
+      request.open('POST', 'uploadnew', true);
+      request.onload = function () {
+        if (request.status === 200) { // File uploaded
+          response = JSON.parse(this.response);
+          insertFile(response.filename, response.fileurl, response.extension);
+        } else {
+          //alert('An error occurred! Contact Andy Braren for help.');
+        }
+      };
+      request.send(data);
+      
+    };
+    
+    function insertFile(filename, fileurl, extension) {
+      html = '<p class="ce-element ce-element--type-text"><a href="' + fileurl + '" class="file-' + extension + '" data-filename="' + filename + '">' + filename + '</a></p>';
+        
+      // For whenever ContentTools is replaced
+      // focus.insertAdjacentHTML('afterend', html);
+      // var newelement = focus.nextSibling;
+      // focus.parentNode.removeChild(focus);
+      
+      // ContentTools implementation
+      // This is necessary to make the file's block editable after insertion
+      // https://github.com/GetmeUK/ContentTools/issues/201
+      selectedElm = ContentEdit.Root.get().focused();
+      p = new ContentEdit.Text('p', {}, html);
+      selectedElm.parent().attach(p, selectedElm.parent().children.indexOf(selectedElm) + 1);
+      p.focus();
+      
+      // New paragraph below the newly-added file
+      selectedElm = ContentEdit.Root.get().focused();
+      n = new ContentEdit.Text('p', {}, '');
+      selectedElm.parent().attach(n, selectedElm.parent().children.indexOf(selectedElm) + 1);
+      n.focus();
+    }
+  
+  }, false);
+  
+}
 
 
+function toggleHero(clickcount, formupload) {
+  var heroDiv = document.getElementById('hero');
+  var heroAdd = document.getElementById('hero-add');
+  var formHero = document.getElementById('heroToUpload');
+  
+  if (heroDiv != null) {
+    if (clickcount == '0') {
+      heroDiv.addEventListener('click', formclick = function() {
+        formHero.click();
+      });
+      formHero.onchange = function() {
+        
+        var data = new FormData();
+        var files = formHero.files;
+        for (var i = 0; i < files.length; i++) {
+          var file = files[i];
+          data.append('files', file, file.name);
+        }
+        data.append('page', window.location.pathname);
+        
+        data.append('type', 'hero');
+        
+        var request = new XMLHttpRequest();
+        request.open('POST', 'uploadnew', true);
+        request.onload = function () {
+          if (request.status === 200) { // File uploaded
+            response = JSON.parse(this.response);
+            insertHero(response.filename, response.fileurl, response.extension);
+          } else {
+            //alert('An error occurred! Contact Andy Braren for help.');
+          }
+        };
+        request.send(data);
+        
+        function insertHero(filename, fileurl, extension) {
+          html = '<figure><img src="' + fileurl + '"></img></figure>';
+          //image = heroDiv.getElementsByTagName('FIGURE')[0];
+          //image.insertAdjacentHTML('afterend', html);
+          //image.parentNode.removeChild(image);
+          image = heroDiv.getElementsByTagName('IMG')[0];
+          image.removeAttribute('class');
+          image.parentNode.removeAttribute('style');
+          
+          image.src = fileurl;
+        }
+      };
+    }
+    else {
+      heroDiv.removeEventListener('click', formclick);
+    }
+  }
+  /*
+  if (heroAdd != null) {
+    if (clickcount == '0') {
+      heroAdd.addEventListener('click', formclick = function() {
+        formHero.click();
+      });
+      formHero.onchange = function() {
+        savePage();
+        editor.ignition().confirm();
+        formupload.submit();
+      };
+    }
+    else {
+      heroAdd.removeEventListener('click', formclick);
+    }
+  }
+  */
+}
 
-
-
+/*
 function toggleHero(clickcount, formupload) {
   var heroDiv = document.getElementById('hero');
   var heroAdd = document.getElementById('hero-add');
@@ -336,6 +711,7 @@ function toggleHero(clickcount, formupload) {
     }
   }
 }
+*/
 
 /* Trigger when Save button is clicked */
 /* If empty, then the hidden class is confirmed or added */
@@ -650,7 +1026,7 @@ if (authorfield != null) {
     } else {
       var major = '';
     }
-    var resultHTML = '<a data-username="' + this.getAttribute('data-username') + '" data-href="' + this.getAttribute('data-profileURL') + '" ><div class="author-delete"></div><div class="row"><img src="' + this.getAttribute('data-avatar') + '" class="' + this.getAttribute('data-color') + '" width="40" height="40"><div class="column"><span>' + this.getAttribute('data-name') + '</span>' + major + '</div></div></a>';
+    var resultHTML = '<a data-username="' + this.getAttribute('data-username') + '" data-href="' + this.getAttribute('data-profileURL') + '" ><div class="item-delete"></div><div class="row"><img src="' + this.getAttribute('data-avatar') + '" class="' + this.getAttribute('data-color') + '" width="40" height="40"><div class="column"><span>' + this.getAttribute('data-name') + '</span>' + major + '</div></div></a>';
     authorwidget.insertAdjacentHTML('beforeend', resultHTML);
     itemDeleteButtons();
   }
@@ -729,7 +1105,7 @@ if (groupfield != null) {
     groupfield.value = '';
     groupfield.classList.remove('clicked');
     
-    var resultHTML = '<a data-href="' + this.getAttribute('data-groupURL') + '" data-username="' + this.getAttribute('data-groupslug') + '"><div class="author-delete"></div><div class="row"><img src="' + this.getAttribute('data-logo') + '" class="' + this.getAttribute('data-color') + '" width="40" height="40"><div class="column"><span>' + this.getAttribute('data-title') + '</span></div></div></a>';
+    var resultHTML = '<a data-href="' + this.getAttribute('data-groupURL') + '" data-username="' + this.getAttribute('data-groupslug') + '"><div class="item-delete"></div><div class="row"><img src="' + this.getAttribute('data-logo') + '" class="' + this.getAttribute('data-color') + '" width="40" height="40"><div class="column"><span>' + this.getAttribute('data-title') + '</span></div></div></a>';
     groupwidget.insertAdjacentHTML('beforeend', resultHTML);
     itemDeleteButtons();
   }
@@ -925,43 +1301,15 @@ if (filters != null) {
 
 
 
-/* Night Mode switch */
-/* Adds a "night" class to the body and stores night setting within localstorage */
-function nightMode() {
-  var styleselectors = document.getElementsByClassName('styleselector');
-  var themeswitch = function() {
-    if (localStorage.getItem("theme") == null) {
-      localStorage.setItem("theme", "night");
-      document.body.classList.add("night");
-    }
-    else if (localStorage.getItem("theme") == "night") {
-      localStorage.removeItem("theme");
-      document.body.classList.remove("night");
-    }
-  };
-  for (var i = 0; i < styleselectors.length; i++) {
-    styleselectors[i].addEventListener('click', themeswitch, false);
-  }
-}
 
-/* Text preference */
-/* For now, switches between regular and dyslexic fonts */
-function fontFamily() {
-  var styleselectors = document.getElementsByClassName('fontselector');
-  var fontfamilyswitch = function() {
-    if (localStorage.getItem("fontfamily") == null) {
-      localStorage.setItem("fontfamily", "dyslexic");
-      document.body.classList.add("dyslexic");
-    }
-    else if (localStorage.getItem("fontfamily") == "dyslexic") {
-      localStorage.removeItem("fontfamily");
-      document.body.classList.remove("dyslexic");
-    }
-  };
-  for (var i = 0; i < styleselectors.length; i++) {
-    styleselectors[i].addEventListener('click', fontfamilyswitch, false);
-  }
-}
+
+
+
+
+
+
+
+
 
 
 
@@ -1098,6 +1446,143 @@ if (affiliateField != null) {
   }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+/* Progress Nav
+  - http://lab.hakim.se/progress-nav/
+-------------------------------------------------- */
+function progressNav() {
+
+	var toc = document.querySelector( '.toc' );
+	var tocPath = document.querySelector( '.toc-marker path' );
+	var tocItems;
+	
+	if (toc != null) {
+  	// Factor of screen size that the element must cross
+  	// before it's considered visible
+  	var TOP_MARGIN = 0.1,
+  		BOTTOM_MARGIN = 0.2;
+  
+  	var pathLength;
+  
+  	window.addEventListener( 'resize', drawPath, false );
+  	window.addEventListener( 'scroll', sync, false );
+  
+  	drawPath();
+  
+  	function drawPath() {
+  
+  		tocItems = [].slice.call( toc.querySelectorAll( 'li' ) );
+  
+  		// Cache element references and measurements
+  		tocItems = tocItems.map( function( item ) {
+  			var anchor = item.querySelector( 'a' );
+  			var target = document.getElementById( anchor.getAttribute( 'href' ).slice( 1 ) );
+  
+  			return {
+  				listItem: item,
+  				anchor: anchor,
+  				target: target
+  			};
+  		} );
+  
+  		// Remove missing targets
+  		tocItems = tocItems.filter( function( item ) {
+  			return !!item.target;
+  		} );
+  
+  		var path = [];
+  		var pathIndent;
+  
+  		tocItems.forEach( function( item, i ) {
+  
+  			var x = item.anchor.offsetLeft - 5,
+  				y = item.anchor.offsetTop,
+  				height = item.anchor.offsetHeight;
+  
+  			if( i === 0 ) {
+  				path.push( 'M', x, y, 'L', x, y + height );
+  				item.pathStart = 0;
+  			}
+  			else {
+  				// Draw an additional line when there's a change in
+  				// indent levels
+  				if( pathIndent !== x ) path.push( 'L', pathIndent, y );
+  
+  				path.push( 'L', x, y );
+  
+  				// Set the current path so that we can measure it
+  				tocPath.setAttribute( 'd', path.join( ' ' ) );
+  				item.pathStart = tocPath.getTotalLength() || 0;
+  
+  				path.push( 'L', x, y + height );
+  			}
+  
+  			pathIndent = x;
+  
+  			tocPath.setAttribute( 'd', path.join( ' ' ) );
+  			item.pathEnd = tocPath.getTotalLength();
+  
+  		} );
+  
+  		pathLength = tocPath.getTotalLength();
+  
+  		sync();
+  
+  	}
+  
+  	function sync() {
+  
+  		var windowHeight = window.innerHeight;
+  
+  		var pathStart = pathLength,
+  			pathEnd = 0;
+  
+  		var visibleItems = 0;
+  
+  		tocItems.forEach( function( item ) {
+  
+  			var targetBounds = item.target.getBoundingClientRect();
+  
+  			if( targetBounds.bottom > windowHeight * TOP_MARGIN && targetBounds.top < windowHeight * ( 1 - BOTTOM_MARGIN ) ) {
+  				pathStart = Math.min( item.pathStart, pathStart );
+  				pathEnd = Math.max( item.pathEnd, pathEnd );
+  
+  				visibleItems += 1;
+  
+  				item.listItem.classList.add( 'visible' );
+  			}
+  			else {
+  				item.listItem.classList.remove( 'visible' );
+  			}
+  
+  		} );
+  
+  		// Specify the visible path or hide the path altogether
+  		// if there are no visible items
+  		if( visibleItems > 0 && pathStart < pathEnd ) {
+  			tocPath.setAttribute( 'stroke-dashoffset', '1' );
+  			tocPath.setAttribute( 'stroke-dasharray', '1, '+ pathStart +', '+ ( pathEnd - pathStart ) +', ' + pathLength );
+  			tocPath.setAttribute( 'opacity', 1 );
+  		}
+  		else {
+  			//tocPath.setAttribute( 'opacity', 0 );
+  		}
+  
+  	}
+	}
+
+};
 
 
 
