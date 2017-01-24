@@ -528,7 +528,8 @@ blockquote {
 .logo svg {
   display: block;
   height: 35px;
-  width: inherit;
+  max-width: 500px; /* Dumb Safari fix http://stackoverflow.com/questions/24153939/inline-svg-scaling-auto-width */
+  width: auto;
 }
 
 .logo svg path {
@@ -868,18 +869,18 @@ nav {
 }
 
 /* Night */
-.styleselector, .fontselector {
+.styleselector, .font-family {
   cursor: pointer;
   /*padding: 8px;*/
 }
-.styleselector img, .fontselector img, .tocselector img {
+.styleselector img, .font-family img, .tocselector img {
   max-height: 18px;
 }
 .tocselector {
   display: none;
 }
 
-.fontselector {
+.font-family {
   /*
   display: none;
   */
@@ -1265,6 +1266,7 @@ textarea {
   */
   justify-content: flex-start;
   margin: -1rem 0 0 -1rem;
+  width: 100%;
 }
 .card {
   /*
@@ -2318,7 +2320,7 @@ form div[role='group'] h3 {
   background-color: var(--theme-main);
 }
 
-#hero ~ .main .sidebar #icon {
+#hero:not(.nohero) ~ .main .sidebar #icon {
   margin-top: -100px;
   border-radius: 5px;
   /*background-color: var(--theme-main);*/
@@ -2763,7 +2765,7 @@ body.noscroll > header > .container {
 }
 
 
-code {
+p code {
   background-color: var(--theme-opac2);
   padding: 0 5px 2px;
   border-radius: 4px;
@@ -2778,6 +2780,7 @@ pre {
   background-color: rgba(226, 141, 49, 0.1);
   padding: 15px 20px;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
   white-space: pre;
 }
 
@@ -3306,6 +3309,12 @@ twitterwidget {
   transition: opacity 0.2s, visibility 0.2s;
 }
 
+.toc li {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .toc > div {
   display: flex;
   align-items: flex-end;
@@ -3338,11 +3347,6 @@ p {
   line-height: 1.3rem;
 }
 
-
-
-
-
-
 /*
 .toc {
   padding-right: 1rem;
@@ -3366,6 +3370,40 @@ p {
   list-style: none;
 }
 */
+
+
+
+.toc-marker {
+  position: absolute;
+  top: -2px;
+  left: -10px;
+  padding-left: 10px;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.toc-marker path {
+  -webkit-transition: all 0.3s ease;
+          transition: all 0.3s ease;
+  stroke: #a9a9a9;
+  stroke-width: 2;
+}
+
+
+ul.toc {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  max-height: 100%;
+  max-height: calc(100vh - 200px);
+}
+
+
+
+
+
+
+
 
 
 .dropdown {
