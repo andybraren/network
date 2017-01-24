@@ -532,8 +532,10 @@ function isVisibleToUser($page) {
         $isvisible = true;
       }
       elseif (!in_array(site()->user(), $page->authors())) {
-        if (!array_intersect(str::split(site()->user()->groups()), $page->relatedGroups()->toArray())) {
-          $isvisible = false;
+        if (!empty($page->relatedGroups())) {
+          if (!array_intersect(str::split(site()->user()->groups()), $page->relatedGroups()->toArray())) {
+            $isvisible = false;
+          }
         }
       }
     }

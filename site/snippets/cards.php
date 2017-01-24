@@ -9,8 +9,8 @@ if (!isset($type)) {
 ?>
 
 <?php if ($type == "makers"): ?>
-  <?php if ($page->isHomePage()): ?>
 
+  <?php if ($page->isHomePage()): ?>
     <?php $counter = 0 ?>
     <?php foreach($site->users()->sortBy('registrationdate', 'desc') as $user): ?>
       <?php if($avatar = $user->avatar() and $counter < 20): ?>
@@ -20,10 +20,21 @@ if (!isset($type)) {
         <?php $counter++ ?>
       <?php endif ?>
     <?php endforeach ?>
-    
-  <?php else: ?>
   
-  <?php if ($page->uid() == 'makers'): ?>
+  <?php elseif ($type == 'makers' and isset($group)): ?>
+    <div class="cards-makers">
+      <h2>Members</h2>
+      <?php foreach ($site->users()->sortBy('registrationdate', 'desc') as $user): ?>
+        <?php if ($user->groups() and in_array($group, str::split($user->groups(),','))): ?>
+          <a href="<?php echo $site->url() . "/makers/" . $user ?>">
+            <img src="<?php echo userAvatar($user, 108) ?>" class="<?php echo userColor($user) ?>">
+            <div><span><?php echo $user->firstname() . ' ' . $user->lastname() ?></span></div>
+          </a>
+        <?php endif ?>
+      <?php endforeach ?>
+    </div>
+  
+  <?php else: ?>
     <div class="cards-makers">
       
       <style>
@@ -49,23 +60,6 @@ if (!isset($type)) {
     </div>
   <?php endif ?>
   
-  <?php if ($type == 'makers' and isset($group)): ?>
-  
-  <div class="cards-makers">
-    <h2>Members</h2>
-    <?php foreach ($site->users()->sortBy('registrationdate', 'desc') as $user): ?>
-      <?php if ($user->groups() and in_array($group, str::split($user->groups(),','))): ?>
-        <a href="<?php echo $site->url() . "/makers/" . $user ?>">
-          <img src="<?php echo userAvatar($user, 108) ?>" class="<?php echo userColor($user) ?>">
-          <div><span><?php echo $user->firstname() . ' ' . $user->lastname() ?></span></div>
-        </a>
-      <?php endif ?>
-    <?php endforeach ?>
-  </div>
-    
-  <?php endif ?>
-  
-  <?php endif ?>
 <?php endif ?>
 
 
@@ -130,10 +124,12 @@ if (!isset($type)) {
     }
     
   ?>
-
+  
+  <?php /*
   <?php if ($page->uid() != $type and ($site->user() or $items != '')): ?>
     <h2><?php echo ucfirst(strval($type)) ?></h2>
   <?php endif ?>
+  */ ?>
   
   <?php if ($site->user() and $type != 'makers' or $items != '' and $type != 'makers'): ?>
   <div class="cards">

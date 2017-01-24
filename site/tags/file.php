@@ -33,6 +33,7 @@ kirbytext::$tags['file'] = array(
 
     return html::a($file->url(), html($text), array(
       'class'  => 'file-' . $file->extension(),
+      'data-filename' => $file->filename(),
       'title'  => html($tag->attr('title')) . '',
       'rel'    => $tag->attr('rel'),
       'target' => $tag->target(),

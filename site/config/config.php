@@ -577,10 +577,21 @@ c::set('routes', array(
       	unlink($oldfile);
     	}
     	
+    	$type = (isset($_POST['type'])) ? $_POST['type'] : null;
+    	
       // Save the file in the right place
       try {
         
-        move_uploaded_file($_FILES['files']['tmp_name'], $target_file);
+        if (move_uploaded_file($_FILES['files']['tmp_name'], $target_file)) {
+          if ($type != null) {
+            if ($type == 'hero') {
+              $fileurl = (string)kirbytag(array('image' => $filename . '.' . $extension, 'targetpage' => $_POST['page'], 'type' => 'hero', 'output' => 'url'));
+              site()->page($targetpage)->update(array(
+                'Hero' => $filename . '.' . $extension,
+              ));
+            }
+          }
+        }
         
         $response = array('filename' => $filename . '.' . $extension, 'fileurl' => $fileurl, 'extension' => $extension);
         echo json_encode($response, JSON_UNESCAPED_SLASHES);

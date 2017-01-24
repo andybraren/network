@@ -222,7 +222,9 @@ var kirbytagtweaks = [
       return node.nodeName === 'A' && node.classList.toString().includes('file-');
     },
     replacement: function(content, node) {      
-      var filename = node.href.split('/').pop().replace(/\%20/g,' ');
+      //var filename = node.href.split('/').pop().replace(/\%20/g,' ');
+      //console.log(filename);
+      var filename = node.getAttribute('data-filename');
       var text = node.innerHTML;
       
       if (filename != text) {

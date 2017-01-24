@@ -28,8 +28,8 @@
 <div class="main">
   <div class="container">
 
-    <?php if($page->uid() != 'groups' and $page->uid() != 'spaces' and $page->uid() != 'projects' and $page->uid() != 'handbooks' and $page->uid() != 'articles' and $page->uid() != 'equipment' and $page->uid() != 'books' and $page->uid() != 'courses' and $page->uid() != 'learn'): ?>
-      <?php snippet('sidebar') ?>
+    <?php if (!empty($page->authors())): ?>
+        <?php snippet('sidebar') ?>
     <?php endif ?>
 
     <?php if ($page->links() != '' or $page->equipment() != '' or $page->handbooks() != ''): ?>
@@ -43,7 +43,7 @@
     <main class="content">
       <article>
   
-        <div data-editable data-name="title">
+        <div class="title" data-editable data-name="title">
           <h1><?php echo ($page->title() != "") ? $page->title()->html() : "" ?></h1>
         </div>
   
@@ -94,10 +94,24 @@
       <?php if($page->uid() == 'courses'): ?>
         <?php snippet('cards', array('type' => 'courses')) ?>
       <?php endif ?>
+      <?php if($page->isChildOf($site->find('courses'))): ?>
+        <?php snippet('cards', array('type' => 'projects', 'group' => $page->uid())) ?>
+      <?php endif ?>
       
       <?php if($page->uid() == 'learn'): ?>
-        <?php snippet('cards', array('type' => 'handbooks')) ?>
         <?php snippet('cards', array('type' => 'courses')) ?>
+        <?php snippet('cards', array('type' => 'handbooks')) ?>        
+      <?php endif ?>
+      
+      <?php if($page->uid() == 'make'): ?>
+        <?php snippet('cards', array('type' => 'projects')) ?>
+        <?php snippet('cards', array('type' => 'challenges')) ?>
+      <?php endif ?>
+      
+      <?php if($page->uid() == 'connect'): ?>
+        <?php snippet('cards', array('type' => 'makers')) ?>
+        <?php snippet('cards', array('type' => 'articles')) ?>
+        <?php snippet('cards', array('type' => 'groups')) ?>
       <?php endif ?>
 
       <?php if($page->uid() == 'projects'): ?>
@@ -130,10 +144,6 @@
 
       <?php if($page->isChildOf($site->find('challenges'))): ?>
         <?php snippet('cards') ?>
-      <?php endif ?>
-
-      <?php if($page->isChildOf($site->find('books'))): ?>
-        <?php snippet('cards', array('type' => 'projects')) ?>
       <?php endif ?>
 
       <?php if($page->parent() == 'events' && $page->hasChildren()): ?>
