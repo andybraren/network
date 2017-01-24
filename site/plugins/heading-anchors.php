@@ -50,7 +50,8 @@ function retitle($match) {
         $id = preg_replace('/<\/?a[^>]*>/','',$id);
         */
         
-        $id = str::slug($title);
+        $id = str::unhtml($title);
+        $id = str::slug($id);
         
         //return "<$h2 id='$id'><a href='#$id'>$title</a></$h2>";
         return "<$h2 id='$id'>$title</$h2>";
