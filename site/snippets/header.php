@@ -1,4 +1,4 @@
-<?php echo (c::get('cache') == true) ? '<!-- Cached ' . date('Y-m-d H:i:s e') . '-->' : '' ?>
+<?php echo (c::get('cache') == true) ? '<!-- Cached ' . date('Y-m-d H:i:s e') . ' ' . site()->url() . $_SERVER['REQUEST_URI'] . ' -->' : '' ?>
 
 <!DOCTYPE html>
 <html lang="en">
