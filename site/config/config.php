@@ -75,7 +75,7 @@ c::set('cachebuster', true);
 if($_SERVER['SERVER_NAME'] != 'makernetwork.org') {
 }
 c::set('cache', false);
-c::set('cache.ignore', array('sitemap'));
+c::set('cache.ignore', array('sitemap','flush','error','connect','projects/*'));
 
 
 /* Turn on GD Lib's image orientation detection. This fixed iOS image rotation issues.
@@ -603,6 +603,91 @@ c::set('routes', array(
 		}
 	),
 	
+  // PURGE CACHE
+	array(
+		'pattern' => array('purgeCache', '(.+purgeCache)'),
+		'method' => 'POST',
+		'action'  => function() {
+			kirby()->cache()->flush();
+			return true;
+		}
+	),
+	
+  // REGENERATE PAGE CACHE
+  // Visit example.com/whatever/flush to surgically excise and regenerate that page's cache file within /site/cache
+	array(
+		'pattern' => array('flush', '(.+flush)'),
+		'method' => 'GET',
+		'action'  => function() {
+      
+      $uri = ltrim(str_replace('/flush','',$_SERVER['REQUEST_URI']),'/');
+      $url = site()->url() . '/' . $uri;
+      $cache_file = kirby()->roots()->cache() . '/' . md5(site()->url() . '/' . $uri);
+            
+      if ($uri == '') { // nuke every cache file
+        kirby()->cache()->flush();
+        foreach (site()->index() as $page) {
+          if(!in_array($page, c::get('cache.ignore'))) {
+            ping($page->url());
+            echo $page->uri() . '<br>';
+          }
+        }
+        echo 'The entire site\'s cache was successfully regenerated.';
+      } else {
+      	if (file_exists($cache_file)) {
+        	if (unlink($cache_file)) { // delete the singular cache file
+            if (ping($url)) {
+              echo 'The page\'s cache file was successfully regenerated.';
+            } else {
+              echo 'The page\'s cache file was deleted, but a connection error to the page is preventing a new one from being generated.';
+            }
+        	} else {
+          	echo 'The page\'s cache file exists, but could not be deleted.';
+        	}
+      	} else {
+          if(!in_array($uri, c::get('cache.ignore'))) {
+            if (ping($url)) {
+              echo 'The page\'s cache file did not already exist, so a new one was successfully generated.';
+            } else {
+              echo 'The page\'s cache file did not already exist, and a connection error is preventing a new one from being generated.';
+            }
+          } else {
+            echo 'This page is being ignored, so a cache file was not generated.';
+          }
+      	}
+      }
+		}
+	),
+	
+  // SITEMAP
+  // Based on https://getkirby.com/docs/cookbook/xmlsitemap
+  // Currently lists every single folder, regardless of whether a page.txt is present
+	array(
+		'pattern' => array('sitemap', '(.+sitemap)'),
+		'method' => 'GET',
+		'action'  => function() {
+      
+      $ignore = array('sitemap', 'error', 'drafts', '_gsdata_');
+      
+      // send the right header
+      header('Content-type: text/xml; charset="utf-8"');
+      
+      // echo the doctype
+      echo '<?xml version="1.0" encoding="utf-8"?>';
+      echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+      foreach (site()->pages()->index() as $p) {
+        if (!in_array($p->uid(), $ignore)) {
+          echo '<url>';
+            echo '<loc>' . html(site()->url() . '/' . $p->uri()) . '</loc>';
+            echo '<lastmod>' . $p->modified('c') . '</lastmod>';
+            echo '<priority>' . (($p->isHomePage()) ? 1 : number_format(0.5/$p->depth(), 1)) . '</priority>';
+          echo '</url>';
+        }
+      }
+      echo '</urlset>';
+      
+		}
+	),
 
 
 
