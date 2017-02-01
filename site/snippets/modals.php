@@ -1,5 +1,63 @@
 <div class="modals">
   
+  <div id="modal-reading">
+    <span class="theme-night">Night Mode: Off</span><hr>
+    <span class="font-family">Dyslexia: Off</span><hr>
+    <div class="row">
+      <span>Font size:</span>
+      <span class="font-decrease">-</span>
+      <span class="font-reset">16</span>
+      <span class="font-increase">+</span>
+    </div>
+  </div>
+  
+  <div id="modal-toc" class="widget">
+    <?php if(preg_match_all('/(?<!#)#{2,3}([^#].*)\n/', $page->text(), $matches)): // Grabs H2's and H3's ?>
+      <div>
+        <span class="heading">CONTENTS</span>
+        <a class="toc-top">&#8673;</a>
+      </div>
+      <div class="toc-items">
+        <?php
+          $count = 0;
+          $sublist = 'none';
+          foreach ($matches[0] as $rawmatch) {
+            
+            $text = $matches[1][$count];
+            $lastmatch = end($matches[0]);
+            
+            if (preg_match('/(?<!#)#{2}([^#].*)\n/', $rawmatch)) { // H2
+              
+              if ($sublist == 'start') {
+                echo '</ul>';
+                $sublist = 'none';
+              }
+              
+              echo '<li><a href="#' . str::slug($text) . '">' . $text . '</a></li>';
+              
+            }
+            if (preg_match('/(?<!#)#{3}([^#].*)\n/', $rawmatch)) { // H3
+              
+              if ($sublist == 'none') {
+                $sublist = 'start';
+                echo '<ul>';
+              }
+              
+              echo '<li><a href="#' . str::slug($text) . '">' . $text . '</a></li>';
+              
+            }
+            
+            if ($rawmatch == $lastmatch) {
+              echo ($sublist == 'start') ? '</ul>' : '';
+            }
+            
+            $count++;
+          }
+        ?>
+      </div>
+    <?php endif ?>
+  </div>
+  
   <div id="modal-login" class="modal<?php if(param('login')) { echo ' visible'; } ?>">
     <div class="modal-container">
       <div class="modal-content">

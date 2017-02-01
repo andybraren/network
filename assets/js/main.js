@@ -45,11 +45,32 @@ window.onload = function() {
   myTooltip.init();
 
   
-  var topbutton = document.getElementById('toc-top');
+  var topbutton = document.getElementsByClassName('toc-top');
   if (topbutton != null) {
-    topbutton.addEventListener('click', function(event) {
-      window.scrollTo(0,0);
-    });
+    for (var i=0; i<topbutton.length; i++) {
+      topbutton[i].addEventListener('click', function(event) { // Scroll to top, and replace the URL
+        window.scrollTo(0,0);
+        history.replaceState({}, document.title, window.location.href.split('#')[0]);
+      });
+    }
+  }
+  
+  // TOC web history cleaner
+  // A JS enhancement that prevents every TOC click from being added to web history
+  // This makes the back button behave more expectedly, although an argument could be made otherwise
+  // Falls back to default HTML behavior
+  var tocitems = document.getElementsByClassName('toc-items');
+  if (tocitems != null) {
+    for (var i=0; i<tocitems.length; i++) {
+      tocitems[i].addEventListener('click', function(event) {
+        if (event.target && event.target.nodeName == "A") {
+          event.preventDefault();
+          var baseUrl = window.location.href.split('#')[0];
+          var anchor = event.target.href.split('#')[1];
+          window.location.replace( baseUrl + '#' + anchor );
+        }
+      });
+    }
   }
   
   // Update signup modal color on color change
@@ -136,6 +157,77 @@ window.onload = function() {
 }
 
 /*--------------------------------------------------
+  TOC Toggle
+  - Displays the TOC on mobile devices
+--------------------------------------------------*/
+
+
+var tocToggle = document.getElementById('toggle-toc');
+if (tocToggle != null) {
+  
+  tocToggle.addEventListener('click', function(event) {
+    var rect = tocToggle.getBoundingClientRect();
+    modal = document.getElementById('modal-toc');
+    modal.classList.toggle('visible');
+    modal.style.left = Number(rect.left) + 5 + 'px';
+    
+    window.addEventListener('scroll', closeOnScroll);
+    document.addEventListener('click', closeOnClick);
+  });
+  
+  function closeOnScroll(e) {
+    modal.classList.remove('visible');
+    this.removeEventListener('scroll', closeOnScroll);
+  }
+  
+  function closeOnClick(e) {
+    console.log(e);
+    console.log(e.target);
+    var isClickInside = modal.contains(e.target);
+    var isOpenButton = tocToggle.contains(e.target);
+    if (!isClickInside && !isOpenButton) {
+      modal.classList.remove('visible');
+      this.removeEventListener('click', closeOnClick);
+    }
+  }
+  
+}
+
+/*--------------------------------------------------
+  Reading Settings
+  - Toggles the reading settings modal, with night mode, font size adjustment, etc.
+--------------------------------------------------*/
+
+var stylesettings = document.getElementById('settings-reading');
+if (stylesettings != null) {
+  
+  stylesettings.addEventListener('click', function(event) {
+    /* Position and expose the settings modal based on the stylesettings button */
+    var rect = stylesettings.getBoundingClientRect();
+    modal = document.getElementById('modal-reading');
+    modal.classList.toggle('visible');
+    modal.style.right = Number(document.body.clientWidth) - Number(rect.right) + 5 + 'px';
+    
+    window.addEventListener('scroll', closeOnScroll);
+    document.addEventListener('click', closeOnClick);
+  });
+  
+  function closeOnScroll(e) {
+    modal.classList.remove('visible');
+    this.removeEventListener('scroll', closeOnScroll);
+  }
+  
+  function closeOnClick(e) {
+    var isClickInside = modal.contains(e.target);
+    var isOpenButton = stylesettings.contains(e.target);
+    if (!isClickInside && !isOpenButton) {
+      modal.classList.remove('visible');
+      this.removeEventListener('click', closeOnClick);
+    }
+  }
+}
+
+/*--------------------------------------------------
   Theme Setting
   - Adds a "night" class to the body and stores the night setting within localstorage
 --------------------------------------------------*/
@@ -147,9 +239,11 @@ if (nightMode != null) {
       if (localStorage.getItem('theme') == null) {
         localStorage.setItem('theme', 'night');
         document.body.classList.add('night');
+        document.getElementsByClassName('theme-night')[0].innerHTML = 'Night Mode: On';
       } else {
         localStorage.removeItem('theme');
         document.body.classList.remove('night');
+        document.getElementsByClassName('theme-night')[0].innerHTML = 'Night Mode: Off';
       }
     });
   }
@@ -158,6 +252,46 @@ if (nightMode != null) {
 function checkTheme() {
   if (localStorage.getItem('theme')) {
     document.body.classList.add(localStorage.getItem('theme'));
+    document.getElementsByClassName('theme-night')[0].innerHTML = 'Night Mode: On';
+  }
+}
+
+/*--------------------------------------------------
+  Font Family Setting
+  - Adjusts the font family used throughout the interface
+--------------------------------------------------*/
+
+var fontFamily = document.getElementsByClassName('font-family');
+if (fontFamily != null) {
+  for (var i=0; i<fontFamily.length; i++) {
+    fontFamily[i].addEventListener('click', function(event) {
+      if (localStorage.getItem('fontFamily') == null) {
+        setFontFamily('dyslexic');
+      } else {
+        setFontFamily(null);
+      }
+    });
+  }
+}
+
+function setFontFamily(name) {
+  if (name != null) {
+    var currentFontFamily = window.getComputedStyle(document.body).getPropertyValue('font-family');
+    document.body.style.fontFamily = name;
+    localStorage.setItem('fontFamily', name);
+    document.getElementsByClassName('font-family')[0].innerHTML = 'Dyslexia: On';
+  } else {
+    document.body.style.fontFamily = null;
+    localStorage.removeItem('fontFamily');
+    document.getElementsByClassName('font-family')[0].innerHTML = 'Dyslexia: Off';
+  }
+
+}
+
+function checkFontFamily() {
+  if (localStorage.getItem('fontFamily')) {
+    document.body.style.fontFamily = localStorage.getItem('fontFamily');
+    document.getElementsByClassName('font-family')[0].innerHTML = 'Dyslexia: On';
   }
 }
 
@@ -197,11 +331,13 @@ function setFontSize(increment) {
   var newSize = currentSize + increment;
   if (increment != null && newSize != initialSize) {
     document.documentElement.style.fontSize = newSize + 'px';
+    document.getElementsByClassName('font-reset')[0].innerHTML = newSize;
     localStorage.setItem('fontSize', newSize);
   } else {
     document.documentElement.style.fontSize = null;
+    document.getElementsByClassName('font-reset')[0].innerHTML = initialSize;
     localStorage.removeItem('fontSize');
-  }
+  }  
 }
 
 function checkFontSize() {
@@ -212,47 +348,22 @@ function checkFontSize() {
 }
 
 /*--------------------------------------------------
-  Font Family Setting
-  - Adjusts the font family used throughout the interface
+  Search Box
+  - Toggles the search box
 --------------------------------------------------*/
 
-var fontFamily = document.getElementsByClassName('font-family');
-if (fontFamily != null) {
-  for (var i=0; i<fontFamily.length; i++) {
-    fontFamily[i].addEventListener('click', function(event) {
-      if (localStorage.getItem('fontFamily') == null) {
-        setFontFamily('dyslexic');
-      } else {
-        setFontFamily(null);
-      }
-    });
-  }
+var search = document.getElementById('search-box');
+if (search != null) {
+  
+  search.addEventListener('focus', function(event) {
+    document.getElementById('subnavigation').classList.toggle('searching');
+  });
+  
+  search.addEventListener('blur', function(event) {
+    document.getElementById('subnavigation').classList.toggle('searching');
+  });
+  
 }
-
-function setFontFamily(name) {
-  if (name != null) {
-    var currentFontFamily = window.getComputedStyle(document.body).getPropertyValue('font-family');
-    document.body.style.fontFamily = name;
-    localStorage.setItem('fontFamily', name);
-  } else {
-    document.body.style.fontFamily = null;
-    localStorage.removeItem('fontFamily');
-  }
-
-}
-
-function checkFontFamily() {
-  if (localStorage.getItem('fontFamily')) {
-    document.body.style.fontFamily = localStorage.getItem('fontFamily');
-  }
-}
-
-
-
-
-
-
-
 
 
 
@@ -1463,7 +1574,7 @@ if (affiliateField != null) {
 -------------------------------------------------- */
 function progressNav() {
 
-	var toc = document.querySelector( '.toc' );
+	var toc = document.querySelector( '.widget.toc .toc-items' );
 	var tocPath = document.querySelector( '.toc-marker path' );
 	var tocItems;
 	

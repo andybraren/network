@@ -347,9 +347,9 @@
       <div class="widget toc sticky">
         <div>
           <span class="heading">CONTENTS</span>
-          <a id="toc-top">&#8673;</a>
+          <a class="toc-top">&#8673;</a>
         </div>
-        <ul class="toc">
+        <div class="toc-items">
           <?php
             $count = 0;
             $sublist = 'none';
@@ -386,7 +386,7 @@
               $count++;
             }
           ?>
-        </ul>
+        </div>
       <svg class="toc-marker" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
 				<path stroke="#444" stroke-width="3" fill="transparent" stroke-dasharray="0, 0, 0, 1000" stroke-linecap="round" stroke-linejoin="round" transform="translate(-0.5, -0.5)" />
 			</svg>
