@@ -59,7 +59,7 @@ body {
   min-height: 100vh;
   
   position: relative;
-  margin-top: 85px;
+  margin-top: 87px;
 }
 
 /* Header
@@ -187,9 +187,9 @@ img.b-lazy {
   */
 }
 img.b-loaded {
-  /*
+  
   width: initial;
-  */
+  
   opacity: 1;
   transition: opacity 0.2s ease-out;
 }
@@ -243,7 +243,9 @@ article > img {
 
 
 
-
+.video-container img.b-loaded {
+  width: 100%;
+}
 
 
 
@@ -423,6 +425,7 @@ body.white { background-color: white; }
 .white .menu-secondary a { color: darkgrey; }
 .white #navigation .menu-secondary .login a { color: darkgrey; border-color: darkgrey; }
 .white .menu a:hover, .menu-modal:hover { background-color: rgba(0, 0, 0, 0.05); }
+.white .logo svg path { fill: #757575; } 
 
 
 
@@ -814,6 +817,145 @@ nav {
 
 
 
+
+
+/* Night */
+.styleselector, .font-family {
+  cursor: pointer;
+  /*padding: 8px;*/
+}
+.styleselector img, #settings-reading img, .toggle-toc img {
+  max-height: 18px;
+}
+.toggle-toc {
+  display: none;
+}
+
+.font-family {
+  /*
+  display: none;
+  */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Reading Settings
+-------------------------------------------------- */
+
+#modal-reading, #modal-toc {
+  display: block;
+  position: fixed;
+  
+  opacity: 0;
+  
+  right: 5px;
+  margin-top: 5px;
+  
+  z-index: 100;
+  background-color: white;
+  
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  border-radius: 4px;
+  box-shadow: 0 50px 100px rgba(50,50,93,.1), 0 15px 35px rgba(50,50,93,.15), 0 5px 15px rgba(0,0,0,.1);
+  
+  transform: rotate3d(1,1,0,-15deg);
+  transform-origin: 100% 0;
+  will-change: transform,opacity;
+  transition-property: transform,opacity;
+  transition-duration: .25s;
+  
+  pointer-events: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+#modal-reading.visible, #modal-toc.visible {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  
+  will-change: transform,opacity;
+  transform: none;
+    transition-property: transform,opacity;
+  transition-duration: .25s;
+  
+}
+
+#modal-reading span, #modal-toc span {
+  line-height: 44px;
+  padding: 0 10px;
+  -webkit-tap-highlight-color: transparent;
+  
+  cursor: pointer;
+}
+
+#settings-reading svg {
+  display: block;
+  height: 18px;
+  max-width: 500px; /* Dumb Safari fix http://stackoverflow.com/questions/24153939/inline-svg-scaling-auto-width */
+  width: auto;
+}
+
+.font-decrease, .font-reset, .font-increase {
+    text-align: center;
+    border: 1px solid #c3c3c3;
+    margin: 2px;
+    border-radius: 10px;
+    line-height: 32px !important;
+    height: 33px;
+    align-self: center;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(197, 197, 197, 0.75), rgba(0, 0, 0, 0));
+}
+
+.night #modal-reading {
+  background-color: #2C2C2C;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.night #modal-toc {
+  background-color: #2C2C2C;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+
+
+
+
+
+
+
+/* Search Box
+-------------------------------------------------- */
+
+.search svg {
+  display: block;
+  height: 18px;
+  max-width: 500px; /* Dumb Safari fix http://stackoverflow.com/questions/24153939/inline-svg-scaling-auto-width */
+  width: auto;
+}
+
 .search {
   float: right;
   min-width: 20px;
@@ -843,6 +985,8 @@ nav {
   margin-top: 1px;
 }
 
+
+
 .search-container a img {
   width: 18px;
   height: 18px;
@@ -868,23 +1012,28 @@ nav {
   padding-right: 5px !important;
 }
 
-/* Night */
-.styleselector, .font-family {
-  cursor: pointer;
-  /*padding: 8px;*/
-}
-.styleselector img, .font-family img, .tocselector img {
-  max-height: 18px;
-}
-.tocselector {
-  display: none;
+@media (max-width: 800px) {
+  .searching .menu {
+    width: 100%;
+    flex-grow: 1;
+  }
+  .searching .menu:not(.menu-secondary),
+  .searching #settings-reading {
+    display: none;
+  }
+  .searching .search {
+    width: 100% !important;
+  }
+  .searching .search-box:focus {
+    width: 100% !important;
+  }
 }
 
-.font-family {
-  /*
-  display: none;
-  */
-}
+
+
+
+
+
 
 
 
@@ -894,7 +1043,7 @@ body.night {
   background-color: #2C2C2C;
 }
 .night header {
-  background-color: #2C2C2C;
+  background-color: rgba(44, 44, 44, 0.85);
   background-image: none;
   box-shadow: none;
 }
@@ -2240,7 +2389,12 @@ form div[role='group'] h3 {
   text-align: center;
   cursor: pointer;
 }
-
+#toggle-toc svg {
+  display: block;
+  height: 18px;
+  max-width: 500px; /* Dumb Safari fix http://stackoverflow.com/questions/24153939/inline-svg-scaling-auto-width */
+  width: auto;
+}
 
 
 .image-upload-button {
@@ -3277,7 +3431,7 @@ twitterwidget {
 }
 
 
-/* Table of Contents
+/* Table of Contents (TOC)
 -------------------------------------------------- */
 
 .sticky {
@@ -3293,7 +3447,7 @@ twitterwidget {
   background-color: white;
 }
 
-.toc > * {
+.toc-items > * {
   list-style: none;
 }
 
@@ -3315,7 +3469,7 @@ twitterwidget {
   text-overflow: ellipsis;
 }
 
-.toc > div {
+.toc > div:first-child {
   display: flex;
   align-items: flex-end;
   flex-wrap: wrap;
@@ -3337,7 +3491,7 @@ p {
   line-height: 1.5rem;
 }
 
-.toc ul ul {
+.toc-items ul {
   padding-left: 10px;
   opacity: .7;
 }
@@ -3375,7 +3529,7 @@ p {
 
 .toc-marker {
   position: absolute;
-  top: -2px;
+  top: 0px;
   left: -10px;
   padding-left: 10px;
   width: 100%;
@@ -3391,21 +3545,21 @@ p {
 }
 
 
-ul.toc {
+.toc-items {
   overflow-y: auto;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   max-height: 100%;
   max-height: calc(100vh - 200px);
 }
+.toc-items li {
+  opacity: .8;
+}
+.toc-items li.visible {
+  opacity: 1;
+}
 
-
-
-
-
-
-
-
-
+/*
 .dropdown {
   opacity: .2;
   position: absolute;
@@ -3419,8 +3573,19 @@ ul.toc {
   visibility: visible;
   opacity: 1;
 }
+*/
 
-
+#modal-toc {
+  max-height: 65vh;
+  width: 65vw;
+  max-width: 500px;
+}
+#modal-toc.visible .toc {
+  display: block;
+}
+#modal-toc .toc-items {
+    padding: 0 15px;
+}
 
 
 
@@ -3904,10 +4069,11 @@ tbody th {
 }
 */
 
+/*
 tr:nth-of-type(odd) td {
   background: #F7F7F7;
 }
-
+*/
 
 
 
@@ -4042,7 +4208,7 @@ aside figcaption {
     -webkit-overflow-scrolling: touch;
   }
   
-  .tocselector { display: block; }
+  .toggle-toc { display: block; }
   
   .main .container {
     flex-direction: column;
