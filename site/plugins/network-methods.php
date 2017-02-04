@@ -162,7 +162,11 @@ page::$methods['requests'] = function($page) {
   if ($page->content()->userdata() != '') {
     if (isset(explode('///',$page->content()->userdata())[6])) {
       return str::split(explode('///',$page->content()->userdata())[6],',');
+    } else {
+      return array();
     }
+  } else {
+    return array();
   }
 };
 
@@ -262,6 +266,32 @@ page::$methods['relatedProjects'] = function($page) {
   }
 
 };
+
+// Related Events
+// returns a collection of related "event" pages only
+page::$methods['relatedEvents'] = function($page) {
+  
+  $collection = new Pages();
+  
+  if ($page->related()) {
+    foreach ($page->related() as $item) {
+      if ($result = site()->page('events/' . $item)) {
+        $collection->add($result);
+      }
+    }
+  }
+  
+  return $collection;
+  
+};
+
+
+
+
+
+
+
+
 
 // "External" links
 // returns an array of titled external links
@@ -413,8 +443,24 @@ page::$methods['price'] = function($page) {
 //--------------------------------------------------
 
 // Hero image
-// returns the hero image (or first image) of a page
+// returns the first hero image (or first image) of a page
 page::$methods['heroImage'] = function($page) {
+
+  if ($file = $page->file($page->content()->hero())) {
+    return $file;
+  } elseif ($hero = $page->images()->findBy('name', 'hero')) {
+    return $hero;
+  } elseif ($page->hasImages()) {
+    return $page->images()->sortBy('sort', 'asc')->first();
+  } else {
+    return null;
+  }
+  
+};
+
+// Hero images
+// returns a collection of the page's hero images
+page::$methods['heroImages'] = function($page) {
 
   if ($hero = $page->images()->findBy('name', 'hero')) {
     return $hero;
@@ -425,6 +471,8 @@ page::$methods['heroImage'] = function($page) {
   }
   
 };
+
+
 
 //==================================================
 // USER DATA METHODS
@@ -607,6 +655,34 @@ function youtube_image($id) {
     }
   }
   return $url;
+}
+
+
+
+//==================================================
+// CUSTOM FUNCTIONS
+// https://makernetwork.org/docs
+//==================================================
+
+/* Ping
+  - checks whether a page is up or not
+  - useful way of triggering a page to generate its cache file if it doesn't already exist
+*/
+function ping($url) {
+  $curl = curl_init();
+  curl_setopt_array($curl, array(
+      CURLOPT_URL => $url,
+      CURLOPT_POST => 0,
+      CURLOPT_TIMEOUT => 5,
+      CURLOPT_CONNECTTIMEOUT => 5,
+      CURLOPT_RETURNTRANSFER => true,
+      CURLINFO_HEADER_OUT => true,
+      CURLOPT_NOBODY => 1,
+  ));
+  curl_exec($curl);
+  $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+  curl_close($curl);
+  return ($httpcode>=200 && $httpcode<300) ? true : false;
 }
 
 
