@@ -365,6 +365,66 @@
   <?php endif ?>
 <?php endif ?>
 
+<?php // Events ?>
+<?php if ($type == 'events'): ?>
+  
+  <?php $items = $page->relatedEvents(); ?>
+  
+  <?php if (isset($items) and !is_null($items) and $items != '' or $page->isEditableByUser()): ?>
+    <div class="widget<?php echo ($items == '' and $page->isEditableByUser()) ? ' hidden' : '' ?>">
+      
+      <span class="heading"><?php echo ($items->count() > 1) ? 'EVENTS' : 'EVENT' ?></span>
+      
+      <div class="items" id="events">
+        <?php if (isset($items)): ?>
+          <?php foreach ($items as $item): ?>
+              <a class="item" href="<?php echo $item->url() ?>" data-username="<?php echo $item->slug() ?>">
+                
+                <?php if ($page->isEditableByUser()): ?>
+                  <div class="item-delete"></div>
+                <?php endif ?>
+                
+                <div class="row">
+                  
+                  
+                  <div class="column">
+                    <span><?php echo $item->title() ?></span>
+                    <?php // <span># members</span> ?>
+                  </div>
+                </div>
+              </a>
+          <?php endforeach ?>
+        <?php endif ?>
+      </div>
+      
+      <?php if ($page->isEditableByUser()): ?>
+        <form id="form-group-add">
+          <div>
+            <input type="text" id="group-add" autocomplete="off">
+            <label>Add a group</label>
+            <ul id="group-results"></ul>
+          </div>
+  
+        </form>
+      <?php endif ?>
+      
+    </div>
+  <?php endif ?>
+<?php endif ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

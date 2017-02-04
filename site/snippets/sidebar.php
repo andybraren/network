@@ -319,9 +319,14 @@
     <?php snippet('widget', array('type' => 'authors')) ?>
   <?php endif ?>
   
-  <?php // GROUPS WIDGET ?>
+  <?php // RELATED GROUPS WIDGET ?>
   <?php if($page->parent() != 'groups'): ?>
     <?php snippet('widget', array('type' => 'groups')) ?>
+  <?php endif ?>
+  
+  <?php // RELATED EVENTS WIDGET ?>
+  <?php if($page->parent() != 'events'): ?>
+    <?php snippet('widget', array('type' => 'events')) ?>
   <?php endif ?>
   
   <?php // RELEVANT EQUIPMENT WIDGET - displays each piece of Equipment related to this Handbook ?>
