@@ -495,7 +495,7 @@ function addFileTool() {
       data.append('page', window.location.pathname);
       
       var request = new XMLHttpRequest();
-      request.open('POST', 'uploadnew', true);
+      request.open('POST', 'upload', true);
       request.onload = function () {
         if (request.status === 200) { // File uploaded
           response = JSON.parse(this.response);
@@ -673,7 +673,7 @@ function addHeroTool() {
       data.append('page', window.location.pathname);
       
       var request = new XMLHttpRequest();
-      request.open('POST', 'uploadnew', true);
+      request.open('POST', 'upload', true);
       request.onload = function () {
         if (request.status === 200) { // File uploaded
           response = JSON.parse(this.response);
@@ -737,7 +737,7 @@ function toggleHero(clickcount, formupload) {
         data.append('type', 'hero');
         
         var request = new XMLHttpRequest();
-        request.open('POST', 'uploadnew', true);
+        request.open('POST', 'upload', true);
         request.onload = function () {
           if (request.status === 200) { // File uploaded
             response = JSON.parse(this.response);
@@ -749,16 +749,19 @@ function toggleHero(clickcount, formupload) {
         request.send(data);
         
         function insertHero(filename, fileurl, extension) {
-          html = '<figure><img src="' + fileurl + '"></img></figure>';
-          //image = heroDiv.getElementsByTagName('FIGURE')[0];
-          //image.insertAdjacentHTML('afterend', html);
-          //image.parentNode.removeChild(image);
-          image = heroDiv.getElementsByTagName('IMG')[0];
-          image.removeAttribute('class');
-          image.parentNode.removeAttribute('style');
-          
-          image.src = fileurl;
+          var heroAdd = document.getElementById('hero-add');
+          if (heroAdd != undefined) {
+            html = '<figure><img src="' + fileurl + '"></img></figure>';
+            heroAdd.insertAdjacentHTML('afterend', html);
+            heroAdd.parentNode.removeChild(heroAdd);
+          } else {
+            image = heroDiv.getElementsByTagName('IMG')[0];
+            image.removeAttribute('class');
+            image.parentNode.removeAttribute('style');
+            image.src = fileurl;
+          }
         }
+        
       };
     }
     else {

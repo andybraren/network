@@ -426,24 +426,25 @@ c::set('routes', array(
 
   // New page creation at temp location
   array(
-		'pattern' => array('new', '(.+new)'), // matches any url ending in new
+		'pattern' => array('/new', '(.+new)'), // matches any url ending in new
     'action'  => function() {
-      $currentpath = str_replace(array('/maker/','/new','/'),'',$_SERVER['REQUEST_URI']);
-      $newpage = date('His');
+            
+      $parenturi = ltrim(strtok(str_replace('/new','',$_SERVER['REQUEST_URI']), '?'), '/');
+      $newpage = $parenturi . '/' . date('His');
+      
+      $pagetype = preg_replace('/s\b/', '', strtolower(site()->page($parenturi)->title()));
+      
       try {
-        //page()->create($newpage, 'project', array(
-        page()->create('projects/' . $newpage, 'project', array(
-          'title' => 'New project title',
-          'created'  => date('Y-m-d H:i:s'),
-          'modified' => date('Y-m-d H:i:s'),
-          'modifiedby' => site()->user()->username(),
-          'makers' => site()->user()->username() . ', me-184-robotics',
-          'visibility' => 'public',
-          'color' => '',
-          'hero' => '',
-          'text' => ''
+        page()->create($newpage, 'page', array(
+          'Title' => 'New ' . $pagetype . ' title',
+          'DateData'  => date('Y-m-d H:i:s') . ', ' . date('Y-m-d H:i:s'),
+          'UserData' => site()->user()->username(),
+          'RelData' => '',
+          'Settings' => 'private, ' . site()->user()->color() . ', comments == off, submissions == off, price == off',
+          'Hero' => '',
+          'Text' => '',
         ));
-        return go($currentpath . '/' . $newpage);
+        return go($newpage);
       } catch(Exception $e) {
         return page('error');
       }
@@ -497,6 +498,9 @@ c::set('routes', array(
   		$submissions = 'off';
   		$price = 'off';
   		
+  		/* Hero */
+  		$hero = (isset($_POST['hero'])) ? $_POST['hero'] : $targetpage->hero();
+  		
       try {
         site()->page($targetpage)->update(array(
           'Title'  => $title,
@@ -504,7 +508,7 @@ c::set('routes', array(
           'UserData' => $authors . ' /// ' . $oldauthors . ' /// ' . $subscribers . ' /// ' . $subscriberEmails . ' /// ' . $registrants . ' /// ' . $attendees . ' /// ' . $requests,
           'RelData' => $relatedGroups,
           'Settings' => $visibility . ', ' . $color . ', comments == ' . $comments . ', submissions == ' . $submissions . ', price == ' . $price,
-          'Hero' => '',
+          'Hero' => $hero,
           'Text'  => $text,
         ));
         //echo var_dump($_POST);
@@ -551,9 +555,9 @@ c::set('routes', array(
 	),
 	
 	
-  // UPLOAD
+  // UPLOAD NEW
 	array(
-		'pattern' => array('uploadnew', '(.+uploadnew)'),
+		'pattern' => array('upload', '(.+upload)'),
 		'method' => 'POST',
 		'action'  => function() {
   		
@@ -615,6 +619,8 @@ c::set('routes', array(
 	
   // REGENERATE PAGE CACHE
   // Visit example.com/whatever/flush to surgically excise and regenerate that page's cache file within /site/cache
+  // https://forum.getkirby.com/t/controlling-the-cache/464
+  // https://github.com/ChainsawBaby/buildCache
 	array(
 		'pattern' => array('flush', '(.+flush)'),
 		'method' => 'GET',
@@ -693,7 +699,7 @@ c::set('routes', array(
 
   // SAVE AVATAR OR ICON, or possibly ContentTools uploads and eventually videos and other files as well
 	array(
-    'pattern' => array('upload', '(.+upload)', 'makerbox'),
+    'pattern' => array('uploadold', '(.+uploadold)', 'makerbox'),
 		'method' => 'POST',
 		'action'  => function() {
       try {

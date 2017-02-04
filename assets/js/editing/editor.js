@@ -709,7 +709,7 @@ function imageUploader(dialog) {
         xhr = new XMLHttpRequest();
         xhr.upload.addEventListener('progress', xhrProgress);
         xhr.addEventListener('readystatechange', xhrComplete);
-        xhr.open('POST', window.location.href  + '/upload', true);
+        xhr.open('POST', window.location.href  + '/uploadold', true);
         xhr.send(formData);
     });
 
