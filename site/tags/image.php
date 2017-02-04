@@ -25,55 +25,70 @@ kirbytext::$tags['image'] = array(
     'alt',
     'text',
     'title',
-    'class',
-    'imgclass',
-    'linkclass',
     'caption',
     'link',
-    'target',
-    'popup',
-    'rel',
     'size',      // Added by Andy
     'data-size', // Added by Andy for PhotoSwipe
     'data-src',  // Added by Andy for b-lazy
     'type',      // Added by Andy for hero image logic
+    'output',    // Added by Andy for hero image logic via AJAX
+    'returndata',
+    'targetpage',
     'default'    // Added by Andy for hero image logic
   ),
   'html' => function($tag) {
 
-    $url     = $tag->attr('image');
+    $image   = $tag->attr('image');
+    $file    = $tag->file($image);
+    
+    $output = ($tag->attr('output')) ? $tag->attr('output') : null;
+    $targetpage = ($tag->attr('targetpage')) ? site()->page($tag->attr('targetpage')) : null;
+    
+    if ($output == 'url') {
+      $file = new Asset ('content/' . $targetpage->uri() . '/' . $image);
+    }
+    
+    $width   = $tag->attr('width');
+    $height  = $tag->attr('height');
+
+    // use the file url if available and otherwise the given url
+    $url = $file ? $file->url() : url($image);
+    
+    
+    
+
     $alt     = $tag->attr('alt');
     $title   = $tag->attr('title');
     $link    = $tag->attr('link');
     $caption = $tag->attr('caption');
-    $file    = $tag->file($url);
+    
     $size    = $tag->attr('size');      // Added by Andy
-    $width   = $tag->attr('width');     // Added by Andy
-    $height  = $tag->attr('height');    // Added by Andy
+
     $type    = $tag->attr('type');      // Added by Andy
-    $default = $tag->attr('default');   // Added by Andy
     $datasize = "null";
     $datasrc = "null";
     $minithumb = "null";
     $thumb = "null";
     
-    if ($default != null) {
-      $defaultimage = new Asset('/assets/images/hero-add.png');
-      $file = $defaultimage;
-    }
 
-    // use the file url if available and otherwise the given url
-    $url = $file ? $file->url() : url($url);
+    
+    
+    
+    
+    
+    
+    
+    
 
     // alt is just an alternative for text
     if($text = $tag->attr('text')) $alt = $text;
 
     // try to get the title from the image object and use it as alt text
-    if($file != null and $file->exists()) {
+    if($file != null) {
       
       // use thumbnails for large images - Added by Andy
       // http://getkirby.com/forum/general/20141030/thumb-images-posted-via-image
-      $maxImageSize = '720';
+      $maxImageSize = '700';
       if($width and $height) {
         $thumb = thumb($file, array('width' => $width, 'height' => $height, 'crop' => false));
         $url = $thumb->url();
@@ -119,7 +134,7 @@ kirbytext::$tags['image'] = array(
         $widthcalc = $thumb->width() < $maxImageSize ? 'width:' . $thumb->width() / $maxImageSize * 100 . '%' : '';
         $stylecalc = 'padding-top:' . $thumb->height() / $thumb->width() * 100 * ($thumb->width() / $maxImageSize) . '%;' . $widthcalc;
       }
-
+      
       if($type == 'hero') {
         if ($file->ratio() >= 3.5) {
           $thumb = $file->resize(1500);
@@ -145,8 +160,14 @@ kirbytext::$tags['image'] = array(
         $thumb = $file;
       }
       
+      if (isset($output)) {
+        if ($output == 'url') {
+          return $thumb->url();
+        }
+      }
+      
       // link builder
-      $_link = function($image) use($tag, $url, $link, $file, $datasize, $type) {
+      $_link = function($image) use($tag, $url, $link, $file, $datasize, $type, $output) {
         
         // build the href for the link
         if($link == 'self') {
@@ -164,14 +185,15 @@ kirbytext::$tags['image'] = array(
         //if(empty($link)) return $image;    // tweaked by Andy to force links
         
         //$datasize = $file->width() . "x" . $file->height();
-  
-        if ($type == 'hero') {
+        if ($type == 'hero' and $output == 'url') {
+          return $url;
+        }
+        else if ($type == 'hero') {
           return $image;
         }
         else if ($datasize != "null") {
           return html::a(url($href), $image, array(
             'rel'    => $tag->attr('rel'),
-            'class'  => $tag->attr('linkclass'),
             'title'  => $tag->attr('title'),
             'target' => $tag->target(),
             'data-size'  => $datasize,          // added by Andy for PhotoSwipe
@@ -180,7 +202,6 @@ kirbytext::$tags['image'] = array(
         else {
           return html::a(url($href), $image, array(
             'rel'    => $tag->attr('rel'),
-            'class'  => $tag->attr('linkclass'),
             'title'  => $tag->attr('title'),
             'target' => $tag->target()
           ));
@@ -240,13 +261,19 @@ kirbytext::$tags['image'] = array(
         }
         return $figure;
       } else {
-        $class = trim($tag->attr('class') . ' ' . $tag->attr('imgclass'));
+        $class = trim($tag->attr('class'));
         return $_link($_image($class));
       }
     }
     
+    /*
+    else if ($output == 'url') {
+      return $url;
+    }
+    */
+    
     else { // If the image doesn't exist, is missing, or something else is wrong
-      return '<img class="error-image" src="' . $url . '" alt="' . $tag->attr('image') . '">';
+      //return '<img class="error-image" src="' . $url . '" alt="' . $tag->attr('image') . '">';
     }
   }
 );

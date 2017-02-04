@@ -82,8 +82,10 @@
         <?php snippet('cards', array('type' => 'groups')) ?>
       <?php endif ?>
       <?php if($page->parent() == 'groups'): ?>
+        <h2>Projects</h2>
         <?php snippet('cards', array('type' => 'projects', 'group' => $page->uid())) ?>
         <?php snippet('cards', array('type' => 'makers', 'group' => $page->uid())) ?>
+        <h2>Articles</h2>
         <?php snippet('cards', array('type' => 'articles', 'group' => $page->uid())) ?>
       <?php endif ?>
 

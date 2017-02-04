@@ -37,7 +37,7 @@ array(
       if (get('search')) {
         $users = site()->users()->filterBy('firstname', 'c*=', get('search'));
         if ($users == "") {
-          $error = "No users foudnd.";
+          $error = "No users found.";
         }
       }
       foreach ($users as $user) {
