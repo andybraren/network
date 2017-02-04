@@ -309,28 +309,41 @@
 
 
 
-<?php // Groups ?>
-<?php if ($type == 'groups'): ?>
+
+
+
+
+
+
+
+
+<?php // Related Groups and Events ?>
+<?php if ($type == 'groups' or $type == 'events'): ?>
   
   <?php
-    $plural = false;
-    $groups = $page->relatedGroups();
-    if ($groups != null and $groups != '') {
-      if ($groups->count() > 1) {
-        $plural = true;
-      }
+    if ($type == 'groups') {
+      $items    = $page->relatedGroups();
+      $singular = 'group';
+      $plural   = 'groups';
     }
+    if ($type == 'events') {
+      $items    = $page->relatedEvents();
+      $singular = 'event';
+      $plural   = 'events';
+    }
+    
+    $heading = ($items->count() > 1) ? strtoupper($plural) : strtoupper($singular);
   ?>
   
-  <?php if (!empty($groups) or $page->isEditableByUser()): ?>
-    <div class="widget<?php echo ($groups == '' and $page->isEditableByUser()) ? ' hidden' : '' ?>">
+  <?php if (isset($items) and !is_null($items) and $items != '' or $page->isEditableByUser()): ?>
+    <div class="widget<?php echo ($items == '' and $page->isEditableByUser()) ? ' hidden' : '' ?>">
       
-      <span class="heading"><?php echo ($plural) ? 'GROUPS' : 'GROUP' ?></span>
+      <span class="heading"><?php echo $heading ?></span>
       
-      <div class="items" id="groups">
-        <?php if (isset($groups)): ?>
-          <?php foreach ($groups as $group): ?>
-              <a class="item" href="<?php echo $group->url() ?>" data-username="<?php echo $group->slug() ?>">
+      <div class="items" id="<?php echo $plural ?>">
+        <?php if (isset($items)): ?>
+          <?php foreach ($items as $item): ?>
+              <a class="item" data-slug="<?php echo $item->slug() ?>" href="<?php echo $item->url() ?>">
                 
                 <?php if ($page->isEditableByUser()): ?>
                   <div class="item-delete"></div>
@@ -338,24 +351,26 @@
                 
                 <div class="row">
                   
-                  <img src="<?php echo groupLogo($group->slug(), 40) ?>" width="40" height="40" class="<?php echo groupColor($group->slug()) ?>">
+                  <?php if ($type == 'groups'): ?>
+                    <img src="<?php echo groupLogo($item->slug(), 40) ?>" width="40" height="40" class="<?php echo groupColor($item->slug()) ?>">
+                  <?php endif ?>
                   
                   <div class="column">
-                    <span><?php echo $group->title() ?></span>
-                    <?php // <span># members</span> ?>
+                    <span><?php echo $item->title() ?></span>
                   </div>
                 </div>
+                
               </a>
           <?php endforeach ?>
         <?php endif ?>
       </div>
       
       <?php if ($page->isEditableByUser()): ?>
-        <form id="form-group-add">
+        <form data-role="search">
           <div>
-            <input type="text" id="group-add" autocomplete="off">
-            <label>Add a group</label>
-            <ul id="group-results"></ul>
+            <input id="<?php echo $singular ?>" type="text" autocomplete="off">
+            <label>Add <?php echo $singular ?></label>
+            <ul data-role="results"></ul>
           </div>
   
         </form>
@@ -365,52 +380,12 @@
   <?php endif ?>
 <?php endif ?>
 
-<?php // Events ?>
-<?php if ($type == 'events'): ?>
-  
-  <?php $items = $page->relatedEvents(); ?>
-  
-  <?php if (isset($items) and !is_null($items) and $items != '' or $page->isEditableByUser()): ?>
-    <div class="widget<?php echo ($items == '' and $page->isEditableByUser()) ? ' hidden' : '' ?>">
-      
-      <span class="heading"><?php echo ($items->count() > 1) ? 'EVENTS' : 'EVENT' ?></span>
-      
-      <div class="items" id="events">
-        <?php if (isset($items)): ?>
-          <?php foreach ($items as $item): ?>
-              <a class="item" href="<?php echo $item->url() ?>" data-username="<?php echo $item->slug() ?>">
-                
-                <?php if ($page->isEditableByUser()): ?>
-                  <div class="item-delete"></div>
-                <?php endif ?>
-                
-                <div class="row">
-                  
-                  
-                  <div class="column">
-                    <span><?php echo $item->title() ?></span>
-                    <?php // <span># members</span> ?>
-                  </div>
-                </div>
-              </a>
-          <?php endforeach ?>
-        <?php endif ?>
-      </div>
-      
-      <?php if ($page->isEditableByUser()): ?>
-        <form id="form-group-add">
-          <div>
-            <input type="text" id="group-add" autocomplete="off">
-            <label>Add a group</label>
-            <ul id="group-results"></ul>
-          </div>
-  
-        </form>
-      <?php endif ?>
-      
-    </div>
-  <?php endif ?>
-<?php endif ?>
+
+
+
+
+
+
 
 
 

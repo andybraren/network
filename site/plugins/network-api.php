@@ -79,12 +79,36 @@ array(
       
       foreach ($items as $item) {
         $temp['title']     = ($item->title()) ? (string)$item->title() : null;
-        $temp['groupslug'] = ($item->slug()) ? (string)$item->slug() : null;
-        $temp['groupURL']  = ($item->url()) ? (string)$item->url() : null;
-        $temp['logoURL']   = groupLogo($item->slug(), 40);
+        $temp['slug']      = ($item->slug()) ? (string)$item->slug() : null;
+        $temp['url']       = ($item->url()) ? (string)$item->url() : null;
+        $temp['image']     = groupLogo($item->slug(), 40);
         $temp['color']     = groupColor($item->slug());
-        //$temp['logoURL']   = ($logoURL = $item->images()->findBy('name', 'logo')) ? (string)$logoURL->url() : null;
-        //$results['data'][$item->slug()] = array_filter($temp);
+        $results['data'][] = array_filter($temp);
+      }
+    }
+    
+    // Events API
+    if (get('events')) {
+      if (get('events') == 'all') {
+        $items = site()->page('events')->children();
+      } elseif ($thepage = site()->page('events/' . get('events'))) {
+        $items = array($thepage);
+      } else {
+        $error = "No event exists with the provided name.";
+      }
+      if (get('search')) {
+        $items = site()->page('events')->children()->filterBy('title', 'c*=', get('search'));
+        if ($items == "") {
+          $error = "No events found with the provided query.";
+        }
+      }
+      
+      foreach ($items as $item) {
+        $temp['title']     = ($item->title()) ? (string)$item->title() : null;
+        $temp['slug']      = ($item->slug()) ? (string)$item->slug() : null;
+        $temp['url']       = ($item->url()) ? (string)$item->url() : null;
+        //$temp['image']     = $item->heroImage();
+        //$temp['color']     = $item->color();
         $results['data'][] = array_filter($temp);
       }
     }

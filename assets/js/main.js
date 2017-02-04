@@ -997,10 +997,22 @@ function savePage() {
     var groups = Array.prototype.slice.call(groups.children);
     var arr = [];
     for (var i = groups.length - 1; i >= 0; i--) {
-      arr.push(groups[i].getAttribute('data-username'));
+      arr.push(groups[i].getAttribute('data-slug'));
     }
     var groups = arr.reverse().join(', ');
     data.append('groups', groups);
+  }
+  
+  /* Events */
+  var events = document.getElementById('events');
+  if (events != null) {
+    var events = Array.prototype.slice.call(events.children);
+    var arr = [];
+    for (var i = events.length - 1; i >= 0; i--) {
+      arr.push(events[i].getAttribute('data-slug'));
+    }
+    var events = arr.reverse().join(', ');
+    data.append('events', events);
   }
   
   /* Visibility */
@@ -1230,6 +1242,98 @@ if (groupfield != null) {
 
 
 
+
+
+
+/* Widget searches */
+//var searchwidgets = document.querySelectorAll('[data-role="search"]');
+var searchforms = document.querySelectorAll('[data-role="search"]');
+if (searchforms != null) {
+  for (var i = 0; i < searchforms.length; i++) {
+    
+    var searchinput = searchforms[i].getElementsByTagName('INPUT')[0];
+    searchinput.addEventListener('input', lengthCheck, false);
+    
+    function lengthCheck() {
+      var type = this.parentNode.parentNode.previousElementSibling.id;
+      var resultnode = this.nextElementSibling.nextElementSibling;
+      var input = this;
+      var query = this.value;
+      
+      if (this.value.length >= 2) {
+        doSearch(type, query, input, resultnode);
+      } else {
+        clearSearch(resultnode);
+      }
+    }
+    
+    function clearSearch(resultnode) { // Remove old results
+      while (resultnode.hasChildNodes()) {   
+        resultnode.removeChild(resultnode.firstChild);
+      }
+    }
+    
+    function doSearch(type, query, input, resultnode) {
+      var request = new XMLHttpRequest();
+      request.open('GET', '/api?' + type + '=all&search=' + query, true);
+      
+      request.onload = function() {
+        if (request.status >= 200 && request.status < 400) { // Success!
+          var data = JSON.parse(this.response);
+          if (data.status == 'success') {
+            
+            // Remove old results
+            clearSearch(resultnode);
+            
+            // Add new results
+            for (var i = 0; i < Object.keys(data.data).length; i++){
+              
+              var result = document.createElement('li');
+              result.setAttribute('data-title', data.data[i]['title']);
+              result.setAttribute('data-slug',  data.data[i]['slug']);
+              result.setAttribute('data-url',   data.data[i]['url']);
+              result.setAttribute('data-image', data.data[i]['image']);
+              result.setAttribute('data-color', data.data[i]['color']);
+              
+              result.innerHTML = data.data[i]['title'];
+              
+              resultnode.appendChild(result);
+              //result.addEventListener('click', selectResult, false);
+              result.addEventListener('click', function() {
+                clearSearch(resultnode);
+                
+                input.value = '';
+                input.classList.remove('clicked');
+                
+                var title = this.getAttribute('data-title');
+                var slug = this.getAttribute('data-slug');
+                var url  = this.getAttribute('data-url');
+                var image = this.getAttribute('data-image');
+                var color = this.getAttribute('data-color');
+                
+                var resultHTML = '<a class="item" data-slug="' + slug + '" data-href="' + url + '"><div class="item-delete"></div><div class="row"><img src="' + image + '" class="' + color + '" width="40" height="40"><div class="column"><span>' + title + '</span></div></div></a>';
+                
+                input.parentNode.parentNode.previousElementSibling.insertAdjacentHTML('beforeend', resultHTML);
+                itemDeleteButtons();
+              }, false);
+            }
+            
+          } else if (data.status == 'error') {
+            console.log('No results found');
+          }
+        } else {
+          console.log('The server was reached, but returned an error');
+        }
+      };
+      
+      request.onerror = function() {
+        console.log('Connection error');
+      };
+      
+      request.send();
+    }
+  }
+}
 
 
 

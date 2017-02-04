@@ -3931,19 +3931,19 @@ p {
 /* SIDEBAR WIDGETS
 -------------------------------------------------- */
 
-#author-results, #group-results {
+#author-results, #group-results, [data-role="results"] {
   position: absolute;
   background-color: white;
   z-index: 100 !important;
   width: 100%;
 }
 
-#author-results li, #group-results li {
+#author-results li, #group-results li, [data-role="results"] li {
   padding: 5px;
   border: 1px solid #d9d9d9;
   border-width: 0px 1px 1px 1px;
 }
-#author-results li:hover, #group-results li:hover {
+#author-results li:hover, #group-results li:hover, [data-role="results"] li:hover {
   background-color: #d9d9d9;
   cursor: pointer;
 }

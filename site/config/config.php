@@ -489,7 +489,8 @@ c::set('routes', array(
   		  $requests = (isset($_POST['join'])) ? implode(', ', array_merge($targetpage->requests(), array($_POST['join']))) : $requests;
   		
   		/* RelData */
-  		$relatedGroups = (isset($_POST['groups'])) ? $_POST['groups'] : $targetpage->groups();
+  		$relatedGroups = (isset($_POST['groups'])) ? $_POST['groups'] : $targetpage->relatedGroups();
+  		$relatedEvents = (isset($_POST['events'])) ? $_POST['events'] : $targetpage->relatedEvents();
   		
   		/* Settings */
   		$visibility  = (isset($_POST['visibility'])) ? $_POST['visibility'] : $targetpage->visibility();
@@ -506,7 +507,7 @@ c::set('routes', array(
           'Title'  => $title,
           'DateData' => $dateCreated . ', ' . $dateModified,
           'UserData' => $authors . ' /// ' . $oldauthors . ' /// ' . $subscribers . ' /// ' . $subscriberEmails . ' /// ' . $registrants . ' /// ' . $attendees . ' /// ' . $requests,
-          'RelData' => $relatedGroups,
+          'RelData' => $relatedGroups . ', ' . $relatedEvents,
           'Settings' => $visibility . ', ' . $color . ', comments == ' . $comments . ', submissions == ' . $submissions . ', price == ' . $price,
           'Hero' => $hero,
           'Text'  => $text,
