@@ -158,15 +158,15 @@ if (!isset($type)) {
     */ ?>
     
     <?php if ($page->isEditableByUser()): ?>
-        <a href="<?php echo $site->page($type)->url() ?>/new" class="card">
-          <div class="card-hero">
-            <img src="<?php echo $newhero->crop(259,101)->url() ?>">
-          </div>
-                  
-          <div class="card-content">
-            <h4>Add new</h4>
-          </div>
-        </a>
+      <a href="<?php echo $site->page($type)->url() ?>/new<?php echo '?' . $page->parent()->slug() . '=' . $page->slug() ?>" class="card">
+        <div class="card-hero">
+          <img src="<?php echo $newhero->crop(259,101)->url() ?>">
+        </div>
+                
+        <div class="card-content">
+          <h4>Add new</h4>
+        </div>
+      </a>
     <?php endif ?>
     
     <?php // New bug card ?>
@@ -189,7 +189,7 @@ if (!isset($type)) {
           <a href="<?php echo $item->url() ?>">
             <?php if ($hero = $item->images()->findBy('name', 'icon') AND $page->uid() == 'books'): ?>
               <img src="<?php echo $hero->crop(360, 500)->url() ?>"></img>
-            <?php elseif ($hero = $item->images()->findBy('name', 'hero')): ?>
+            <?php elseif ($hero = $item->heroImage()): ?>
               <img src="<?php echo $hero->crop(300, 120)->url() ?>" height="120px"></img>
             <?php elseif($item->hasImages()): ?>
               <?php $hero = $item->images()->sortBy('sort', 'asc')->first() ?>
