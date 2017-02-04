@@ -6,8 +6,7 @@
       
       <a class="logo" href="<?php echo url() ?>">
         <div id="logo-1">
-          <?php $logo = new Asset('/assets/images/logo.svg'); ?>
-          <?php echo $logo->content() ?>
+          <?php echo (new Asset('/assets/images/logo.svg'))->content() ?>
         </div>
         <div id="logo-2">
           <?php $logo = new Asset('/assets/images/logo-icon.svg'); ?>
@@ -117,12 +116,14 @@
   
 </nav>
 
-<?php if (!in_array($page->uid(), array('home','spaces','events','search','equipment','docs'))): ?>
+<?php if (!in_array($page->uid(), array('home','spaces','events','search','equipment'))): ?>
   <nav id="subnavigation" role="navigation">
     <div class="container">
       
       <ul class="menu">
-        <li class="tocselector"><a><img src="<?php echo url('assets/images/menu-toc.svg') ?>"></a></li>
+        <li id="toggle-toc">
+          <a><?php echo (new Asset('/assets/images/menu-toc.svg'))->content() ?></a>
+        </li>
         
         <?php if (in_array($page->uid(), array('learn','courses','handbooks','books')) or $page->isDescendantOf('courses') or $page->isDescendantOf('handbooks') or $page->isDescendantOf('books')): ?>
           <?php if ($site->page('courses')): ?>
@@ -165,15 +166,42 @@
       <ul class="menu menu-secondary">
         <li class="search">
           <form class="search-container" action="<?php echo $site->url() . '/search'?>">
-            <a><img src="<?php echo url('assets/images/menu-search.svg') ?>"></a>
+            <a><?php echo (new Asset('/assets/images/menu-search.svg'))->content() ?></a>
             <input id="search-box" type="text" class="search-box" name="s">
             <input type="submit" id="search-submit">
           </form>
         </li>
-        <li class="fontselector"><a><img src="<?php echo url('assets/images/menu-font.svg') ?>"></a></li>
-        <li class="styleselector"><a><img src="<?php echo url('assets/images/menu-color.svg') ?>"></a></li>
+        
+        <li>
+          <a id="settings-reading"><?php echo (new Asset('/assets/images/menu-font.svg'))->content() ?></a>
+        </li>
       </ul>
       
     </div>
   </nav>
 <?php endif ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
