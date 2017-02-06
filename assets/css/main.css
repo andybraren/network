@@ -351,6 +351,7 @@ a[class*="file-"] {
 .file-xls, .file-csv { background-image: url(../../assets/images/file-xls.svg); }
 .file-zip { background-image: url(../../assets/images/file-zip.svg); }
 .file-vi { background-image: url(../../assets/images/file-vi.svg); }
+.file-img { background-image: url(../../assets/images/file-img.svg);}
 
 /* Page Themes / Colors
 -------------------------------------------------- */

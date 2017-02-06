@@ -30,9 +30,11 @@ kirbytext::$tags['file'] = array(
     // use filename if the text is empty and make sure to
     // ignore markdown italic underscores in filenames
     if(empty($text)) $text = str_replace('_', '\_', $file->name()) . '.' . $file->extension();
+    
+    $id = ($file->type() == 'image') ? 'img' : $file->extension();
 
     return html::a($file->url(), html($text), array(
-      'class'  => 'file-' . $file->extension(),
+      'class'  => 'file-' . $id,
       'data-filename' => $file->filename(),
       'title'  => html($tag->attr('title')) . '',
       'rel'    => $tag->attr('rel'),
