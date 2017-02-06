@@ -434,12 +434,15 @@ c::set('routes', array(
       
       $pagetype = preg_replace('/s\b/', '', strtolower(site()->page($parenturi)->title()));
       
+      $related = (kirby()->request()->has('related')) ? get('related') : '';
+      
+      
       try {
         page()->create($newpage, 'page', array(
           'Title' => 'New ' . $pagetype . ' title',
           'DateData'  => date('Y-m-d H:i:s') . ', ' . date('Y-m-d H:i:s'),
           'UserData' => site()->user()->username(),
-          'RelData' => '',
+          'RelData' => $related,
           'Settings' => 'private, ' . site()->user()->color() . ', comments == off, submissions == off, price == off',
           'Hero' => '',
           'Text' => '',
@@ -448,6 +451,7 @@ c::set('routes', array(
       } catch(Exception $e) {
         return page('error');
       }
+      
     }
   ),
   array(
