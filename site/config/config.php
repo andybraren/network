@@ -477,7 +477,7 @@ c::set('routes', array(
   		//$modifiedBy = site()->user(get('username'));
   		
   		/* UserData */
-  		$authors = (isset($_POST['authors'])) ? $_POST['authors'] : implode(', ', $targetpage->authors());
+  		$authors = (isset($_POST['users'])) ? $_POST['users'] : implode(', ', $targetpage->authors());
   		$oldauthors = '';
   		$subscribers = '';
   		$subscriberEmails = '';

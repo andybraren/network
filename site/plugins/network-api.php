@@ -107,8 +107,9 @@ array(
         $temp['title']     = ($item->title()) ? (string)$item->title() : null;
         $temp['slug']      = ($item->slug()) ? (string)$item->slug() : null;
         $temp['url']       = ($item->url()) ? (string)$item->url() : null;
-        //$temp['image']     = $item->heroImage();
-        //$temp['color']     = $item->color();
+        $temp['image']     = ($item->heroImage()) ? $item->heroImage()->crop(40,40)->url() : null;
+        //$temp['color']     = ($item->color()) ? $item->color() : null;
+        $temp['date']       = ($item->dateStart()) ? date('F j, Y', strtotime($item->dateStart())) : null;
         $results['data'][] = array_filter($temp);
       }
     }

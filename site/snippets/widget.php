@@ -174,7 +174,7 @@
 <?php endif ?>
 
 <?php // AUTHORS ?>
-<?php if ($type == 'authors'): ?>
+<?php if ($type == 'authorss'): ?>
   
   <?php
     $plural = false;
@@ -311,25 +311,27 @@
 
 
 
-
-
-
-
-
-
-<?php // Related Groups and Events ?>
-<?php if ($type == 'groups' or $type == 'events'): ?>
+<?php // Related Groups, Events, and Authors ?>
+<?php if ($type == 'authors' or $type == 'groups' or $type == 'events'): ?>
   
   <?php
+    if ($type == 'authors') {
+      $items    = $page->authors();
+      $singular = 'author';
+      $plural   = 'authors';
+      $id       = 'users';
+    }
     if ($type == 'groups') {
       $items    = $page->relatedGroups();
       $singular = 'group';
       $plural   = 'groups';
+      $id       = 'groups';
     }
     if ($type == 'events') {
       $items    = $page->relatedEvents();
       $singular = 'event';
       $plural   = 'events';
+      $id       = 'events';
     }
     
     $heading = ($items->count() > 1) ? strtoupper($plural) : strtoupper($singular);
@@ -338,12 +340,23 @@
   <?php if (isset($items) and !is_null($items) and $items != '' or $page->isEditableByUser()): ?>
     <div class="widget<?php echo ($items == '' and $page->isEditableByUser()) ? ' hidden' : '' ?>">
       
-      <span class="heading"><?php echo $heading ?></span>
+      <div class="row">
+        <span class="heading"><?php echo $heading ?></span>
+        <?php if ($page->isEditableByUser()): ?>
+          <form data-role="search">
+            <div>
+              <input id="<?php echo $singular ?>" autocomplete="off" placeholder="+ Add new">
+              <ul data-role="results"></ul>
+            </div>
+    
+          </form>
+        <?php endif ?>
+      </div>
       
-      <div class="items" id="<?php echo $plural ?>">
+      <div class="items" id="<?php echo $id ?>">
         <?php if (isset($items)): ?>
           <?php foreach ($items as $item): ?>
-              <a class="item" data-slug="<?php echo $item->slug() ?>" href="<?php echo $item->url() ?>">
+              <a class="item" data-slug="<?php echo ($item->slug()) ? $item->slug() : $item->username() ?>" href="<?php echo $item->url() ?>">
                 
                 <?php if ($page->isEditableByUser()): ?>
                   <div class="item-delete"></div>
@@ -351,12 +364,32 @@
                 
                 <div class="row">
                   
+                  <?php if ($type == 'authors'): ?>
+                    <img src="<?php echo userAvatar($item->username(), 40) ?>" width="40" height="40" class="<?php echo userColor($item->username()) ?>">
+                  <?php endif ?>
+                  
                   <?php if ($type == 'groups'): ?>
                     <img src="<?php echo groupLogo($item->slug(), 40) ?>" width="40" height="40" class="<?php echo groupColor($item->slug()) ?>">
                   <?php endif ?>
                   
+                  <?php if ($type == 'events'): ?>
+                    <img src="<?php echo $item->heroImage()->crop(40,40)->url() ?>" width="40" height="40" class="<?php echo $item->color() ?>">
+                  <?php endif ?>
+                  
                   <div class="column">
-                    <span><?php echo $item->title() ?></span>
+                    
+                    <?php if ($type == 'authors'): ?>
+                      <span><?php echo $item->firstname() . ' ' . $item->lastname() ?></span>
+                      <?php if ($item->major() != null): ?>
+                        <span><?php echo $item->major() ?></span>
+                      <?php endif ?>
+                    <?php else: ?>
+                      <span><?php echo $item->title() ?></span>
+                      <?php if ($type == 'events'): ?>
+                        <span><?php echo date('F j, Y', strtotime($item->dateStart())) ?></span>
+                      <?php endif ?>
+                    <?php endif ?>
+                    
                   </div>
                 </div>
                 
@@ -364,17 +397,6 @@
           <?php endforeach ?>
         <?php endif ?>
       </div>
-      
-      <?php if ($page->isEditableByUser()): ?>
-        <form data-role="search">
-          <div>
-            <input id="<?php echo $singular ?>" type="text" autocomplete="off">
-            <label>Add <?php echo $singular ?></label>
-            <ul data-role="results"></ul>
-          </div>
-  
-        </form>
-      <?php endif ?>
       
     </div>
   <?php endif ?>

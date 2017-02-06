@@ -92,7 +92,7 @@ page::$methods['dateEnd'] = function($page) {
 
 // Authors
 // returns an array of active author usernames (with roles separated by ~)
-page::$methods['authors'] = function($page) {
+page::$methods['authorsold'] = function($page) {
   if ($page->content()->makers() != '') {
     return $page->content()->makers()->split(',');
   }
@@ -105,6 +105,46 @@ page::$methods['authors'] = function($page) {
     return array();
   }
 };
+
+
+
+// Still new to OOP, but this creates a new collection with the same functionality as $collection
+
+// Authors New
+// 
+page::$methods['authors'] = function($page) {
+  
+  // Create an array of authors
+  if ($page->content()->makers() != '') {
+    $authors = $page->content()->makers()->split(',');
+  }
+  elseif ($page->content()->userdata() != '') {
+    if (isset(explode('///',$page->content()->userdata())[0])) {
+      $authors = str::split(explode('///',$page->content()->userdata())[0],',');
+    }
+  } else {
+    $authors = array();
+  }
+  
+  $collection = new Collection();
+  
+  // Add each valid author to the collection and return them
+  foreach ($authors as $author) {
+    if (site()->user($author)) {
+      $collection->append($author, site()->user($author));
+    }
+  }
+  
+  return $collection;
+  
+};
+
+
+
+
+
+
+
 
 // Old Authors
 // returns an array of old/retired author usernames (with roles separated by ~)
@@ -177,10 +217,7 @@ page::$methods['requests'] = function($page) {
 // Related "internal" pages
 // returns an array of all related "internal" pages
 page::$methods['related'] = function($page) {
-  if ($page->content()->makers() != '') {
-    return $page->content()->makers()->split(',');
-  }
-  elseif ($page->content()->reldata() != '') {
+  if ($page->content()->reldata() != '') {
     if (isset(explode('///',$page->content()->reldata())[0])) {
       return str::split(explode('///',$page->content()->reldata())[0],',');
     } else {
@@ -339,6 +376,8 @@ page::$methods['color'] = function($page) {
     if (isset(explode(',',$page->content()->settings())[1])) {
       return trim(explode(',',$page->content()->settings())[1]);
     }
+  } else {
+    return null;
   }
 };
 
@@ -535,12 +574,9 @@ pages::$methods['visibleToUser'] = function($pages) {
 };
 
 
-page::$methods['groups'] = function($user) {
-  if ($user->content()->groupsd() != '') {
-    return array('hello');
-  } else {
-    return array();
-  }
+page::$methods['groupss'] = function($user) {
+  return 'blah, bhsh';
+
 };
 
 function isVisibleToUser($page) {
@@ -555,7 +591,7 @@ function isVisibleToUser($page) {
       if (in_array($page->visibility(), array('public'))) {
         $isvisible = true;
       }
-      elseif (!in_array(site()->user(), $page->authors())) {
+      elseif (!in_array(site()->user(), $page->authors()->toArray())) {
         if (!empty($page->relatedGroups())) {
           if (!array_intersect(str::split(site()->user()->groups()), $page->relatedGroups()->toArray())) {
             $isvisible = false;
@@ -577,7 +613,7 @@ function isEditableByUser($page) {
     $isEditable = false;
   }
   if (site()->user()) { // if logged in
-    if (!in_array(site()->user(), $page->authors())) {
+    if (!in_array(site()->user(), $page->authors()->toArray())) {
       $isEditable = false;
     }
   }

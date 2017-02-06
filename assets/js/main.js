@@ -834,7 +834,7 @@ function checkEmptyWidgets() {
   var widgets = document.getElementsByClassName('widget');
   
   for (var i = widgets.length - 1; i >= 0; i--) {
-    var items = widgets[i].getElementsByTagName('div')[0];
+    var items = widgets[i].getElementsByClassName('items')[0];
     
     if (typeof items != 'undefined') {
             
@@ -945,7 +945,7 @@ if (buttonjoin != null) {
     
     data = new FormData();
     data.append('page', window.location.pathname);
-    data.append('join', document.getElementById('datausername').getAttribute('data-username'));
+    data.append('join', document.getElementById('datausername').getAttribute('data-slug'));
     
     var request = new XMLHttpRequest();
     request.open('POST', 'save', true);
@@ -968,6 +968,7 @@ function savePage() {
   data = new FormData();
   
   /* Authors */
+  /*
   var authors = document.getElementById('authors');
   if (authors != null) {
     var authors = Array.prototype.slice.call(authors.children);
@@ -978,6 +979,19 @@ function savePage() {
     var authors = arr.reverse().join(', ');
     data.append('authors', authors);
   }
+  */
+  
+  /* Users */
+  var users = document.getElementById('users');
+  if (users != null) {
+    var users = Array.prototype.slice.call(users.children);
+    var arr = [];
+    for (var i = users.length - 1; i >= 0; i--) {
+      arr.push(users[i].getAttribute('data-slug'));
+    }
+    var users = arr.reverse().join(', ');
+    data.append('users', users);
+  }
   
   /* Requests */
   var requests = document.getElementById('requests');
@@ -985,7 +999,7 @@ function savePage() {
     var requests = Array.prototype.slice.call(requests.children);
     var arr = [];
     for (var i = requests.length - 1; i >= 0; i--) {
-      arr.push(requests[i].getAttribute('data-username'));
+      arr.push(requests[i].getAttribute('data-slug'));
     }
     var requests = arr.reverse().join(', ');
     data.append('requests', requests);
@@ -1108,7 +1122,7 @@ if (authorfield != null) {
             //console.log(data.data[i]['firstname'] + ' ' + data.data[i]['lastname']);
             
             var result = document.createElement('li');
-            result.setAttribute('data-username', data.data[i]['username']);
+            result.setAttribute('data-slug', data.data[i]['username']);
             result.setAttribute('data-name', data.data[i]['firstname'] + ' ' + data.data[i]['lastname']);
             result.setAttribute('data-avatar', data.data[i]['avatarURL']);
             result.setAttribute('data-major', data.data[i]['major']);
@@ -1152,7 +1166,7 @@ if (authorfield != null) {
     } else {
       var major = '';
     }
-    var resultHTML = '<a data-username="' + this.getAttribute('data-username') + '" data-href="' + this.getAttribute('data-profileURL') + '" ><div class="item-delete"></div><div class="row"><img src="' + this.getAttribute('data-avatar') + '" class="' + this.getAttribute('data-color') + '" width="40" height="40"><div class="column"><span>' + this.getAttribute('data-name') + '</span>' + major + '</div></div></a>';
+    var resultHTML = '<a data-slug="' + this.getAttribute('data-slug') + '" data-href="' + this.getAttribute('data-profileURL') + '" ><div class="item-delete"></div><div class="row"><img src="' + this.getAttribute('data-avatar') + '" class="' + this.getAttribute('data-color') + '" width="40" height="40"><div class="column"><span>' + this.getAttribute('data-name') + '</span>' + major + '</div></div></a>';
     authorwidget.insertAdjacentHTML('beforeend', resultHTML);
     itemDeleteButtons();
   }
@@ -1231,7 +1245,7 @@ if (groupfield != null) {
     groupfield.value = '';
     groupfield.classList.remove('clicked');
     
-    var resultHTML = '<a data-href="' + this.getAttribute('data-groupURL') + '" data-username="' + this.getAttribute('data-groupslug') + '"><div class="item-delete"></div><div class="row"><img src="' + this.getAttribute('data-logo') + '" class="' + this.getAttribute('data-color') + '" width="40" height="40"><div class="column"><span>' + this.getAttribute('data-title') + '</span></div></div></a>';
+    var resultHTML = '<a data-href="' + this.getAttribute('data-groupURL') + '" data-slug="' + this.getAttribute('data-groupslug') + '"><div class="item-delete"></div><div class="row"><img src="' + this.getAttribute('data-logo') + '" class="' + this.getAttribute('data-color') + '" width="40" height="40"><div class="column"><span>' + this.getAttribute('data-title') + '</span></div></div></a>';
     groupwidget.insertAdjacentHTML('beforeend', resultHTML);
     itemDeleteButtons();
   }
@@ -1255,8 +1269,8 @@ if (searchforms != null) {
     searchinput.addEventListener('input', lengthCheck, false);
     
     function lengthCheck() {
-      var type = this.parentNode.parentNode.previousElementSibling.id;
-      var resultnode = this.nextElementSibling.nextElementSibling;
+      var type = this.parentNode.parentNode.parentNode.nextElementSibling.id;
+      var resultnode = this.nextElementSibling;
       var input = this;
       var query = this.value;
       
@@ -1297,6 +1311,19 @@ if (searchforms != null) {
               
               result.innerHTML = data.data[i]['title'];
               
+              if (type == 'users') {
+                result.setAttribute('data-slug', data.data[i]['username']);
+                result.setAttribute('data-name', data.data[i]['firstname'] + ' ' + data.data[i]['lastname']);
+                result.setAttribute('data-avatar', data.data[i]['avatarURL']);
+                result.setAttribute('data-major', data.data[i]['major']);
+                result.setAttribute('data-profileURL', data.data[i]['profileURL']);
+                result.innerHTML = data.data[i]['firstname'] + ' ' + data.data[i]['lastname'];
+              }
+              
+              if (type == 'events') {
+                result.setAttribute('data-date', data.data[i]['date']);
+              }
+              
               resultnode.appendChild(result);
               //result.addEventListener('click', selectResult, false);
               result.addEventListener('click', function() {
@@ -1308,12 +1335,32 @@ if (searchforms != null) {
                 var title = this.getAttribute('data-title');
                 var slug = this.getAttribute('data-slug');
                 var url  = this.getAttribute('data-url');
-                var image = this.getAttribute('data-image');
+                
                 var color = this.getAttribute('data-color');
                 
-                var resultHTML = '<a class="item" data-slug="' + slug + '" data-href="' + url + '"><div class="item-delete"></div><div class="row"><img src="' + image + '" class="' + color + '" width="40" height="40"><div class="column"><span>' + title + '</span></div></div></a>';
+                if (this.getAttribute('data-image') !== 'undefined') {
+                  var image = '<img src="' + this.getAttribute('data-image') + '" class="' + color + '" width="40" height="40">';
+                } else {
+                  var image = '';
+                }
                 
-                input.parentNode.parentNode.previousElementSibling.insertAdjacentHTML('beforeend', resultHTML);
+                var date = (this.getAttribute('data-date') != null) ? '<span>' + this.getAttribute('data-date') + '</span>': '';
+                
+                var resultHTML = '<a class="item" data-slug="' + slug + '" data-href="' + url + '"><div class="item-delete"></div><div class="row">' + image + '<div class="column"><span>' + title + '</span>' + date + '</div></div></a>';
+                
+                if (type == 'users') {
+                  var username = this.getAttribute('data-slug');
+                  var name  = this.getAttribute('data-name');
+                  var image  = this.getAttribute('data-avatar');
+                  var major = '<span>' + this.getAttribute('data-major') + '</span>';
+                    if (this.getAttribute('data-major') == 'undefined') {
+                      var major = '';
+                    }
+                  var url = this.getAttribute('data-profileURL');
+                  var resultHTML = '<a class="item" data-slug="' + username + '" data-href="' + url + '" ><div class="item-delete"></div><div class="row"><img src="' + image + '" class="' + color + '" width="40" height="40"><div class="column"><span>' + name + '</span>' + major + '</div></div></a>';
+                }
+                
+                input.parentNode.parentNode.parentNode.nextElementSibling.insertAdjacentHTML('beforeend', resultHTML);
                 itemDeleteButtons();
               }, false);
             }

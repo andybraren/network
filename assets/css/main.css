@@ -3669,6 +3669,7 @@ p {
 }
 .sidebar .row img {
   align-self: flex-start;
+  margin-right: .3rem;
 }
 
 
@@ -3747,7 +3748,9 @@ p {
 .item {
   position: relative;
 }
-
+.item .column span {
+  white-space: nowrap;
+}
 
 
 
@@ -3791,10 +3794,10 @@ p {
 }
 .sidebar .heading {
   display: block;
-  line-height: 1.5rem;
+  /*
   font-size: 0.9rem;
   font-weight: 300;
-  margin: 0 0 0.2rem 0;
+  */
   letter-spacing: 1px;
 }
 
@@ -3830,7 +3833,6 @@ p {
   justify-content: center;
   -webkit-justify-content: center;
   */
-  margin-left: .3rem;
 }
 
 .sidebar .makers > a {
@@ -3947,6 +3949,49 @@ p {
   background-color: #d9d9d9;
   cursor: pointer;
 }
+
+[data-role="results"] {
+  width: 180px;
+  right: 0px;
+}
+
+[data-role="results"] li:first-child {
+ border-top: 1px solid #d9d9d9;
+}
+
+
+[data-role="search"] input {
+  display: block;
+  width: 100%;
+  /*
+  text-align: right;
+  */
+  margin-left: 5px;
+  margin-bottom: 5px;
+}
+
+[data-role="search"] input:focus {
+  outline: none;
+}
+
+[data-role="search"] > div {
+  margin: initial;
+}
+
+[data-role="search"] {
+  font-size: 0.9rem;
+  flex: 1;
+}
+
+/*
+.widget .heading {
+  flex: 2;
+  width: 100%;
+}
+*/
+
+
+
 
 
 
