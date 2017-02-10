@@ -91,7 +91,7 @@ if (!isset($type)) {
           $filtered = new Pages();
           foreach ($items as $item) {
             if ($item->authors() != null) {
-              if (in_array($maker,$item->authors())) {
+              if (in_array($maker,$item->authors()->toArray())) {
                 $filtered->add($item);
               }
             }
@@ -158,7 +158,7 @@ if (!isset($type)) {
     */ ?>
     
     <?php if ($page->isEditableByUser()): ?>
-      <a href="<?php echo $site->page($type)->url() ?>/new<?php echo '?related=' . $page->slug() ?>" class="card">
+      <a href="<?php echo $site->page($type)->url() ?>/new<?php echo ($page->parent() == '' or $page->parent() == 'makers') ? '' : '?related=' . $page->slug() ?>" class="card">
         <div class="card-hero">
           <img src="<?php echo $newhero->crop(259,101)->url() ?>">
         </div>

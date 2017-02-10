@@ -156,6 +156,7 @@ img {
   display: block;
   margin-right: auto;
   margin-left: auto;
+  transition: opacity 0.2s ease-out;
 }
 
 .small {
@@ -191,7 +192,6 @@ img.b-loaded {
   width: initial;
   
   opacity: 1;
-  transition: opacity 0.2s ease-out;
 }
 
 /* Crude way to ensure figcaptions aren't hidden by removing the calculated padding once loaded by b-lazy */
@@ -346,12 +346,14 @@ a[class*="file-"] {
 }
 
 .file-pdf { background-image: url(../../assets/images/file-pdf.svg); }
-.file-doc, .file-docx { background-image: url(../../assets/images/file-doc.svg); }
+.file-doc, .file-docx, .file-wpd, .file-wps { background-image: url(../../assets/images/file-doc.svg); }
 .file-ppt { background-image: url(../../assets/images/file-ppt.svg); }
-.file-xls, .file-csv { background-image: url(../../assets/images/file-xls.svg); }
+.file-csv, .file-xls { background-image: url(../../assets/images/file-xls.svg); }
 .file-zip { background-image: url(../../assets/images/file-zip.svg); }
 .file-vi { background-image: url(../../assets/images/file-vi.svg); }
 .file-img { background-image: url(../../assets/images/file-img.svg);}
+.file-rtf { background-image: url(../../assets/images/file-rtf.svg);}
+.file-mp3, .file-m4a, .file-wav { background-image: url(../../assets/images/file-mp3.svg);}
 
 /* Page Themes / Colors
 -------------------------------------------------- */
@@ -1203,7 +1205,7 @@ aside figure a img {
 
 .main hr {
   height: 2px;
-  background: #ddd;
+  background-color: #ddd;
   width: 100%;
   max-width: 720px;
   margin-bottom: 2rem;
@@ -2433,7 +2435,7 @@ form div[role='group'] h3 {
 -------------------------------------------------- */
 
 .editing #hero img:hover {
-  opacity: 0.6;
+  opacity: 0.8;
 }
 
 
@@ -4237,6 +4239,176 @@ aside figcaption {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
+
+
+
+
+
+
+
+
+/* Discussion
+-------------------------------------------------- */
+
+.discussion {
+  max-width: 700px;
+}
+
+.discussion .user-avatar img {
+  width: 40px;
+  background-color: var(--theme-main);
+}
+
+.discussion .user-firstname {
+  font-weight: bold;
+}
+
+.discussion .user-avatar img {
+  border-radius: 20px;
+}
+
+.discussion .item .column {
+  margin-left: 1rem;
+}
+
+.discussion .item .column > div:first-child {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.discussion .item .comment-date, .discussion .item span {
+  font-size: .8rem;
+}
+
+
+#add-comment .text {
+  width: 100%;
+    background: initial;
+    border: initial;
+}
+
+.discussion hr {
+  height: 1px;
+  background-color: initial;
+  margin: 1.5rem 0;
+  margin-left: auto;
+  max-width: 644px;
+}
+
+[data-role='editor'] {
+  
+}
+
+
+
+#discussion-header {
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+#discussion-sections {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  
+}
+
+
+.discussion .item > div:first-child {
+  position: relative;
+}
+
+.discussion .user-badge {
+  position: absolute;
+  right: -5px;
+  top: -5px;
+}
+
+/* http://www.w3schools.com/css/css_tooltip.asp */
+
+.user-badge .tooltip {
+  
+  cursor: default;
+  
+  opacity: 0;
+  transition: opacity .25s;
+  
+    position: absolute;
+    z-index: 1;
+    width: 100px;
+    text-align: center;
+    background-color: #fdfdfd;
+    padding: 12px;
+    border: 1px solid #dedede;
+    border-radius: 3px;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -50px;
+}
+.user-badge .tooltip:after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #dedede transparent transparent transparent;
+}
+.user-badge > div:hover ~ .tooltip {
+  
+  opacity: 1;
+  transition: opacity .25s;
+}
+
+
+
+#discussion-sections div {
+  display: flex;
+  flex-direction: column;
+}
+#discussion-sections div {
+    text-align: center;
+    margin: 0 2px;
+    padding: 5px 10px;
+    border-right: 1px solid #c1c1c1;
+    cursor: pointer;
+}
+
+#discussion-sections div:last-child {
+  border-right: initial;
+}
+
+#discussion-sections div span:nth-child(2) {
+  font-size: .7rem;
+      white-space: nowrap;
+    overflow-x: hidden;
+}
+
+.discussion .item {
+  margin-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.discussion .item:after {
+    content: "";
+    background: #dedede;
+    position: absolute;
+    bottom: 0;
+    width: 92%;
+    right: 0;
+    height: 1px;
+}
+
+
+
+
+
+
+
+
+
 
 
 

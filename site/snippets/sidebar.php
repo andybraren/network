@@ -67,11 +67,15 @@
           </select>
           <label for="color">Color</label>
         </div>
-        <?php /*
-        <div>
-          <input type="submit" class="button fullwidth" value="Save Settings">
+        
+        <div class="size-full">
+          <select name="comments" id="setting-comments" class="hasbeenclicked clicked">
+            <option value="on" <?php echo ($page->comments()) ? 'selected ' : '' ?>>On</option>
+            <option value="off" <?php echo (!$page->comments()) ? 'selected ' : '' ?>>Off</option>
+          </select>
+          <label for="comments">Comments</label>
         </div>
-        */ ?>
+        
       </form>
     </div>
     

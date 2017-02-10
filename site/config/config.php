@@ -422,8 +422,7 @@ c::set('routes', array(
       }
     }
   ),
-
-
+  
   // New page creation at temp location
   array(
 		'pattern' => array('/new', '(.+new)'), // matches any url ending in new
@@ -454,6 +453,7 @@ c::set('routes', array(
       
     }
   ),
+  
   array(
     //'pattern' => array('new', '(:any)/new/(:any)'),
     'pattern' => array('(:num)', '(:any)/new/(:num)'),
@@ -498,10 +498,11 @@ c::set('routes', array(
   		
   		/* Settings */
   		$visibility  = (isset($_POST['visibility'])) ? $_POST['visibility'] : $targetpage->visibility();
-  		$color  = (isset($_POST['color'])) ? $_POST['color'] : $targetpage->color();
-  		$comments = 'off';
+  		$color       = (isset($_POST['color'])) ? $_POST['color'] : $targetpage->color();
+  		  $commentSetting = ($targetpage->comments()) ? 'on' : 'off';
+        $comments       = (isset($_POST['comments'])) ? $_POST['comments'] : $commentSetting;
   		$submissions = 'off';
-  		$price = 'off';
+  		$price       = 'off';
   		
   		/* Hero */
   		$hero = (isset($_POST['hero'])) ? $_POST['hero'] : $targetpage->hero();
@@ -535,6 +536,58 @@ c::set('routes', array(
           
 		}
 	),
+	
+	
+  // SAVE COMMENTS
+	array(
+		'pattern' => array('saveblah', '(.+saveblah)'), // matches any url ending in save
+		'method' => 'POST',
+		'action'  => function() {
+  		
+  		$targetpage = site()->page($_POST['page']);
+      
+  		$milliseconds = round(microtime() * 1000);
+  		$milliseconds = sprintf('%03d', $milliseconds); // add a leading 0 if the number is less than 3 digits
+  		if ($milliseconds == 1000) {
+    		$milliseconds = 000;
+      };
+      
+      $slug = date('YmdHis') . $milliseconds;
+      
+      $newpage = $targetpage->uri() . '/comments/' . $slug;
+      
+      $text  = (isset($_POST['text'])) ? $_POST['text'] : $targetpage->text();
+      
+      try {
+        page()->create($newpage, 'comment', array(
+          'DateData'  => date('Y-m-d H:i:s'),
+          'UserData' => site()->user()->username(),
+          'RelData' => '',
+          'Settings' => '',
+          'Text' => $text,
+        ));
+        
+        // Return the comment ID # and the data ID # for editing purposes
+        $id = 'comment-' . $targetpage->find('comments')->children()->count();
+        $response = array('id' => $id, 'dataid' => $slug);
+        echo json_encode($response);
+        
+      } catch(Exception $e) {
+        return page('error');
+      }
+      
+		}
+	),
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
   // DELETE PAGES
 	array(

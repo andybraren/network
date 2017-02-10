@@ -1041,6 +1041,12 @@ function savePage() {
     data.append('color', color.options[color.selectedIndex].value);
   }
   
+  /* Comments */
+  var comments = document.getElementById('setting-comments');
+  if (comments != null) {
+    data.append('comments', comments.options[comments.selectedIndex].value);
+  }
+  
   /* Title */
   var title = document.querySelectorAll("[data-name='title']")[0];
   if (title != null) {
@@ -1076,8 +1082,66 @@ function deletePage() {
 
 
 
+/* Save comment button */
+var commentbutton = document.getElementById('save-comment');
+if (commentbutton != null) {
+  commentbutton.addEventListener('click', function(event) {
+    saveComment();
+  });
+}
 
+function saveComment() {
+  
+  /* Comment text */
+  var comment = document.getElementById('add-comment');
+  if (comment != null) {
+    commentText = comment.getElementsByClassName('text')[0];
+    if (commentText.childNodes[1].innerHTML != '') {
+            
+      data = new FormData();
+      data.append('page', window.location.pathname);
+      data.append('text', toMarkdown(commentText.innerHTML, { converters: kirbytagtweaks }));
+      
+      var request = new XMLHttpRequest();
+      request.open('POST', 'saveblah', true);
+      
+      request.onload = function() {
+        if (request.status >= 200 && request.status < 400) {
+          
+          data = JSON.parse(this.response);
+          
+          // Clone the node, remove some parts, and then add it to the flow
+          var clone = comment.cloneNode(true);
+          clone.getElementsByClassName('text')[0].removeAttribute('contenteditable');
+          clone.getElementsByClassName('comment-date')[0].innerHTML = 'just now';
+          clone.getElementsByClassName('comment-date')[0].href = window.location + '/#' + data.id;
+          clone.getElementsByClassName('post')[0].remove();
+          clone.setAttribute('id', data.id);
+          clone.setAttribute('data-id', data.dataid);
+          comment.previousElementSibling.insertAdjacentElement('afterend', clone);
+          
+          // if the comment id is not immediately after the preceding comment, then there must
+          // be other comments between the two. A "load comments" button between them should be
+          // added in that case with a link to refresh the page, or ideally, pull down specific comment
+          // html from the server and insert them into the flow
+          
+          // Reset the comment authoring area
+          commentText.childNodes[1].innerHTML = '<p placeholder="Add text here"></p>';
+          
+        } else {
+          // error occured
+        }
+      };
+      
+      request.send(data);
+    }
+  }
+  
+}
 
+// Maybe another function could set a 1-minute timer that refreshed timestamps if needed
+// This would only be needed for "2 days ago" or whatever, not for set page dates
+// This JS function should only be active while the page is in use to save CPU
 
 
 

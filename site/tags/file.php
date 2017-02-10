@@ -32,7 +32,8 @@ kirbytext::$tags['file'] = array(
     if(empty($text)) $text = str_replace('_', '\_', $file->name()) . '.' . $file->extension();
     
     $id = ($file->type() == 'image') ? 'img' : $file->extension();
-
+    
+    /*
     return html::a($file->url(), html($text), array(
       'class'  => 'file-' . $id,
       'data-filename' => $file->filename(),
@@ -40,6 +41,9 @@ kirbytext::$tags['file'] = array(
       'rel'    => $tag->attr('rel'),
       'target' => $tag->target(),
     ));
+    */
+    
+    return '<a href="' . $file->url() . '" class="file-' . $id . '" data-filename="' . $file->filename() . '">' . html($text) . '</a>';
 
   }
 );

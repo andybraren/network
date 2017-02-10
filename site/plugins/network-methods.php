@@ -25,14 +25,21 @@ page::$methods['dateCreated'] = function($page) {
 // Date Modified
 // returns the most recent date the page was modified
 page::$methods['dateModified'] = function($page) {
-  if ($page->content()->modified() != '') {
+  
+  if ($page->content()->datedata() != '') {
+    
+    $array = $page->content()->datedata()->split(',');
+    
+    if (isset($array[1])) { // if date modified exists
+      $parts = explode('==', $array[1]);
+      return (isset($parts[0])) ? $parts[0] : ''; // return just the date
+    }
+    
+  }
+  elseif ($page->content()->modified() != '') { // legacy content format
     return $page->content()->modified();
   }
-  elseif ($page->content()->datedata() != '') {
-    if (isset(str::split(str::split($page->content()->datedata(),',')[1],'==')[0])) {
-      return str::split(str::split($page->content()->datedata(),',')[1],'==')[0];
-    }
-  }
+  
 };
 
 // Modified By
@@ -384,16 +391,34 @@ page::$methods['color'] = function($page) {
 // Comments
 // returns the page's comments
 page::$methods['comments'] = function($page) {
+  
   if ($page->content()->settings() != '') {
-    if (isset(str::split($page->content()->settings(),',')[2])) {                           // check if comments setting is present
-      if (isset(str::split(str::split($page->content()->settings(),',')[2],'==')[1])) {     // check if comments setting is set
-        if (str::split(str::split($page->content()->settings(),',')[2],'==')[1] != 'off') { // check if comments are not off
-          return str::split(str::split($page->content()->settings(),',')[2],'==')[1];       // return "on" or whatever it is
-          // Eventually return an array of the actual comment objects themselves
+    
+    $array = $page->content()->settings()->split(',');
+    if (isset($array[2])) { // if comment setting exists
+      $parts = explode('==', $array[2]);
+      if (isset($parts[1])) {
+        
+        //return ($parts[1] == 'on') ? true : false; // return just the setting on/off
+        //return trim($parts[1], ' ');
+        $blah = str_replace(' ', '', $parts[1]);
+        
+        if ($blah == 'on') {
+          
+          // If the comments folder doesn't exist, create it
+          $target_dir = kirby()->roots()->content() . '/' . $page->uri() . '/comments';
+          if (!is_dir($target_dir)) {
+            mkdir($target_dir, 0775, true);
+          } else {
+            return $page->find('comments')->children();
+          }
+          
         }
       }
     }
+    
   }
+  
 };
 
 // Submissions
