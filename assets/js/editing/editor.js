@@ -126,12 +126,7 @@ var kirbytagtweaks = [
         return filename ? '(image: ' + filename + caption + ')' : '';  
       }
       
-      if (node.childNodes[0].childNodes[1].href != null) { // it's a guggenheim image
-        var filename = node.childNodes[0].childNodes[1].getAttribute('data-share-src').split("/").pop() || '';
-        return filename ? filename + ', ' : '';
-      }
-
-      if (node.childNodes[0].nodeName == 'VIDEO') {
+      else if (node.childNodes[0].nodeName == 'VIDEO') {
         var file = node.childNodes[0].getAttribute('data-file') || '';
         var autoplay = node.childNodes[0].hasAttribute('autoplay');
         if (autoplay) {
@@ -142,10 +137,14 @@ var kirbytagtweaks = [
         return file ? '(video: ' + file + autoplay + ')' : '';
       }
       
+      else if (node.childNodes[0].childNodes[1].href != null) { // it's a guggenheim image
+        var filename = node.childNodes[0].childNodes[1].getAttribute('data-share-src').split("/").pop() || '';
+        return filename ? filename + ', ' : '';
+      }
+      
       else {
         //var videourl = node.childNodes[0].childNodes[1];
       }
-
       
     }
   },

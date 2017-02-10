@@ -55,8 +55,8 @@ kirbytext::$tags['video'] = array(
       $url = $video->url();
       if ($poster = $tag->page()->file($video->name() . ".png") OR $poster = $tag->page()->file($video->name() . ".jpg")):
         $posterimage = 'poster="' . thumb($poster, array('width' => 700))->url() . '"';
-        $filename = $video->filename();
       endif;
+      $filename = $video->filename();
     else:
       $url = $file ? $file->url() : url($url);
     endif;
