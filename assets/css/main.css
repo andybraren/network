@@ -3993,6 +3993,32 @@ p {
 }
 */
 
+.widget.categories li:before {
+    content: "";
+    display: inline-block;
+    /* padding: 10px; */
+    /* float: left; */
+    margin-right: 5px;
+    width: 15px;
+    height: 15px;
+    border-radius: 5px;
+    background-color: var(--theme-main);
+    vertical-align: middle;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

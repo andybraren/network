@@ -744,6 +744,56 @@ collection::$filters['c*='] = function($collection, $field, $value, $split = fal
   return $collection;
 };
 
+/* Human Date
+  - Used by comments and forum to create relative dates
+  - http://stackoverflow.com/questions/2915864/php-how-to-find-the-time-elapsed-since-a-date-time
+*/
+function humanDate($date) {
+  
+  $time = time() - $date; // to get the time since that moment
+  $time = ($time < 1) ? 1 : $time;
+  $tokens = array (
+    //31536000 => 'year',
+    //2592000 => 'month',
+    //604800 => 'week',
+    86400 => 'day',
+    3600 => 'hour',
+    60 => 'minute',
+    1 => 'second'
+  );
+  
+  if ($time > (2592000*2)) { // over 2 months
+    return date('M \'y', $date);
+  }
+  elseif ($time > 2592000) { // over 1 month
+    return date('M j', $date);
+  }
+  elseif ($time > (604800*2)) { // over 2 weeks
+    return date('M j', $date);
+  }
+  elseif ($time < 60) { // under 60 seconds
+    return 'just now';
+  }
+  else {
+    foreach ($tokens as $unit => $text) {
+      if ($time < $unit) continue;
+      $numberOfUnits = floor($time / $unit);
+      return $numberOfUnits . ' ' . $text . (($numberOfUnits > 1) ? 's' : '') . ' ago';
+    }
+  }
+}
+
+/* Milliseconds
+  - returns the current millisecond time
+*/
+function milliseconds() {
+  $milliseconds = round(microtime() * 1000);
+  $milliseconds = sprintf('%03d', $milliseconds); // add a leading 0 if the number is less than 3 digits
+  if ($milliseconds == 1000) {
+  	$milliseconds = 000;
+  };
+  return $milliseconds;
+}
 
 
 
@@ -752,4 +802,4 @@ collection::$filters['c*='] = function($collection, $field, $value, $split = fal
 
 
 
-?>
+

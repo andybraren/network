@@ -429,9 +429,14 @@ c::set('routes', array(
     'action'  => function() {
             
       $parenturi = ltrim(strtok(str_replace('/new','',$_SERVER['REQUEST_URI']), '?'), '/');
-      $newpage = $parenturi . '/' . date('His');
+      //$newpage = $parenturi . '/' . date('His');
+      $newpage = $parenturi . '/' . date('YmdHis') . milliseconds();
       
       $pagetype = preg_replace('/s\b/', '', strtolower(site()->page($parenturi)->title()));
+      
+      if ($pagetype == 'forum') {
+        $pagetype = 'forum thread';
+      }
       
       $related = (kirby()->request()->has('related')) ? get('related') : '';
       
@@ -519,7 +524,7 @@ c::set('routes', array(
         ));
         //echo var_dump($_POST);
 
-        if ($title != $originaltitle) {
+        if ($title != $originaltitle and $targetpage->parent() != 'forum') {
           $currentlocation = kirby()->roots()->content() . '/' . $targetpage->diruri();
           $newlocation = kirby()->roots()->content() . '/' . $targetpage->parent()->diruri() . '/' . str::slug($title);
           rename($currentlocation, $newlocation);
@@ -545,14 +550,8 @@ c::set('routes', array(
 		'action'  => function() {
   		
   		$targetpage = site()->page($_POST['page']);
-      
-  		$milliseconds = round(microtime() * 1000);
-  		$milliseconds = sprintf('%03d', $milliseconds); // add a leading 0 if the number is less than 3 digits
-  		if ($milliseconds == 1000) {
-    		$milliseconds = 000;
-      };
-      
-      $slug = date('YmdHis') . $milliseconds;
+            
+      $slug = date('YmdHis') . milliseconds();
       
       $newpage = $targetpage->uri() . '/comments/' . $slug;
       

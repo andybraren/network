@@ -215,6 +215,29 @@
     -->
     
   <?php endif ?>
+  
+  <?php // FORUM ?>
+  <?php if ($page->uid() == 'forum' or $page->parent() == 'forum'): ?>
+    
+    <?php if ($page->uid() == 'forum'): ?>
+      <a href="<?php echo $page->url() . '/new' ?>">
+        <div id="button-new" class="button green">Start a discussion</div>
+      </a>
+    <?php endif ?>
+    
+    <div class="widget categories">
+      <span class="heading">CATEGORIES</span>
+      <ul>
+        <li class="blue"><a href="">General</a></li>
+        <li class="red"><a href="">Bugs</a></li>
+        <li class="green"><a href="">Ideas</a></li>
+        <li class="orange"><a href="">Questions</a></li>
+        <li class="purple"><a href="">Flux capacitance</a></li>
+        <li class="silver"><a href="">Radial constant</a></li>
+        <li class="black"><a href="">Spline reticulation</a></li>
+      </ul>
+    </div>
+  <?php endif ?>
 
 
   <?php // EVENTS SORTING ?>
