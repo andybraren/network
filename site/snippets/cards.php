@@ -192,8 +192,9 @@ if (!isset($type)) {
             <?php elseif ($hero = $item->heroImage()): ?>
               <img src="<?php echo $hero->crop(300, 120)->url() ?>" height="120px"></img>
             <?php elseif($item->hasImages()): ?>
-              <?php $hero = $item->images()->sortBy('sort', 'asc')->first() ?>
-              <img src="<?php echo $hero->crop(300, 120)->url() ?>" height="120px"></img>
+              <?php if ($hero = $item->images()->not('location.jpg')->sortBy('sort', 'asc')->first()): ?>
+                <img src="<?php echo $hero->crop(300, 120)->url() ?>" height="120px"></img>
+              <?php endif ?>
             <?php else: ?>
             <?php endif ?>
   

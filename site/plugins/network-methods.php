@@ -487,11 +487,15 @@ page::$methods['price'] = function($page) {
 page::$methods['heroImage'] = function($page) {
 
   if ($file = $page->file($page->content()->hero())) {
-    return $file;
+    if ($file->type() == 'image') {
+      return $file;
+    } else {
+      return null;
+    }    
   } elseif ($hero = $page->images()->findBy('name', 'hero')) {
     return $hero;
   } elseif ($page->hasImages()) {
-    return $page->images()->sortBy('sort', 'asc')->first();
+    return $page->images()->not('location.jpg')->sortBy('sort', 'asc')->first();
   } else {
     return null;
   }
