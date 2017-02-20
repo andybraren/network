@@ -7,7 +7,7 @@
       <div id="discussion-sections" class="row">
         
         <div>
-          <span>Makers</span>
+          <span>Members</span>
           <span><?php echo $page->comments()->count() ?> comments</span>
         </div>
         
@@ -17,8 +17,8 @@
         </div>
         
         <div>
-          <span>Links</span>
-          <span># links</span>
+          <span>Mentions</span>
+          <span># mentions</span>
         </div>
   
       </div>

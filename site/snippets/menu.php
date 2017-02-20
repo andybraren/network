@@ -47,6 +47,10 @@
         <?php if ($site->page('events')): ?>
           <li><a href="<?php echo $site->page('events')->url() ?>" <?php echo ($page->uid() == 'events' or $page->isDescendantOf('events')) ? ' class="active"' : '' ?>>Events</a></li>
         <?php endif ?>
+        
+        <?php if ($site->page('forum')): ?>
+          <li><a href="<?php echo $site->page('forum')->url() ?>" <?php echo ($page->uid() == 'forum' or $page->isDescendantOf('forum')) ? ' class="active"' : '' ?>>Forum</a></li>
+        <?php endif ?>
 
       <?php endif ?>
       
@@ -121,9 +125,12 @@
     <div class="container">
       
       <ul class="menu">
-        <li id="toggle-toc">
-          <a><?php echo (new Asset('/assets/images/menu-toc.svg'))->content() ?></a>
-        </li>
+        
+        <?php if(preg_match_all('/(?<!#)#{2,3}([^#].*)\n/', $page->text(), $matches)): // Grabs H2's and H3's ?>
+          <li id="toggle-toc">
+            <a><?php echo (new Asset('/assets/images/menu-toc.svg'))->content() ?></a>
+          </li>
+        <?php endif ?>
         
         <?php if (in_array($page->uid(), array('learn','courses','handbooks','books')) or $page->isDescendantOf('courses') or $page->isDescendantOf('handbooks') or $page->isDescendantOf('books')): ?>
           <?php if ($site->page('courses')): ?>

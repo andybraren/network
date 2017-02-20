@@ -102,19 +102,16 @@
       <?php endif ?>
       
       <?php if($page->uid() == 'learn'): ?>
-        <?php snippet('cards', array('type' => 'courses')) ?>
-        <?php snippet('cards', array('type' => 'handbooks')) ?>        
+        <p>Content from the sub-tabs above will be included here in a way that makes sense.</p>      
       <?php endif ?>
       
       <?php if($page->uid() == 'make'): ?>
-        <?php snippet('cards', array('type' => 'projects')) ?>
-        <?php snippet('cards', array('type' => 'challenges')) ?>
+        <p>Content from the sub-tabs above will be included here in a way that makes sense.</p>
+        <p>Ideas should be a sub-set of Projects. Materials might be moved elsewhere. Challenges are maybe more like events.</p>
       <?php endif ?>
       
       <?php if($page->uid() == 'connect'): ?>
-        <?php snippet('cards', array('type' => 'makers')) ?>
-        <?php snippet('cards', array('type' => 'articles')) ?>
-        <?php snippet('cards', array('type' => 'groups')) ?>
+        <p>Content from the sub-tabs above will be included here in a way that makes sense.</p>
       <?php endif ?>
       
       <?php if($page->uid() == 'projects'): ?>
