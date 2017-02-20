@@ -2,49 +2,55 @@
 
 require_once __DIR__ . DS . 'private.php'; // load private information
 
-/*
+//--------------------------------------------------
+// Stripe Configuration
+/*--------------------------------------------------
 
----------------------------------------
-License Setup
----------------------------------------
+There are a few quality of life improvements that can't
+be configured from within this file. You'll need to tweak
+the htaccess or php.ini file to make these changes.
 
-Please add your license key, which you've received
-via email after purchasing Kirby on http://getkirby.com/buy
+http://www.php.net/manual/en/ini.list.php
 
-It is not permitted to run a public website without a
-valid license key. Please read the End User License Agreement
-for more information: http://getkirby.com/license
+Add the following to the htaccess file:
+
+# Increase max amount of data that can be sent via a POST in a form
+php_value post_max_size 100M
 
 */
 
-c::set('license', 'put your license key here');
+// Increase memory limit
+ini_set('memory_limit', '512M');
 
+// Increase max file size that a user can upload
+ini_set('upload_max_filesize', '100M');
 
-/*
+// Increase maximum processing time
+ini_set('max_execution_time', 60); // ALL 60 seconds = 1 minute
 
----------------------------------------
-Kirby Configuration
----------------------------------------
+// Set session lifetime
+// User will be logged out if they don't visit again within this timespan. If they do, the timer is essentially reset
+// http://natesilva.tumblr.com/post/250569350/php-sessions-timeout-too-soon-no-matter-how-you
+// ini_set('session.gc_maxlifetime', 2628000); // 1 month
+ini_set('session.gc_maxlifetime', 86400); // 1 day
+// ini_set('session.gc_maxlifetime', 3600); // 1 hour
+
+// Set session save directory
+ini_set('session.save_path', dirname(dirname(__FILE__)) . '/sessions');
+
+// Enable PHP's garbage collection method, even on Ubuntu/Debian, with a prob/divisor % chance of happening on each session_start()
+ini_set('session.gc_probability', 1);
+ini_set('session.gc_divisor', 100);
+
+//--------------------------------------------------
+// Kirby Configuration
+/*--------------------------------------------------
 
 By default you don't have to configure anything to
 make Kirby work. For more fine-grained configuration
 of the system, please check out http://getkirby.com/docs/advanced/options
 
 */
-
-/* Looks like ini_set doesn't actually do anything here. They have to be manually set within php.ini */
-
-/* Increase memory limit */
-ini_set('memory_limit', '512M');
-
-/* Increase max file size that a user can upload */
-ini_set('upload_max_filesize', '100M');
-
-/* Increase max amount of data that can be sent via a POST in a form */
-ini_set('post_max_size', '100M');
-
-/* Increase maximum processing time */
-ini_set('max_execution_time', 60); // 60 seconds = 1 minute
 
 // Supposedly changes folders that Kirby creates to be 775 instead of 755
 // https://forum.getkirby.com/t/content-folder-permissions-on-create/2846
@@ -70,11 +76,15 @@ c::set('cachebuster', true);
 
 
 
-/* Turn on caching */
+/* Caching for anonymous users */
+// https://forum.getkirby.com/t/kirby-cache-routes/2032
 
-if($_SERVER['SERVER_NAME'] != 'makernetwork.org') {
+c::set('cache', true);
+
+if (site()->user()) {
+  c::set('cache', false);
 }
-c::set('cache', false);
+
 c::set('cache.ignore', array('sitemap','flush','error','connect','projects/*'));
 
 
@@ -98,8 +108,8 @@ c::set('timezone','America/New_York');
 /* Increase login session duration
    https://forum.getkirby.com/t/login-session-lifetime-extending-for-the-frontend/2922
 */
-s::$timeout = 60*24*30; // 1 month of session validity
-s::$cookie['lifetime'] = 43000; // expires in 1 month
+//s::$timeout = 60*24*30; // 1 month of session validity
+//s::$cookie['lifetime'] = 43000; // expires in 1 month
 
 //cookie::set('kirby_session_auth', $value, $lifetime = 42000, '/blah', $domain = null);
 /*
@@ -722,6 +732,158 @@ c::set('routes', array(
 		}
 	),
 	
+  // REPLACE AMAZON LINKS
+  // Replaces all shortened Amazon URLs with their regular, clean, full URLs
+	array(
+		'pattern' => array('replaceAmazon', '(.+replaceAmazon)'),
+		'method' => 'GET',
+		'action'  => function() {
+      
+
+      
+      // Unshorten URL function
+      // http://jonathonhill.net/2012-05-18/unshorten-urls-with-php-and-curl/
+      function unshorten_url($matches) {
+        //print_r($matches);
+        foreach ($matches as $url) {
+          
+          //echo $url;
+          $originalurl = $url;
+                    
+          $ch = curl_init($url);
+          curl_setopt_array($ch, array(
+              CURLOPT_FOLLOWLOCATION => TRUE,  // the magic sauce
+              CURLOPT_RETURNTRANSFER => TRUE,
+              CURLOPT_SSL_VERIFYHOST => FALSE, // suppress certain SSL errors
+              CURLOPT_SSL_VERIFYPEER => FALSE, 
+          ));
+          curl_exec($ch);
+          $url = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
+          curl_close($ch);
+          
+          //echo $url . '<br>' . '<br>';
+          
+          // Get the Amazon ASIN
+          // http://stackoverflow.com/questions/21700573/get-asin-from-pasted-amazon-url
+          //preg_match('/(?:dp|o|gp|-)\/(B[0-9]{2}[0-9A-Z]{7}|[0-9]{9}(?:X|[0-9]))/', $url, $matches);
+          //preg_match('/dp\/([a-zA-Z0-9\/]*)\//', $url, $matches);
+          
+          /* Exactly Dad's */
+          preg_match('/product\/([a-zA-Z0-9\/]*)\//', $url, $matches);
+          
+          //print_r($matches);
+          
+          if (isset($matches[1])) {
+            $asin = $matches[1];
+          }
+          
+          if (isset($asin)) {
+            return 'https://www.amazon.com/dp/' . $asin;
+          } else {
+            return $originalurl;
+          }
+          
+        }
+      }
+      
+      //$targetpage = site()->page('projects/atest');
+      
+      // this works
+      //$targetpages = site()->page('projects/atest')->children();
+      
+      // doesn't work
+      //$targetpages = site()->page('replacetest')->children();
+      
+      
+      //$rx = '/https?:\/\/(www\.)?amzn\.to\/[a-zA-Z0-9\/]*/';
+      //$newtext = preg_replace_callback($rx, 'unshorten_url', $targetpage->text());
+      //echo $newtext;
+      
+      $targetpages = site()->page('replacetest')->children();
+      
+      //$targetpage = site()->page('replacetest/sixth-gen-intel-skulltrail-nuc'); // success
+      //$targetpage = site()->page('replacetest/liberate-western-digital-8tb-from-external-drive-enclosure-to-save-big'); // success
+      $targetpage = site()->page('replacetest/first-look-ring-video-doorbell-pro'); // failure
+      
+      foreach ($targetpages as $targetpage) {
+        $rx = '/https?:\/\/(www\.)?amzn\.to\/[a-zA-Z0-9\/]*/';
+        $newtext = preg_replace_callback($rx, 'unshorten_url', $targetpage->text());
+        //echo $newtext;
+        
+        
+        try {
+          site()->page($targetpage)->update(array(
+            'Text'  => $newtext,
+          ));
+          echo 'success: ' . $targetpage->slug() . '<br>';
+        } catch(Exception $e) {
+          echo 'error: ' . $targetpage->slug() . '<br>';
+        }
+        
+        
+      }
+		}
+	),
+	
+	
+	// https://getkirby.com/docs/developer-guide/advanced/routing#omitting-the-blog-folder-in-urls
+  array(
+    'pattern' => 'makerssssss/(:any)',
+    'action'  => function($uid) {
+      $new = site()->url() . '/' . $uid;
+      go($new);
+      //header::redirect("$new", 301);
+    }
+  ),
+  
+  // Redirect all requests to /users/ directory to example.com/username
+  array(
+    'pattern' => 'makers/(:any)',
+    'method' => 'GET',
+    'action'  => function($uid) {
+      go($uid);
+    }
+  ),
+  
+  array(
+    'pattern' => array('(:any)', '(:any)/(:any)'),
+    'method' => 'GET',
+    'action'  => function($uid) {
+      
+      $path = kirby()->request()->path();
+
+      $page = page($path);
+      
+      if (!$page) $page = page('makers/' . $path);
+      
+      if ($page) {
+        return site()->visit($page);
+      } else {
+        return site()->visit($uid);
+      }
+      
+    }
+  ),
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+	
+	
   // SITEMAP
   // Based on https://getkirby.com/docs/cookbook/xmlsitemap
   // Currently lists every single folder, regardless of whether a page.txt is present
@@ -751,8 +913,6 @@ c::set('routes', array(
       
 		}
 	),
-
-
 
   // SAVE AVATAR OR ICON, or possibly ContentTools uploads and eventually videos and other files as well
 	array(
@@ -1212,9 +1372,6 @@ c::set('routes', array(
 
 
 ));
-
-
-
 
 
 

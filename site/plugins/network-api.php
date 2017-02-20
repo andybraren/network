@@ -5,7 +5,7 @@ kirby()->routes(array(
 // https://getkirby.com/docs/cookbook/json
 array(
 	'pattern' => 'api',
-	'method'  => 'GET',
+	'method'  => 'POST',
   'action'  => function() {
     
     $key = '';

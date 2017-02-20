@@ -63,8 +63,8 @@ AddDefaultCharset UTF-8
 #
 # php_flag short_open_tag on
 
-
-
+# Increase max amount of data that can be sent via a POST in a form
+php_value post_max_size 100M
 
 # Caching
 <IfModule mod_headers.c>

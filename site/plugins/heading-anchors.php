@@ -64,6 +64,17 @@ function retitle($match) {
     }
 }
 
+// Amazon affiliate links
+// Adds affiliate parameter to all Amazon links (currently only one format, the one that it should be)
+/*
+kirbytext::$pre[] = function($kirbytext, $value) {
+  $value = preg_replace_callback('/https?:\/\/(www\.)?amazon\.com\/([a-zA-Z0-9\/]*)/', 'add_affiliate', $value);
+  return $value;
+};
+*/
+function add_affiliate($match) {
+  return $match[0] . '?tag=whatever';
+}
 
 
 // Replace brackets in kirbytags with parenthesis

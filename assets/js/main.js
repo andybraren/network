@@ -509,6 +509,13 @@ function addFileTool() {
     };
     
     function insertFile(filename, fileurl, extension) {
+      
+      if (extension == 'jpg' ||
+          extension == 'png' ||
+          extension == 'gif') {
+        extension = 'img';
+      }
+      
       html = '<p class="ce-element ce-element--type-text"><a href="' + fileurl + '" class="file-' + extension + '" data-filename="' + filename + '">' + filename + '</a></p>';
         
       // For whenever ContentTools is replaced
@@ -1169,7 +1176,7 @@ if (authorfield != null) {
   
   function authorSearch() {
     var request = new XMLHttpRequest();
-    request.open('GET', '/api?users=all&search=' + authorfield.value, true);
+    request.open('POST', '/api?users=all&search=' + authorfield.value, true);
     
     request.onload = function() {
       if (request.status >= 200 && request.status < 400) { // Success!
@@ -1256,7 +1263,7 @@ if (groupfield != null) {
   
   function groupSearch() {
     var request = new XMLHttpRequest();
-    request.open('GET', '/api?groups=all&search=' + groupfield.value, true);
+    request.open('POST', '/api?groups=all&search=' + groupfield.value, true);
     
     request.onload = function() {
       if (request.status >= 200 && request.status < 400) { // Success!
@@ -1353,7 +1360,7 @@ if (searchforms != null) {
     
     function doSearch(type, query, input, resultnode) {
       var request = new XMLHttpRequest();
-      request.open('GET', '/api?' + type + '=all&search=' + query, true);
+      request.open('POST', '/api?' + type + '=all&search=' + query, true);
       
       request.onload = function() {
         if (request.status >= 200 && request.status < 400) { // Success!
@@ -1669,7 +1676,7 @@ if (usernamefield != null) {
 function queryUsername() {
   
   var request = new XMLHttpRequest();
-  request.open('GET', 'api?users=' + usernamefield.value, true);
+  request.open('POST', 'api?users=' + usernamefield.value, true);
   request.onload = function() {
     if (request.status >= 200 && request.status < 400) { // Success!
       var data = JSON.parse(request.responseText);
