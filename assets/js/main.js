@@ -1012,6 +1012,18 @@ function savePage() {
     data.append('requests', requests);
   }
   
+  /* Projects */
+  var projects = document.getElementById('projects');
+  if (projects != null) {
+    var projects = Array.prototype.slice.call(projects.children);
+    var arr = [];
+    for (var i = projects.length - 1; i >= 0; i--) {
+      arr.push(projects[i].getAttribute('data-slug'));
+    }
+    var projects = arr.reverse().join(', ');
+    data.append('projects', projects);
+  }
+  
   /* Groups */
   var groups = document.getElementById('groups');
   if (groups != null) {

@@ -13,11 +13,11 @@
 // returns the date a page was first created
 page::$methods['dateCreated'] = function($page) {
   if ($page->content()->created() != '') {
-    return $page->content()->created();
+    return strtotime($page->content()->created());
   }
   elseif ($page->content()->datedata() != '') {
     if (isset(str::split($page->content()->datedata(),',')[0])) {
-      return str::split($page->content()->datedata(),',')[0];
+      return strtotime(str::split($page->content()->datedata(),',')[0]);
     }
   }
 };
@@ -32,12 +32,12 @@ page::$methods['dateModified'] = function($page) {
     
     if (isset($array[1])) { // if date modified exists
       $parts = explode('==', $array[1]);
-      return (isset($parts[0])) ? $parts[0] : ''; // return just the date
+      return (isset($parts[0])) ? strtotime($parts[0]) : ''; // return just the date
     }
     
   }
   elseif ($page->content()->modified() != '') { // legacy content format
-    return $page->content()->modified();
+    return strtotime($page->content()->modified());
   }
   
 };
@@ -235,6 +235,24 @@ page::$methods['related'] = function($page) {
   }
 };
 
+// Related Projects
+// returns a collection of related "project" pages only
+page::$methods['relatedProjects'] = function($page) {
+  
+  $collection = new Pages();
+  
+  if ($page->related()) {
+    foreach ($page->related() as $item) {
+      if ($result = site()->page('projects/' . $item)) {
+        $collection->add($result);
+      }
+    }
+  }
+  
+  return $collection;
+  
+};
+
 // Related Groups
 // returns an array of related "group" pages only
 page::$methods['relatedGroups'] = function($page) {
@@ -253,37 +271,6 @@ page::$methods['relatedGroups'] = function($page) {
   }
   
   return $collection;
-
-};
-
-// Related Projects
-// returns an array of related "project" pages only
-page::$methods['relatedProjects'] = function($page) {
-  
-  $collection = array();
-  
-  if ($page->content()->makers() != '') {
-    foreach ($page->makers()->split(',') as $item) {
-      if ($apage = site()->page('projects/' . $item)) {
-        //$collection[] = $apage; // this makes it return a pages collection
-        $collection[] = $apage;   // this makes it return an array of page strings
-      }
-    }
-    return $collection;
-  }
-  
-  elseif ($page->content()->reldata() != '') {
-    if (isset(explode('///',$page->content()->reldata())[0])) {
-      $related = str::split(explode('///',$page->content()->reldata())[0],',');
-      foreach ($related as $item) {
-        if ($apage = site()->page('projects/' . $item)) {
-          //$collection[] = $apage; // this makes it return a pages collection
-          $collection[] = $apage;   // this makes it return an array of page strings
-        }
-      }
-      return $collection;
-    }
-  }
 
 };
 
@@ -569,6 +556,13 @@ function groupColor($groupslug) {
   } else {
     return (string)site()->coloroptions()->split(',')[0];
   }
+}
+
+/* User URL
+  - returns the user's profile URL, sans /users/ directory
+*/
+function userURL($username) {
+  return site()->url() . '/' . site()->user($username)->username();
 }
 
 //--------------------------------------------------

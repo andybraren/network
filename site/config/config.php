@@ -32,7 +32,8 @@ ini_set('max_execution_time', 60); // ALL 60 seconds = 1 minute
 // User will be logged out if they don't visit again within this timespan. If they do, the timer is essentially reset
 // http://natesilva.tumblr.com/post/250569350/php-sessions-timeout-too-soon-no-matter-how-you
 // ini_set('session.gc_maxlifetime', 2628000); // 1 month
-ini_set('session.gc_maxlifetime', 86400); // 1 day
+ini_set('session.gc_maxlifetime', 604800); // 1 week
+// ini_set('session.gc_maxlifetime', 86400); // 1 day
 // ini_set('session.gc_maxlifetime', 3600); // 1 hour
 
 // Set session save directory
@@ -41,6 +42,11 @@ ini_set('session.save_path', dirname(dirname(__FILE__)) . '/sessions');
 // Enable PHP's garbage collection method, even on Ubuntu/Debian, with a prob/divisor % chance of happening on each session_start()
 ini_set('session.gc_probability', 1);
 ini_set('session.gc_divisor', 100);
+
+// Set the kirby_session_auth cookie lifetime to be a month
+s::$timeout = 60*24*30; // 1 month
+s::$cookie['lifetime'] = 60*24*30; // 1 month
+
 
 //--------------------------------------------------
 // Kirby Configuration
@@ -122,6 +128,25 @@ If I log out manually, then kirby_session_auth gets destroyed.
 */
 
 
+//s::$timeout = 120;
+//s::set($timeout, $value = 120);
+//s::$cookie['lifetime'] = 4200;
+//s::set($cookie, $value = 0);
+//cookie::set('kirby_session_auth', '', $lifetime = 55, $path = '/', $domain = null);
+//cookie::set('kirby_session_auth', $value, $lifetime = 42000, $path = '/', $domain = null, $secure = true, $httpOnly = true);
+//c::set('panel.session.timeout', 2160); // 36 hours
+//cookie::set('username', site()->user()->username(), $expires = 42000, $path = '/', $domain = null, $secure = true);
+
+
+
+
+
+
+
+
+
+
+
 
 
 // Override carriage returns between fields when using $page->update()
@@ -189,15 +214,10 @@ c::set('routes', array(
     'action'  => function() {
       $currentpath = str_replace(array('/maker/','/ne/','/login','login','/forgot','forgot'),'',$_SERVER['REQUEST_URI']);
       if($user = site()->user(get('username')) and $user->login(get('password'))) {
-        //s::$timeout = 120;
-        //s::set($timeout, $value = 120);
-        //s::$cookie['lifetime'] = 0;
-        //s::set($cookie, $value = 0);
-        //cookie::set('kirby_session_auth', '', $lifetime = 55, $path = '/', $domain = null);
-        //cookie::set('kirby_session_auth', $value, $lifetime = 42000, $path = '/', $domain = null, $secure = true, $httpOnly = true);
-        //c::set('panel.session.timeout', 2160); // 36 hours
-        //cookie::set('username', site()->user()->username(), $expires = 42000, $path = '/', $domain = null, $secure = true);
         return go($currentpath);
+        // Include a username cookie
+        //cookie::set('username', site()->user()->username(), $expires = 60*24*30, $path = '/', $domain = null, $secure = true);
+        //cookie::set('kirby_session_auth', $value, $lifetime = 42000, '/blah', $domain = null);
       } elseif ($user = site()->users()->findBy('email', get('username')) and $user->login(get('password'))){
         return go($currentpath);
       } else {        
@@ -491,7 +511,7 @@ c::set('routes', array(
   		$text  = (isset($_POST['text'])) ? $_POST['text'] : $targetpage->text();
   		
   		/* DateData */
-  		$dateCreated = $targetpage->dateCreated();
+  		$dateCreated = date('Y-m-d H:i:s', $targetpage->dateCreated());
   		$dateModified  = date('Y-m-d H:i:s');
   		//$modifiedBy = site()->user(get('username'));
   		
@@ -508,8 +528,9 @@ c::set('routes', array(
   		  $requests = (isset($_POST['join'])) ? implode(', ', array_merge($targetpage->requests(), array($_POST['join']))) : $requests;
   		
   		/* RelData */
-  		$relatedGroups = (isset($_POST['groups'])) ? $_POST['groups'] : $targetpage->relatedGroups();
-  		$relatedEvents = (isset($_POST['events'])) ? $_POST['events'] : $targetpage->relatedEvents();
+  		$relatedProjects = (isset($_POST['projects'])) ? $_POST['projects'] : $targetpage->relatedProjects();
+  		$relatedGroups   = (isset($_POST['groups'])) ? $_POST['groups'] : $targetpage->relatedGroups();
+  		$relatedEvents   = (isset($_POST['events'])) ? $_POST['events'] : $targetpage->relatedEvents();
   		
   		/* Settings */
   		$visibility  = (isset($_POST['visibility'])) ? $_POST['visibility'] : $targetpage->visibility();
@@ -527,7 +548,7 @@ c::set('routes', array(
           'Title'  => $title,
           'DateData' => $dateCreated . ', ' . $dateModified,
           'UserData' => $authors . ' /// ' . $oldauthors . ' /// ' . $subscribers . ' /// ' . $subscriberEmails . ' /// ' . $registrants . ' /// ' . $attendees . ' /// ' . $requests,
-          'RelData' => $relatedGroups . ', ' . $relatedEvents,
+          'RelData' => $relatedProjects . ', ' . $relatedGroups . ', ' . $relatedEvents,
           'Settings' => $visibility . ', ' . $color . ', comments == ' . $comments . ', submissions == ' . $submissions . ', price == ' . $price,
           'Hero' => $hero,
           'Text'  => $text,

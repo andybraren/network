@@ -87,6 +87,32 @@ array(
       }
     }
     
+    // Projects API
+    if (get('projects')) {
+      if (get('projects') == 'all') {
+        $items = site()->page('projects')->children();
+      } elseif ($thepage = site()->page('projects/' . get('projects'))) {
+        $items = array($thepage);
+      } else {
+        $error = "No project exists with the provided name.";
+      }
+      if (get('search')) {
+        $items = site()->page('projects')->children()->filterBy('title', 'c*=', get('search'));
+        if ($items == "") {
+          $error = "No projects found with the provided query.";
+        }
+      }
+      
+      foreach ($items as $item) {
+        $temp['title']     = ($item->title()) ? (string)$item->title() : null;
+        $temp['slug']      = ($item->slug()) ? (string)$item->slug() : null;
+        $temp['url']       = ($item->url()) ? (string)$item->url() : null;
+        $temp['image']     = ($item->heroImage()) ? $item->heroImage()->crop(40,40)->url() : null;
+        $temp['color']     = $item->color();
+        $results['data'][] = array_filter($temp);
+      }
+    }
+    
     // Events API
     if (get('events')) {
       if (get('events') == 'all') {

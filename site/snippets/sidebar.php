@@ -346,6 +346,14 @@
     <?php snippet('widget', array('type' => 'authors')) ?>
   <?php endif ?>
   
+  <?php // AUTHORS WIDGET ?>
+  <?php snippet('widget', array('type' => 'meta')) ?>
+  
+  <?php // RELATED PROJECTS WIDGET ?>
+  <?php if($page->parent() != 'projects'): ?>
+    <?php snippet('widget', array('type' => 'projects')) ?>
+  <?php endif ?>
+  
   <?php // RELATED GROUPS WIDGET ?>
   <?php if($page->parent() != 'groups'): ?>
     <?php snippet('widget', array('type' => 'groups')) ?>
@@ -374,7 +382,7 @@
   <?php endif ?>
   
   <?php // TABLE OF CONTENTS ?>
-  <?php if($page->intendedTemplate() == 'handbook' or $page->intendedTemplate() == 'article' or $page->intendedTemplate() == 'project' or $page->uid() == 'docs'): ?>
+  <?php if($page->intendedTemplate() == 'page' or $page->intendedTemplate() == 'handbook' or $page->intendedTemplate() == 'article' or $page->intendedTemplate() == 'project' or $page->uid() == 'docs'): ?>
     <?php if(preg_match_all('/(?<!#)#{2,3}([^#].*)\n/', $page->text(), $matches)): // Grabs H2's and H3's ?>
       <div class="widget toc sticky">
         <div>

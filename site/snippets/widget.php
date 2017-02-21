@@ -308,11 +308,15 @@
 
 
 
+<?php // META ?>
+<?php if ($type == 'meta'): ?>
 
+  
+<?php endif ?>
 
 
 <?php // Related Groups, Events, and Authors ?>
-<?php if ($type == 'authors' or $type == 'groups' or $type == 'events'): ?>
+<?php if ($type == 'authors' or $type == 'groups' or $type == 'events' or $type == 'projects'): ?>
   
   <?php
     if ($type == 'authors') {
@@ -332,6 +336,12 @@
       $singular = 'event';
       $plural   = 'events';
       $id       = 'events';
+    }
+    if ($type == 'projects') {
+      $items    = $page->relatedProjects();
+      $singular = 'project';
+      $plural   = 'projects';
+      $id       = 'projects';
     }
     
     $heading = ($items->count() > 1) ? strtoupper($plural) : strtoupper($singular);
@@ -356,7 +366,18 @@
       <div class="items" id="<?php echo $id ?>">
         <?php if (isset($items)): ?>
           <?php foreach ($items as $item): ?>
-              <a class="item" data-slug="<?php echo ($item->slug()) ? $item->slug() : $item->username() ?>" href="<?php echo $item->url() ?>">
+              
+              <?php
+              if ($type == 'authors') {
+                $url = site()->page('makers/' . $item->username())->url();
+                $url = site()->users($item)->userURL();
+                $url = userURL($item);
+              } else {
+                $url = $item->url();
+              }
+              ?>
+              
+              <a class="item" data-slug="<?php echo ($item->slug()) ? $item->slug() : $item->username() ?>" href="<?php echo $url ?>">
                 
                 <?php if ($page->isEditableByUser()): ?>
                   <div class="item-delete"></div>
@@ -372,7 +393,7 @@
                     <img src="<?php echo groupLogo($item->slug(), 40) ?>" width="40" height="40" class="<?php echo groupColor($item->slug()) ?>">
                   <?php endif ?>
                   
-                  <?php if ($type == 'events'): ?>
+                  <?php if ($type == 'events' or $type == 'projects'): ?>
                     <img src="<?php echo $item->heroImage()->crop(40,40)->url() ?>" width="40" height="40" class="<?php echo $item->color() ?>">
                   <?php endif ?>
                   
