@@ -50,9 +50,9 @@
         <?php if($page->text() != ''): ?>
           <div class="text" data-editable data-name="text"><?php echo $page->text()->kirbytext() ?></div>
         <?php elseif($user = $site->user() and $page->slug() == $user or $user = $site->user() and $user->usertype() == 'admin' and $page->parent() == 'makers'): ?>
-          <div class="text" data-editable data-name="text"><p placeholder="Click the edit button to add a brief description of yourself."></p></div>
+          <div class="text" data-editable data-name="text"><p placeholder=""></p></div>
         <?php elseif($page->isEditableByUser() and $page->uid() != 'projects'): ?>
-          <div class="text" data-editable data-name="text"><p placeholder="Click the edit button to add content to this page."></p></div>
+          <div class="text" data-editable data-name="text"><p placeholder=""></p></div>
         <?php else: ?>
           <div class="text" data-editable data-name="text"><p></p></div>
         <?php endif ?>
@@ -143,7 +143,7 @@
       <?php endif ?>
       
       <?php if($page->isChildOf($site->find('challenges'))): ?>
-        <?php snippet('cards') ?>
+        
       <?php endif ?>
       
       <?php if($page->parent() == 'events' && $page->hasChildren()): ?>

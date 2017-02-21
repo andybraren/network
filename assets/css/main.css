@@ -59,7 +59,7 @@ body {
   min-height: 100vh;
   
   position: relative;
-  margin-top: 89px;
+  margin-top: 87px;
 }
 
 /* Header
@@ -106,7 +106,8 @@ header {
 nav {
   overflow-y: hidden;
   overflow-x: auto;
-  border-bottom: 1px solid #e0e0e0;
+  /*border-bottom: 1px solid #e0e0e0;*/
+    box-shadow: inset 0px -1px 0px 0px #e0e0e0;
 }
 
 header.headroom {
@@ -452,7 +453,11 @@ body {
 .menu-secondary a { color: #797878; font-weight: 500;}
 #navigation .menu-secondary .login a { color: darkgrey; border-color: darkgrey; }
 .menu a:hover, .menu a.active { background-color: rgba(0, 0, 0, 0.05); }
-.logo svg path { fill: var(--theme-main) !important; } 
+
+/* Only change color if the entire thing is one color already */
+.logo svg > g:not([fill*='none']) path {
+  fill: var(--theme-main);
+}
 
 #toggle-toc svg path { fill: #797878; }
 .search svg path { fill: #797878; }
@@ -556,11 +561,11 @@ blockquote {
   max-width: 500px; /* Dumb Safari fix http://stackoverflow.com/questions/24153939/inline-svg-scaling-auto-width */
   width: auto;
 }
-
+/*
 .logo svg path {
   fill: white;
 }
-
+*/
 #logo-2 {
   display: none;
 }
@@ -621,7 +626,7 @@ nav {
 
 
 .menu .active {
-  box-shadow: inset 0px -1px 0px 0px white;
+  box-shadow: inset 0px -1px 0px 0px var(--theme-main);
 }
 .menu li {
   list-style: none;
@@ -844,10 +849,10 @@ nav {
   cursor: pointer;
   /*padding: 8px;*/
 }
-.styleselector img, #settings-reading img, .toggle-toc img {
+.styleselector img, #settings-reading img {
   max-height: 18px;
 }
-.toggle-toc {
+#toggle-toc {
   display: none;
 }
 
@@ -4490,7 +4495,7 @@ aside figcaption {
     -webkit-overflow-scrolling: touch;
   }
   
-  .toggle-toc { display: block; }
+  #toggle-toc { display: block; }
   
   .main .container {
     flex-direction: column;
