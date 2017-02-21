@@ -27,6 +27,7 @@
 2016-09-26 - Moved YouTube thumbnail downloader to network-methods, replaced with more universal downloadedImageURL() function
 2016-12-09 - Added (size:) support, same as images
 2016-12-19 - Playsinline support for YouTube embeds
+2017-02-21 - Figcaption only included if not empty
 */
 
 kirbytext::$tags['video'] = array(
@@ -38,7 +39,7 @@ kirbytext::$tags['video'] = array(
   'html' => function($tag) {
     
     $caption = $tag->attr('caption');
-    $htmlcaption = '<figcaption>' . $caption . '</figcaption>';
+    $htmlcaption = ($caption) ? '<figcaption>' . $caption . '</figcaption>' : '';
     $url = $tag->attr('video');
     $autoplay = $tag->attr('autoplay');
     $file = $tag->file($url);

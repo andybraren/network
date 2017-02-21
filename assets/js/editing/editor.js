@@ -110,6 +110,19 @@ var kirbytagtweaks = [
     }
   },
   
+  { // Use - instead of * for lists
+    filter: 'li',
+    replacement: function (content, node) {
+      content = content.replace(/^\s+/, '').replace(/\n/gm, '\n    ')
+      var prefix = '- '
+      var parent = node.parentNode
+      var index = Array.prototype.indexOf.call(parent.children, node) + 1
+
+      prefix = /ol/i.test(parent.nodeName) ? index + '.  ' : '- '
+      return prefix + content
+    }
+  },
+  
   {
     filter: 'figure', // could be either img or HTML5 <video>
     replacement: function(content, node) {
@@ -127,14 +140,13 @@ var kirbytagtweaks = [
       }
       
       else if (node.childNodes[0].nodeName == 'VIDEO') {
+        
         var file = node.childNodes[0].getAttribute('data-file') || '';
-        var autoplay = node.childNodes[0].hasAttribute('autoplay');
-        if (autoplay) {
-          var autoplay = ' autoplay: on';
-        } else {
-          var autoplay = '';
-        }
-        return file ? '(video: ' + file + autoplay + ')' : '';
+        var size = (node.getAttribute('class')) ? ' size: ' + node.getAttribute('class') : '';
+        var autoplay = (node.childNodes[0].hasAttribute('autoplay')) ? ' autoplay: on' : '';
+        var caption = (node.childNodes[2]) ? ' caption: ' + node.childNodes[2].innerText : '';
+        
+        return file ? '(video: ' + file + size + autoplay + caption + ')' : '';
       }
       
       else if (node.childNodes[0].childNodes[1].href != null) { // it's a guggenheim image
