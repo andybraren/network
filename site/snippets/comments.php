@@ -45,11 +45,13 @@
     <div class="item row" id="comment-<?php echo $commentcount ?>" data-id="<?php echo $comment->slug() ?>">
         
       <div>
-        <?php if ($user->usertype() == 'admin'): ?>
-          <div class="user-badge">
-            <div><?php echo (new Asset('/assets/images/icon-mod.svg'))->content() ?></div>
-            <span class="tooltip">Moderator</span>
-          </div>
+        <?php if ($user->usertype()): ?>
+          <?php if ($user->usertype() == 'admin'): ?>
+            <div class="user-badge">
+              <div><?php echo (new Asset('/assets/images/icon-mod.svg'))->content() ?></div>
+              <span class="tooltip">Moderator</span>
+            </div>
+          <?php endif ?>
         <?php endif ?>
         <a href="<?php echo $site->url() . "/makers/" . $user->username() ?>" class="user-avatar">
           <img src="<?php echo userAvatar($user->username(), 40) ?>" width="40" height="40" class="<?php echo userColor($user->username()) ?>">
@@ -74,13 +76,16 @@
   <?php endforeach ?>
   
   <?php if ($page->isEditableByUser()): ?>
+    <?php $user = site()->user() ?>
     <div class="item row" id="add-comment">
       <div>
-        <?php if ($user->usertype() == 'admin'): ?>
-          <div class="user-badge">
-            <div><?php echo (new Asset('/assets/images/icon-mod.svg'))->content() ?></div>
-            <span class="tooltip">Moderator</span>
-          </div>
+        <?php if ($user->usertype()): ?>
+          <?php if ($user->usertype() == 'admin'): ?>
+            <div class="user-badge">
+              <div><?php echo (new Asset('/assets/images/icon-mod.svg'))->content() ?></div>
+              <span class="tooltip">Moderator</span>
+            </div>
+          <?php endif ?>
         <?php endif ?>
         <a href="<?php echo $site->url() . "/makers/" . $user->username() ?>" class="user-avatar">
           <img src="<?php echo userAvatar($user->username(), 40) ?>" width="40" height="40" class="<?php echo userColor($user->username()) ?>">

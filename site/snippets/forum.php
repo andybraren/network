@@ -12,10 +12,10 @@
     $firstname = $user->firstname();
     $fullname = $user->firstname() . ' ' . $user->lastname();
                   
-    $commentdate = strtotime($item->dateCreated());
+    $commentdate = $item->dateCreated();
     $exactdate = date('M j, Y g:ia', $commentdate);
     $humandate = humanDate($commentdate);
-    $datemodified = ($item->dateModified()) ? date('M j, Y g:ia', strtotime($item->dateModified())) : '';
+    $datemodified = ($item->dateModified()) ? date('M j, Y g:ia', $item->dateModified()) : '';
     
   ?>
   
