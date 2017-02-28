@@ -132,7 +132,7 @@ var kirbytagtweaks = [
         //var filename = str_replace('%20', ' ', blahfilename);
         var figcaption = node.childNodes[1];
         if (figcaption) {
-          var caption = ' caption: ' + figcaption.innerText || '';
+          var caption = ' caption: ' + trim(figcaption.textContent) || '';
         } else {
           var caption = '';
         }
@@ -348,7 +348,7 @@ function replaceFigures() {
         }
         
         if (figures[i].childNodes[1]) {
-          var imgcaption = figures[i].childNodes[1].innerText;
+          var imgcaption = figures[i].childNodes[1].textContent;
           newImg.setAttribute('data-caption',imgcaption);
   
           //var datacaption = document.createAttribute('data-caption');
