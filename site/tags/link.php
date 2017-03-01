@@ -47,14 +47,20 @@ kirbytext::$tags['link'] = array(
       $title = $page->title();
       $excerpt = preg_replace("!(?=[^\]])\([a-z0-9_-]+:.*?\)!is", "", html::decode(markdown(preg_replace("/(#+)(.*)/", "", $page->text()->short(300)))));
       
-      $date = date('M j Y', strtotime($page->datePublished()));
+      $date = date('M j Y', $page->datePublished());
       
       $host = $_SERVER['SERVER_NAME'];
       
-      $image = '<div>' . $page->heroImage()->crop(150) . '</div>';
+      if ($page->heroImage()) {
+        $image = '<div>' . $page->heroImage()->crop(150) . '</div>';
+      } else {
+        $image = '';
+      }
       
-      $author = a::first($page->authors()); // Get the first (primary) author of a page
-      $author = str::split($author,'~')[0]; // Strip out the author's role (if needed)
+      
+      //$author = a::first($page->authors()); // Get the first (primary) author of a page
+      $author = $page->authors()->first();
+      //$author = str::split($author,'~')[0]; // Strip out the author's role (if needed)
       if (site()->user($author)) {
         $author = site()->user($author);
         $author = $author->firstname() . ' ' . $author->lastname();
