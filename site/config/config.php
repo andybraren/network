@@ -85,7 +85,7 @@ c::set('cachebuster', true);
 /* Caching for anonymous users */
 // https://forum.getkirby.com/t/kirby-cache-routes/2032
 
-c::set('cache', true);
+c::set('cache', false);
 
 if (site()->user()) {
   c::set('cache', false);
@@ -142,7 +142,7 @@ If I log out manually, then kirby_session_auth gets destroyed.
 
 
 
-
+c::set('debug', true);
 
 
 

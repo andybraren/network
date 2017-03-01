@@ -6,6 +6,8 @@
   
   <?php
     
+    // https://forum.getkirby.com/t/get-all-images-from-children/1746/3
+    
     $images = new Collection();
     
     $blahs = $page->children()->filterBy('visibility','public')->filterBy('hero', '!=', '')->sortBy('dateCreated','desc')->limit(10);

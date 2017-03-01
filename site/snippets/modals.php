@@ -378,7 +378,7 @@
               <label for="password">Password</label>
             </div>
             
-            <span>Your profile URL will be <?php echo preg_replace('#^https?://#', '', $site->find('makers')->url()) ?>/<span id="usernameurl">username</span></span>
+            <span>Your profile URL will be <?php echo $site->url() ?>/<span id="usernameurl">username</span></span>
             
           </div>
     

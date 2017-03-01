@@ -309,10 +309,22 @@
 
 
 <?php // META ?>
+<!--
 <?php if ($type == 'meta'): ?>
+  <div class="widget">
+    <span class="heading">META</span>
 
+    <span>Published:</span>
+    <span><?php echo humanDate($page->datePublished()) ?></span>
+    
+    <br>
+    
+    <span>Modified:</span>
+    <span><?php echo humanDate($page->dateModified()) ?></span>
+  </div>
   
 <?php endif ?>
+-->
 
 
 <?php // Related Groups, Events, and Authors ?>
