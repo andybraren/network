@@ -15,6 +15,7 @@
 2016-06-30 - Added padding correction for smaller images, GIFs are no longer resized to preserve animations, and width is added to images smaller than maxImageSize to prevent reflow when lazy loading
 2016-06-30 - Added support for hero images, with padding and max-height to prevent reflow
 2017-01-03 - Removed b-lazy class from <figure>
+2017-02-26 - Caption field of images now processed with kirbytext(), allowing special formatting (but not links)
 */
 
 // image tag
@@ -60,7 +61,7 @@ kirbytext::$tags['image'] = array(
     $alt     = $tag->attr('alt');
     $title   = $tag->attr('title');
     $link    = $tag->attr('link');
-    $caption = $tag->attr('caption');
+    $caption = kirbytext($tag->attr('caption'));
     
     $size    = $tag->attr('size');      // Added by Andy
 
