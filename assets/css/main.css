@@ -59,6 +59,10 @@ body {
   min-height: 100vh;
   
   position: relative;
+  margin-top: 53px;
+}
+
+.subnav {
   margin-top: 87px;
 }
 
@@ -88,7 +92,9 @@ header {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  /*
   overflow-y: hidden;
+  */
   /*box-shadow: 0 2px 4px -1px rgba(0,0,0,0.06),0 4px 5px 0 rgba(0,0,0,0.06),0 1px 10px 0 rgba(0,0,0,0.08);*/
   -ms-overflow-style: -ms-autohiding-scrollbar;
   /*
@@ -296,7 +302,6 @@ a.link span {
 }
 
 .link img {
-  max-width: 100%;
   max-height: 100%;
 }
 
@@ -686,8 +691,10 @@ nav {
 #navigation, #subnavigation {
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
+  overflow: visible;
 }
 #subnavigation {
+  overflow: visible;
   -webkit-backdrop-filter: blur(5px);
   /*
   border-top: 1px solid rgba(255, 255, 255, 0.3);
@@ -784,6 +791,95 @@ nav {
 .menu li ul {
   display: none;
 }
+
+
+
+.blah {
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    /*bottom: 0; Doesn't work in Safari */
+    box-shadow: inset 0px -1px 0px 0px #e0e0e0;
+}
+
+.newnav .active ul {
+    display: flex;
+    /*
+    max-width: 1200px;
+    margin: 0 auto;
+    */
+}
+
+.newnav .menu li ul li {
+    line-height: 20px;
+    position: relative;
+    -webkit-flex-shrink: 0;
+    flex-shrink: 0;
+    
+    text-transform: initial;
+}
+
+.newnav .active li ul {
+  display: block;
+}
+
+header {
+  overflow-y: initial !important;
+}
+
+
+
+.newnav .menu .blah li a {
+    padding: 7px 10px !important;
+}
+
+.subnav .newnav {
+  margin-bottom: 34px;
+}
+
+.nav {
+  overflow: visible !important;
+}
+
+.missing > a {
+    opacity: .5;
+    text-decoration: line-through;
+}
+
+li .subtitle {
+    /* color: #bbc0c4; */
+    opacity: .7;
+    font-size: .5rem;
+    letter-spacing: 0px;
+    /* font-size: 16px; */
+    /* padding: 2px 0; */
+    text-transform: uppercase;
+    /* border-radius: 0 0 2px 2px; */
+    line-height: 1;
+    position: absolute;
+    right: 15px;
+    /* right: 0px; */
+    top: 32px;
+}
+
+
+.blah .container {
+  overflow-x: auto;
+}
+
+#navigation {
+  overflow-x: auto;
+}
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4321,6 +4417,11 @@ aside figcaption {
 
 .discussion {
   max-width: 700px;
+    padding-top: 1rem;
+    margin-top: 2rem;
+    border-top: 1px solid #c1c1c1;
+    
+  margin-bottom: 20rem;
 }
 
 .discussion .user-avatar img {
@@ -4470,7 +4571,9 @@ aside figcaption {
     height: 1px;
 }
 
-
+.discussion .item:last-child:after {
+  content: initial;
+}
 
 
 

@@ -55,14 +55,11 @@ page::$methods['modifiedBy'] = function($page) {
 // Date Published
 // returns the date the page was first made non-private
 page::$methods['datePublished'] = function($page) {
-  if ($page->content()->datedata() == '') {
-    return $page->content()->created();
-  }
-  elseif ($page->content()->datedata() != '') {
+  if ($page->content()->datedata() != '') {
     if (isset(str::split($page->content()->datedata(),',')[2])) {
-      return str::split($page->content()->datedata(),',')[2];
+      return strtotime(str::split($page->content()->datedata(),',')[2]);
     } elseif (isset(str::split($page->content()->datedata(),',')[0])) {
-      return str::split($page->content()->datedata(),',')[0];
+      return strtotime(str::split($page->content()->datedata(),',')[0]);
     }
   }
 };
@@ -792,6 +789,203 @@ function milliseconds() {
   };
   return $milliseconds;
 }
+
+function navArray() {
+  $nav = array(
+    array(
+      'title' => 'Learn',
+      'uid' => 'learn',
+      'sub' => array(
+        array(
+          'title' => 'Courses',
+          'uid' => 'courses',
+        ),
+        array(
+          'title' => 'Handbooks',
+          'uid' => 'handbooks',
+        ),
+        array(
+          'title' => 'Books',
+          'uid' => 'books',
+        ),
+      ),
+    ),
+    array(
+      'title' => 'Make',
+      'uid' => 'make',
+      'sub' => array(
+        array(
+          'title' => 'Ideas',
+          'uid' => 'ideas',
+        ),
+        array(
+          'title' => 'Projects',
+          'uid' => 'projects',
+        ),
+        array(
+          'title' => 'Challenges',
+          'uid' => 'challenges',
+        ),
+        array(
+          'title' => 'Materials',
+          'uid' => 'materials',
+        ),
+      ),
+    ),
+    array(
+      'title' => 'Connect',
+      'uid' => 'connect',
+      'sub' => array(
+        array(
+          'title' => 'Articles',
+          'uid' => 'articles',
+        ),
+        array(
+          'title' => 'Makers',
+          'uid' => 'makers',
+        ),
+        array(
+          'title' => 'Groups',
+          'uid' => 'groups',
+        ),
+      ),
+    ),
+    array(
+      'title' => 'Spaces',
+      'uid' => 'spaces',
+    ),
+    array(
+      'title' => 'Equipment',
+      'uid' => 'equipment',
+    ),
+    array(
+      'title' => 'Events',
+      'uid' => 'events',
+    ),
+    array(
+      'title' => 'Forum',
+      'uid' => 'forum',
+      'subtitle' => 'alpha',
+    ),
+  );
+  return $nav;
+}
+
+
+function activeItem() {
+  foreach (navArray() as $item) {
+    
+    // return top-level item
+    if (site()->page($item['uid'])) {
+      if (site()->page($item['uid'])->isOpen()) {
+        return $item['uid'];
+      }
+    }
+    
+    // return sub-level item
+    if (array_key_exists('sub', $item)) {
+      foreach ($item['sub'] as $subitem) {
+        if (site()->page($subitem['uid'])) {
+          if (site()->page($subitem['uid'])->isOpen()) {
+            return $subitem['uid'];
+          }
+        }
+      }
+    }
+    
+  }
+}
+
+function activeMenuItems() {
+  
+  $top = false;
+  $sub = false;
+  
+  $uid = explode('/', $_SERVER['REQUEST_URI'])[1]; // works even on error pages
+  
+  foreach (navArray() as $item) {
+    
+    // return top-level item
+    if (site()->page($item['uid'])) {
+      if (site()->page($item['uid'])->isOpen()) {
+        //return $item['uid'];
+        $top = $item['uid'];
+      }
+    }
+    
+    // invalid or missing pages
+    elseif ($uid == $item['uid']) {
+      $top = $item['uid'];
+    }
+    
+    // return sub-level item
+    if (array_key_exists('sub', $item)) {
+      $hassub = true;
+      foreach ($item['sub'] as $subitem) {
+        
+        // valid pages
+        if (site()->page($subitem['uid'])) {
+          if (site()->page($subitem['uid'])->isOpen()) {
+            //return $subitem['uid'];
+            $sub = $subitem['uid'];
+            $top = $item['uid'];
+          }
+        }
+        
+        // invalid or missing pages
+        elseif ($uid == $subitem['uid']) {
+          $sub = $subitem['uid'];
+          $top = $item['uid'];
+        }
+        
+      }
+    }
+    
+  }
+  
+  return array($top, $sub);
+}
+
+function hasSubMenu() {
+  
+  $activeTop = activeMenuItems()[0];
+  
+  // http://stackoverflow.com/questions/7694843/using-array-search-for-multi-dimensional-array
+  $key = array_search($activeTop, array_column(navArray(), 'uid'));
+  
+  if (array_key_exists('sub', navArray()[$key])) {
+    return true;
+  } else {
+    return false;
+  }
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

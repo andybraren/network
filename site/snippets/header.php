@@ -74,11 +74,6 @@
       transition: all 0.3s ease;
     }
     
-    <?php if ($page->isHomePage() or in_array($page->uid(), array('spaces','events','search','equipment','docs'))): ?>
-      body {
-        margin-top: 53px !important;
-      }
-    <?php endif ?>
     
   </style>
   
@@ -122,7 +117,9 @@
   }
 ?>
 
-<body class="<?php echo $color ?>">
+<?php $subnav = (hasSubMenu()) ? ' subnav' : ''; ?>
+
+<body class="<?php echo $color . $subnav ?>">
   
   <header id="top" class="headroom">
     
