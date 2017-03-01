@@ -1116,7 +1116,7 @@ function saveComment() {
   if (comment != null) {
     commentText = comment.getElementsByClassName('text')[0];
     if (commentText.childNodes[1].innerHTML != '') {
-            
+      
       data = new FormData();
       data.append('page', window.location.pathname);
       data.append('text', toMarkdown(commentText.innerHTML, { converters: kirbytagtweaks }));
@@ -1145,7 +1145,7 @@ function saveComment() {
           // html from the server and insert them into the flow
           
           // Reset the comment authoring area
-          commentText.childNodes[1].innerHTML = '<p placeholder="Add text here"></p>';
+          commentText.innerHTML = '<p placeholder="Add text here"></p>';
           
         } else {
           // error occured

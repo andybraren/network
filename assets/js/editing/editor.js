@@ -144,7 +144,7 @@ var kirbytagtweaks = [
         var file = node.childNodes[0].getAttribute('data-file') || '';
         var size = (node.getAttribute('class')) ? ' size: ' + node.getAttribute('class') : '';
         var autoplay = (node.childNodes[0].hasAttribute('autoplay')) ? ' autoplay: on' : '';
-        var caption = (node.childNodes[2]) ? ' caption: ' + node.childNodes[2].innerText : '';
+        var caption = (node.childNodes[2]) ? ' caption: ' + node.childNodes[2].textContent : '';
         
         return file ? '(video: ' + file + size + autoplay + caption + ')' : '';
       }
