@@ -34,7 +34,7 @@
       $firstname = $user->firstname();
       $fullname = $user->firstname() . ' ' . $user->lastname();
                     
-      $commentdate = strtotime($comment->dateCreated());
+      $commentdate = $comment->dateCreated();
       $exactdate = date('M j, Y g:ia', $commentdate);
       $humandate = humanDate($commentdate);
       $datemodified = ($comment->dateModified()) ? date('M j, Y g:ia', strtotime($comment->dateModified())) : '';
@@ -75,7 +75,7 @@
     
   <?php endforeach ?>
   
-  <?php if ($page->isEditableByUser()): ?>
+  <?php if (site()->user()): ?>
     <?php $user = site()->user() ?>
     <div class="item row" id="add-comment">
       <div>
