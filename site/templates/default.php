@@ -97,8 +97,11 @@
       <?php if($page->uid() == 'courses'): ?>
         <?php snippet('cards', array('type' => 'courses')) ?>
       <?php endif ?>
-      <?php if($page->isChildOf($site->find('courses'))): ?>
+      
+      <?php if (site()->page('courses')): ?>
+      <?php if (site()->page('courses')->isOpen()): ?>
         <?php snippet('cards', array('type' => 'projects', 'group' => $page->uid())) ?>
+      <?php endif ?>
       <?php endif ?>
       
       <?php if($page->uid() == 'learn'): ?>
@@ -138,12 +141,16 @@
         <?php snippet('cards', array('type' => 'books')) ?>
       <?php endif ?>
       
-      <?php if($page->uid() == 'challenges'): ?>
-        <?php snippet('cards', array('type' => 'challenges')) ?>
+      <?php if (site()->page('books')): ?>
+      <?php if (site()->page('books')->isOpen()): ?>
+        <hr>
+        <h2>Case Studies</h2>
+        <?php snippet('cards') ?>
+      <?php endif ?>
       <?php endif ?>
       
-      <?php if($page->isChildOf($site->find('challenges'))): ?>
-        
+      <?php if($page->uid() == 'challenges'): ?>
+        <?php snippet('cards', array('type' => 'challenges')) ?>
       <?php endif ?>
       
       <?php if($page->parent() == 'events' && $page->hasChildren()): ?>
