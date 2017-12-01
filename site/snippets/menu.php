@@ -103,20 +103,9 @@
         </ul>
         
         <ul class="menu menu-secondary">
-          <?php if ($_SERVER['SERVER_NAME'] == 'makernetwork.org'): ?>
-            <li><a href="<?php echo $site->page('docs')->url() ?>" <?php echo ($page->uid() == 'docs' OR $page->isChildOf('docs')) ? ' class="active"' : ''; ?>>Docs</a></li>
-            <li><a href="https://github.com/andybraren/network">Download</a></li>
-          <?php elseif ($_SERVER['SERVER_NAME'] == 'tuftsmake.com'): ?>
-            <li><a href="&#109;&#97;ilto&#58;and%79&#98;rare%&#54;&#69;&#64;g&#109;a%&#54;9l&#46;&#99;%6&#70;m">Report an issue</a></li>
-          <?php else: ?>
-            <?php if ($site->page('about')): ?>
-              <li><a href="<?php echo $site->page('about')->url() ?>">About</a></li>
-            <?php endif ?>
-            <li><a href="https://www.facebook.com/groups/535093299989314">Follow</a></li>
-          <?php endif ?>
-          
-            <li><a href="&#109;&#97;ilto&#58;and%79&#98;rare%&#54;&#69;&#64;g&#109;a%&#54;9l&#46;&#99;%6&#70;m">Contact</a></li>
-          
+          <li><a href="<?php echo $site->page('docs')->url() ?>" <?php echo ($page->uid() == 'docs' OR $page->isChildOf('docs')) ? ' class="active"' : ''; ?>>Docs</a></li>
+          <li><a href="<?php echo $site->page('about')->url() ?>">About</a></li>
+                    
           <?php if ($site->user()): ?>
             <li><a href="<?php echo $page->url() . '/logout' ?>">Logout</a></li>
           <?php endif ?>
