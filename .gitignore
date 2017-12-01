@@ -15,11 +15,6 @@ Icon
 /site/cache/*
 !/site/cache/index.html
 
-# Content
-# ---------------
-
-/content/*
-
 # Unlicensed components
 # ---------------
 
