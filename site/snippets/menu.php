@@ -82,10 +82,6 @@
                   </ul>
                   
                   <ul class="menu menu-secondary">
-                    <li>
-                      <a>Expect bugs the week of 2/27</a>
-                    </li>
-                    
                     <li class="search">
                       <form class="search-container" action="<?php echo $site->url() . '/search'?>">
                         <a><?php echo (new Asset('/assets/images/menu-search.svg'))->content() ?></a>

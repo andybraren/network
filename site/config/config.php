@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . DS . 'private.php'; // load private information
+
 
 //--------------------------------------------------
 // Stripe Configuration
@@ -37,7 +37,7 @@ ini_set('session.gc_maxlifetime', 604800); // 1 week
 // ini_set('session.gc_maxlifetime', 3600); // 1 hour
 
 // Set session save directory
-ini_set('session.save_path', dirname(dirname(__FILE__)) . '/sessions');
+// ini_set('session.save_path', dirname(dirname(__FILE__)) . '/sessions');
 
 // Enable PHP's garbage collection method, even on Ubuntu/Debian, with a prob/divisor % chance of happening on each session_start()
 ini_set('session.gc_probability', 1);

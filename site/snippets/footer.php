@@ -14,12 +14,6 @@
   </div>
 
 
-  <?php // Redundant, but needed for PhotoSwipe in Guggenheim galleries ?>
-  <!--
-  <?= photoswipe() ?>
-  <?php echo js('assets/guggenheim/js/guggenheim-photoswipe.min.js', true) ?>
-  <?php echo css('assets/guggenheim/css/guggenheim-photoswipe.min.css') ?>
-  -->
 
   <?php // Load all of the editing-related resources if they're a logged-in maker with the right permissions ?>
   <?php if($page->isEditableByUser() or $page->comments()): ?>
