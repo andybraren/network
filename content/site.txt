@@ -1,0 +1,165 @@
+Title: Maker Network
+----
+Description: 
+----
+Coloroptions: blue, red, green, purple, orange, silver, gold
+----
+Visibilityoptions: public, unlisted, groups, private
+----
+Usertypes: user, admin
+----
+Grouptypes: 
+----
+Footerleft: © 2017-(date: Year)
+----
+Footerright: 
+----
+Affiliationoptions: 
+----
+Departmentoptions: 
+----
+Majoroptions: 
+----
+Menuprimary: 
+
+- 
+  title: About
+  uid: about
+----
+Menusecondary: 
+
+- title: Contact
+  uid: contact
+----
+Devices: 
+----
+Settings: 
+
+general:
+  timezone: EST
+  autoupdate: true
+  indexable: false
+style:
+  theme: original
+  default-color: blue
+  logo: logo.svg
+  logo-icon: logo-icon.svg
+  favicon: favicon.svg
+  header: one-line, two-line-left, two-line-center
+  width: 1240
+menu:
+  search:
+    enabled: true
+users:
+  roles: user, author
+  passwordless: false
+  login-twitter: false
+  login-google: false
+discussion:
+  acorn:
+    enabled: false
+    anonymous: false
+    upvotes:
+      enabled: false
+      style: clap
+    moderators:
+      status: false
+    restrictions:
+      linksMinTime: ''
+      linksMinPost: ''
+      mediaMinTime: ''
+      mediaMinPost: ''
+  disqus:
+    enabled: false
+    code: ''
+    anonymous: false
+connections:
+  mailgun:
+    enabled: false
+    key: 
+    domain: 
+  sparkpost:
+    enabled: false
+    key: 
+  twitter:
+    enabled: false
+    key: ''
+    autoimport: false
+    autoexport: false
+  medium:
+    enabled: false
+    key: ''
+    autoimport: false
+    autoexport: false
+  tumblr:
+    enabled: false
+    key: ''
+    autoimport: false
+    autoexport: false
+  wordpress:
+    enabled: false
+    key: ''
+    autoimport: false
+    autoexport: false
+page:
+  suggestions: false
+  comments: false
+  comments-anon: false
+monetization:
+  ads: false
+  ads-self:
+    enabled: false
+    ad-board: /advertise
+  ads-google:
+    enabled: false
+  ads-bsa:
+    enabled: false
+  ads-header:
+    enabled: false
+    provider: ''
+    pages: all
+  ads-sidebar:
+    enabled: false
+    provider: ''
+    pages: posts, projects, events
+  ads-footer:
+    enabled: false
+    provider: ''
+    pages: all
+  ads-rss:
+    enabled: false
+    provider: ''
+    pages: all
+  affiliate:
+    enabled: false
+    amazon: 
+    newegg: 
+    skimlinks: 
+analytics:
+  acorn:
+    enabled: false
+    id: ''
+  google:
+    enabled: false
+    id: ''
+memberships:
+  memberships: false
+  perks:
+    enabled: false
+    dis-google-analytics: false
+    dis-affiliates: false
+commerce:
+  commerce: true
+  coupons: true
+  stripe:
+    pk-test: ''
+    sk-test: ''
+    pk-live: ''
+    sk-live: ''
+  braintree-key: ''
+  authorize-key: ''
+  paypal-key: ''
+advanced:
+  cdn: true
+  cache: false
+  debug: true
